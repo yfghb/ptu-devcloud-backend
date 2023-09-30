@@ -1,33 +1,38 @@
-create table if not exists table_sequence(
-    id              bigint              primary key auto_increment comment '主键id',
-    sequence_name   varchar(64)         not null comment 'SEQ_表名大写',
-    table_id        bigint              default 1 not null comment '表主键',
-    step            int                 default 1 comment '自增步长',
-    create_by       bigint              default null comment '创建人',
-    create_date     datetime            default null comment '创建时间',
-    update_by       bigint              default null comment '更新人',
-    update_time     datetime            default null comment '更新时间',
-    delete_flag     tinyint             default false comment '是否删除'
-);
+-- auto-generated definition
+create table method_log
+(
+    id           bigint            not null comment '主键id'
+        primary key,
+    method_name  varchar(64)       null comment '方法名',
+    method_path  varchar(1024)     null comment '方法所在路径',
+    params_json  text              null comment '方法入参',
+    result_json  text              null comment '方法出参',
+    consume_time varchar(16)       null comment '方法运行耗时(单位：秒)',
+    pass_flag    tinyint default 1 null comment '方法是否运行成功',
+    error_msg    text              null comment '报错信息',
+    create_by    bigint            null comment '创建人',
+    create_date  datetime          null comment '创建时间',
+    update_by    bigint            null comment '更新人',
+    update_date  datetime          null comment '更新时间'
+)
+    comment '方法日志';
 
 
-create table if not exists method_log(
-    id              bigint              primary key not null comment '主键id',
-    method_name     varchar(64)         default null comment '方法名',
-    method_path     varchar(1024)       default null comment '方法所在路径',
-    params_json     text                default null comment '方法入参',
-    result_json     text                default null comment '方法出参',
-    sql_msg         text                default null comment 'sql语句',
-    sql_type        char(6)             default null comment 'sql的类型(select, update, insert, delete)',
-    consume_time    varchar(16)         default null comment '方法运行耗时(单位：秒)',
-    pass_flag       tinyint             default true comment '方法是否运行成功',
-    error_msg       text                default null comment '报错信息',
-    create_by       bigint              default null comment '创建人',
-    create_date     datetime            default null comment '创建时间',
-    update_by       bigint              default null comment '更新人',
-    update_time     datetime            default null comment '更新时间',
-    delete_flag     tinyint             default false comment '是否删除'
+-- auto-generated definition
+create table table_sequence
+(
+    id            bigint auto_increment comment '主键id'
+        primary key,
+    sequence_name varchar(64)      not null comment 'SEQ_表名大写',
+    table_id      bigint default 1 not null comment '表主键',
+    step          int    default 1 null comment '自增步长',
+    create_by     bigint           null comment '创建人',
+    create_date   datetime         null comment '创建时间',
+    update_by     bigint           null comment '更新人',
+    update_date   datetime         null comment '更新时间'
+)
+    comment '表序列';
 
-);
 
- insert into table_sequence(sequence_name, create_date) value ('SEQ_METHOD_LOG', sysdate());
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_METHOD_LOG', sysdate());

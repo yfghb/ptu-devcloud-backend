@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.MethodLogMapper">
+    <resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.MethodLog">
+        <result column="id" property="id" />
+        <result column="method_name" property="methodName" />
+        <result column="method_path" property="methodPath" />
+        <result column="params_json" property="paramsJson" />
+        <result column="result_json" property="resultJson" />
+        <result column="consume_time" property="consumeTime" />
+        <result column="pass_flag" property="passFlag" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+        t.id
+        , t.method_name
+        , t.method_path
+        , t.params_json
+        , t.result_json
+        , t.consume_time
+        , t.pass_flag
+        , t.error_msg
+        , t.create_by
+        , t.create_date
+        , t.update_by
+        , t.update_date
+    </sql>
+
+    <!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumns" />
+        FROM method_log t
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+        SELECT
+        <include refid="baseColumns" />
+        FROM method_log t
+        WHERE id = #{id}
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.MethodLog"
+            keyProperty="id" keyColumn="id" useGeneratedKeys="true"
+    >
+        INSERT INTO method_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            method_name,
+            method_path,
+            params_json,
+            result_json,
+            consume_time,
+            pass_flag,
+            error_msg,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{methodName},
+            #{methodPath},
+            #{paramsJson},
+            #{resultJson},
+            #{consumeTime},
+            #{passFlag},
+            #{errorMsg},
+            #{createBy},
+            #{createDate},
+            #{updateBy},
+            #{updateDate},
+        </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.MethodLog"
+            keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO method_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="methodName != null">
+                method_name,
+            </if>
+            <if test="methodPath != null">
+                method_path,
+            </if>
+            <if test="paramsJson != null">
+                params_json,
+            </if>
+            <if test="resultJson != null">
+                result_json,
+            </if>
+            <if test="consumeTime != null">
+                consume_time,
+            </if>
+            <if test="passFlag != null">
+                pass_flag,
+            </if>
+            <if test="errorMsg != null">
+                error_msg,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id},
+            </if>
+            <if test="methodName != null" >
+                #{methodName},
+            </if>
+            <if test="methodPath != null" >
+                #{methodPath},
+            </if>
+            <if test="paramsJson != null" >
+                #{paramsJson},
+            </if>
+            <if test="resultJson != null" >
+                #{resultJson},
+            </if>
+            <if test="consumeTime != null" >
+                #{consumeTime},
+            </if>
+            <if test="passFlag != null" >
+                #{passFlag},
+            </if>
+            <if test="errorMsg != null" >
+                #{errorMsg},
+            </if>
+            <if test="createBy != null" >
+                #{createBy},
+            </if>
+            <if test="createDate != null" >
+                #{createDate},
+            </if>
+            <if test="updateBy != null" >
+                #{updateBy},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.MethodLog">
+        UPDATE method_log
+        <set>
+            method_name=#{methodName},
+            method_path=#{methodPath},
+            params_json=#{paramsJson},
+            result_json=#{resultJson},
+            consume_time=#{consumeTime},
+            pass_flag=#{passFlag},
+            error_msg=#{errorMsg},
+            create_by=#{createBy},
+            create_date=#{createDate},
+            update_by=#{updateBy},
+            update_date=#{updateDate},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.MethodLog">
+        UPDATE method_log
+        <set>
+            <if test="methodName != null" >
+                method_name=#{methodName},
+            </if>
+            <if test="methodPath != null" >
+                method_path=#{methodPath},
+            </if>
+            <if test="paramsJson != null" >
+                params_json=#{paramsJson},
+            </if>
+            <if test="resultJson != null" >
+                result_json=#{resultJson},
+            </if>
+            <if test="consumeTime != null" >
+                consume_time=#{consumeTime},
+            </if>
+            <if test="passFlag != null" >
+                pass_flag=#{passFlag},
+            </if>
+            <if test="errorMsg != null" >
+                error_msg=#{errorMsg},
+            </if>
+            <if test="createBy != null" >
+                create_by=#{createBy},
+            </if>
+            <if test="createDate != null" >
+                create_date=#{createDate},
+            </if>
+            <if test="updateBy != null" >
+                update_by=#{updateBy},
+            </if>
+            <if test="updateDate != null" >
+                update_date=#{updateDate},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+</mapper>
