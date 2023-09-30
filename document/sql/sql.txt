@@ -13,7 +13,8 @@ create table method_log
     create_by    bigint            null comment '创建人',
     create_date  datetime          null comment '创建时间',
     update_by    bigint            null comment '更新人',
-    update_date  datetime          null comment '更新时间'
+    update_date  datetime          null comment '更新时间',
+    url          varchar(2048)     null comment '请求url'
 )
     comment '方法日志';
 

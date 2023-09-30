@@ -38,11 +38,15 @@ public class MethodLog extends BaseEntity implements Serializable {
     
 	/** 方法是否运行成功 */
 	@TableField(value = "pass_flag")
-	private Byte passFlag;
+	private Boolean passFlag;
     
 	/** 报错信息 */
 	@TableField(value = "error_msg")
 	private String errorMsg;
+
+	/** 请求url */
+	@TableField(value = "url")
+	private String url;
     
 
 	

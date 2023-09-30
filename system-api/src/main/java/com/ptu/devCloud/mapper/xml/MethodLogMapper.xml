@@ -14,6 +14,7 @@
         <result column="create_date" property="createDate" />
         <result column="update_by" property="updateBy" />
         <result column="update_date" property="updateDate" />
+        <result column="url" property="url" />
     </resultMap>
 
     <!-- 表字段 -->
@@ -30,6 +31,7 @@
         , t.create_date
         , t.update_by
         , t.update_date
+        , t.url
     </sql>
 
     <!-- 查询全部 -->
@@ -49,8 +51,7 @@
 
     <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.MethodLog"
-            keyProperty="id" keyColumn="id" useGeneratedKeys="true"
-    >
+            keyProperty="id" keyColumn="id">
         INSERT INTO method_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
@@ -65,6 +66,7 @@
             create_date,
             update_by,
             update_date,
+            url,
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             #{id},
@@ -79,12 +81,13 @@
             #{createDate},
             #{updateBy},
             #{updateDate},
+            #{url}
         </trim>
     </insert>
 
     <!-- 插入不为NULL的字段 -->
     <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.MethodLog"
-            keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+            keyProperty="id" keyColumn="id">
         INSERT INTO method_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -122,6 +125,9 @@
             </if>
             <if test="updateDate != null">
                 update_date,
+            </if>
+            <if test="url != null">
+                url
             </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
@@ -161,6 +167,9 @@
             <if test="updateDate != null" >
                 #{updateDate},
             </if>
+            <if test="url != null">
+                #{url},
+            </if>
         </trim>
     </insert>
 
@@ -179,6 +188,7 @@
             create_date=#{createDate},
             update_by=#{updateBy},
             update_date=#{updateDate},
+            url=#{url}
         </set>
         WHERE id = #{id}
     </update>
@@ -220,6 +230,9 @@
             </if>
             <if test="updateDate != null" >
                 update_date=#{updateDate},
+            </if>
+            <if test="url != null">
+                url=#{url},
             </if>
         </set>
         WHERE id = #{id}

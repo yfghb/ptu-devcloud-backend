@@ -5,6 +5,8 @@ import com.ptu.devCloud.mapper.MethodLogMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.MethodLogService;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 
 /**
@@ -19,5 +21,9 @@ public class MethodLogServiceImpl extends ServiceImpl<MethodLogMapper, MethodLog
     private MethodLogMapper methodLogMapper;
 
 
-	
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertIgnoreNull(MethodLog methodLog) {
+        methodLogMapper.insertIgnoreNull(methodLog);
+    }
 }
