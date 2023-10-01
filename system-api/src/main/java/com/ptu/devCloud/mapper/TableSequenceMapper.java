@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.entity.TableSequence;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * TableSequenceMapper
@@ -66,6 +67,13 @@ public interface TableSequenceMapper extends BaseMapper<TableSequence> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(TableSequence tableSequence);
-	
+
+	/**
+	 * 更新表序列值（这个方法不会被MapperAop扫描到）
+	 * @author Yang Fan
+	 * @since 2023/10/1 15:07
+	 * @param seqName 序列名称
+	 */
+	void changeId(@Param("seqName") String seqName);
 	
 }

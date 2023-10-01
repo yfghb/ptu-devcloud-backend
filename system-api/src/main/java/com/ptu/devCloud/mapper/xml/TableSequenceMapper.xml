@@ -160,7 +160,12 @@
         </set>
         WHERE id = #{id}
     </update>
-
+    <update id="changeId">
+        <if test="seqName != null and seqName != ''">
+            update table_sequence t set t.table_id = t.table_id + t.step
+            where t.sequence_name = #{seqName}
+        </if>
+    </update>
 
 
 </mapper>
