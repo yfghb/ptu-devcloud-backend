@@ -3,7 +3,7 @@ create table method_log
 (
     id           bigint            not null comment '主键id'
         primary key,
-    method_name  varchar(64)       null comment '方法名',
+    method_name  varchar(512)      null comment '方法名',
     method_path  varchar(1024)     null comment '方法所在路径',
     params_json  text              null comment '方法入参',
     result_json  text              null comment '方法出参',
