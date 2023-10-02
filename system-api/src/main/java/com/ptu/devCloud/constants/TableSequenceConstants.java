@@ -1,5 +1,5 @@
 package com.ptu.devCloud.constants;
 
 public class TableSequenceConstants {
-    public static final String SEQ_METHOD_LOG = "SEQ_METHOD_LOG";
+    public static final String MethodLog = "SEQ_METHOD_LOG";
 }

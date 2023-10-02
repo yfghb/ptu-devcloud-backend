@@ -41,7 +41,7 @@ public interface MethodLogMapper extends BaseMapper<MethodLog> {
      * @param methodLog 新增的记录
      * @return 返回影响行数
      */
-	@SeqName(value = TableSequenceConstants.SEQ_METHOD_LOG)
+	@SeqName(value = TableSequenceConstants.MethodLog)
 	int insert(MethodLog methodLog);
 	
 	/**
@@ -51,7 +51,7 @@ public interface MethodLogMapper extends BaseMapper<MethodLog> {
      * @param methodLog 新增的记录
      * @return 返回影响行数
      */
-	@SeqName(value = TableSequenceConstants.SEQ_METHOD_LOG)
+	@SeqName(value = TableSequenceConstants.MethodLog)
 	int insertIgnoreNull(MethodLog methodLog);
 	
 	/**
