@@ -1,4 +1,4 @@
-package com.ptu.devCloud.utils;
+package com.ptu.devCloud.entity;
 
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.constants.HttpCodeConstants;

@@ -1,6 +1,7 @@
 package com.ptu.devCloud.aop;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.entity.BaseEntity;
 import com.ptu.devCloud.service.TableSequenceService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -43,18 +45,23 @@ public class MapperAop {
             return;
         }
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        String tableName = signature.getMethod().getAnnotation(TableName.class).value();
         // 获得序列名
-        String seqName = tableName != null ? "SEQ_" + tableName.toUpperCase() : null;
-        if (seqName == null) {
-            log.error(joinPoint.getSignature().getDeclaringTypeName() + "\n找不到表名，无法生成主键！");
+        String seqName = signature.getMethod().getAnnotation(SeqName.class).value();
+        if (StringUtils.checkValNull(seqName)) {
+            log.error(joinPoint.getSignature().getDeclaringTypeName() + "\n找不到序列名，无法生成主键！");
         }
         else {
-            Collection<Object> list = (Collection<Object>) entity;
-            for(Object item : list) {
-                // 填充公共字段
-                generatePublicField(item, seqName);
+            if (entity instanceof List) {
+                List<Object> list = (List<Object>) entity;
+                for(Object item : list) {
+                    // 填充公共字段
+                    generatePublicField(item, seqName);
+                }
             }
+            else {
+                generatePublicField(entity, seqName);
+            }
+
         }
 
     }

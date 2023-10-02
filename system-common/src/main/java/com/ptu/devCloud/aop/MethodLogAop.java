@@ -3,7 +3,7 @@ package com.ptu.devCloud.aop;
 import com.alibaba.fastjson.JSON;
 import com.ptu.devCloud.entity.MethodLog;
 import com.ptu.devCloud.service.MethodLogService;
-import com.ptu.devCloud.utils.CommonResult;
+import com.ptu.devCloud.entity.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
