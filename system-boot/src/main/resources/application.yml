@@ -3,3 +3,8 @@ spring:
     import: dev/druid.yml,dev/mybatis-plus.yml,dev/pageHelper.yml
 server:
   port: 9090
+
+
+
+devCloud:
+  crossOrigin: localhost:5173,localhost:8081
