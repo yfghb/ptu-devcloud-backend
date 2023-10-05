@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2023-09-30 16:24:11
  */
 @RestController
-@RequestMapping("/methodLog")
+@RequestMapping("/MethodLogController")
 public class MethodLogController {
 
     @Resource
