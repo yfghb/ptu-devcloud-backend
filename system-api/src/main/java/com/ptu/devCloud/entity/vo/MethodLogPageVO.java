@@ -1,7 +1,6 @@
 package com.ptu.devCloud.entity.vo;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 
@@ -14,8 +13,10 @@ public class MethodLogPageVO implements Serializable {
     /** 一页显示条数 */
     private Integer pageSize;
 
+    /** 时间范围-左区间 */
     private String startDate;
 
+    /** 时间范围-右区间 */
     private String endDate;
 
 }
