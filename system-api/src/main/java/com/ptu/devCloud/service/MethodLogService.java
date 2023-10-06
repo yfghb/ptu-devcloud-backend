@@ -1,7 +1,9 @@
 package com.ptu.devCloud.service;
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.MethodLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.MethodLogPageVO;
 
 
 /**
@@ -18,4 +20,13 @@ public interface MethodLogService extends IService<MethodLog> {
 	 * @param methodLog methodLog实体
 	 */
 	void insertIgnoreNull(MethodLog methodLog);
+
+	/**
+	 * 接口日志分页查询
+	 * @author Yang Fan
+	 * @since 2023/10/6 15:01
+	 * @param pageVO MethodLogPageVO
+	 * @return pageInfo
+	 */
+	PageInfo<MethodLog> getPage(MethodLogPageVO pageVO);
 }

@@ -1,14 +1,16 @@
 package com.ptu.devCloud.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.MethodLog;
+import com.ptu.devCloud.entity.vo.MethodLogPageVO;
 import com.ptu.devCloud.service.MethodLogService;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.Resource;
-import java.util.List;
+
 
 
 /**
@@ -23,9 +25,16 @@ public class MethodLogController {
     @Resource
     private MethodLogService methodLogService;
 
-    @GetMapping("/list")
-    public CommonResult<List<MethodLog>> getList() {
-        return CommonResult.success(methodLogService.list());
+    /**
+     * 接口日志分页查询
+     * @author Yang Fan
+     * @since 2023/10/6 15:03
+     * @param pageVO MethodLogPageVO
+     * @return CommonResult<PageInfo<MethodLog>>
+     */
+    @PostMapping("/getPage")
+    public CommonResult<PageInfo<MethodLog>> getPage(@RequestBody MethodLogPageVO pageVO) {
+        return CommonResult.success(methodLogService.getPage(pageVO));
     }
 
     
