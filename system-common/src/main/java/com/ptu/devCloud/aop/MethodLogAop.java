@@ -3,9 +3,12 @@ package com.ptu.devCloud.aop;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.annotation.EnableMethodLog;
+import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.MethodLog;
-import com.ptu.devCloud.service.MethodLogService;
+import com.ptu.devCloud.entity.thread.AsyncLogTask;
+import com.ptu.devCloud.entity.thread.ThreadTask;
 import com.ptu.devCloud.entity.CommonResult;
+import com.ptu.devCloud.service.MethodLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -17,6 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+
 
 /**
  * 给 controller 包下的所有方法记录日志
@@ -31,11 +35,11 @@ public class MethodLogAop {
     @Resource
     private MethodLogService methodLogService;
 
-    // 扫描所有的controller包下的所有类的所有方法
+    // 扫描EnableMethodLog注解下的方法
     @Pointcut("@annotation(com.ptu.devCloud.annotation.EnableMethodLog)")
-    public void controllerPointCut(){}
+    public void methodLogPointCut(){}
 
-    @Around("controllerPointCut()")
+    @Around("methodLogPointCut()")
     public Object methodLog(ProceedingJoinPoint joinPoint) {
         Object result = null;
         MethodLog methodLog = new MethodLog();
@@ -72,7 +76,9 @@ public class MethodLogAop {
             methodLog.setConsumeTime(String.format("%.2f", (double) (endTime - startTime) / 1000));
             // 方法出参
             methodLog.setResultJson(JSON.toJSONString(result));
-            methodLogService.insertIgnoreNull(methodLog);
+            // 提交异步日志任务
+            ThreadTask asyncLogTask = new AsyncLogTask(methodLog, methodLogService);
+            CommonConstants.COMMON_THREAD_POOL.submit(asyncLogTask);
         }
 
         return result;
