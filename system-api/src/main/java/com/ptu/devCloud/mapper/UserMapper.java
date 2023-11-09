@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * UserMapper
@@ -70,6 +71,15 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(User user);
+
+	/**
+	 * 以账号查询用户
+	 * @author Yang Fan
+	 * @since 2023/11/9 14:45
+	 * @param loginAccount 登录账号
+	 * @return User
+	 */
+	User selectByAccount(@Param(value = "loginAccount") String loginAccount);
 	
 	
 }
