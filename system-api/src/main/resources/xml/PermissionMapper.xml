@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.PermissionMapper">
+	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.Permission">
+            <result column="id" property="id" />
+	        <result column="create_by" property="createBy" />
+	        <result column="create_date" property="createDate" />
+	        <result column="update_by" property="updateBy" />
+	        <result column="update_date" property="updateDate" />
+	        <result column="permission_name" property="permissionName" />
+	        <result column="parent_id" property="parentId" />
+	        <result column="order_num" property="orderNum" />
+	        <result column="path" property="path" />
+	        <result column="component" property="component" />
+	        <result column="permission_type" property="permissionType" />
+	        <result column="visible" property="visible" />
+	        <result column="status" property="status" />
+	        <result column="perms" property="perms" />
+	        <result column="icon" property="icon" />
+	        <result column="remark" property="remark" />
+		</resultMap>  
+    
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+         t.id
+        , t.create_by
+        , t.create_date
+        , t.update_by
+        , t.update_date
+        , t.permission_name
+        , t.parent_id
+        , t.order_num
+        , t.path
+        , t.component
+        , t.permission_type
+        , t.visible
+        , t.status
+        , t.perms
+        , t.icon
+        , t.remark
+        </sql> 
+    
+    <!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM permission t
+		where t.status = true
+		order by t.order_num
+	</select>
+ 
+ 	<!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM permission t
+		WHERE id = #{id} and t.status = true
+	</select>
+
+	<!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.Permission"
+		keyProperty="id" keyColumn="id" >
+	INSERT INTO permission
+    	<trim prefix="(" suffix=")" suffixOverrides=",">	 
+    	    	    	id,
+    	    	    	    	create_by,
+    	    	    	    	create_date,
+    	    	    	    	update_by,
+    	    	    	    	update_date,
+    	    	    	    	permission_name,
+    	    	    	    	parent_id,
+    	    	    	    	order_num,
+    	    	    	    	path,
+    	    	    	    	component,
+    	    	    	    	permission_type,
+    	    	    	    	visible,
+    	    	    	    	status,
+    	    	    	    	perms,
+    	    	    	    	icon,
+    	    	    	    	remark,
+    	    	    	</trim>
+    	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+    	    	        #{id},                   
+    			    	        #{createBy},                   
+    			    	        #{createDate},                   
+    			    	        #{updateBy},                   
+    			    	        #{updateDate},                   
+    			    	        #{permissionName},                   
+    			    	        #{parentId},                   
+    			    	        #{orderNum},                   
+    			    	        #{path},                   
+    			    	        #{component},                   
+    			    	        #{permissionType},                   
+    			    	        #{visible},                   
+    			    	        #{status},                   
+    			    	        #{perms},                   
+    			    	        #{icon},                   
+    			    	        #{remark},                   
+    			    	</trim>
+	</insert>
+    
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.Permission"
+        keyProperty="id" keyColumn="id" >
+        INSERT INTO permission    
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+        		        <if test="id != null">
+			id,
+		</if>
+                		        <if test="createBy != null">
+			create_by,
+		</if>
+                		        <if test="createDate != null">
+			create_date,
+		</if>
+                		        <if test="updateBy != null">
+			update_by,
+		</if>
+                		        <if test="updateDate != null">
+			update_date,
+		</if>
+                		        <if test="permissionName != null">
+			permission_name,
+		</if>
+                		        <if test="parentId != null">
+			parent_id,
+		</if>
+                		        <if test="orderNum != null">
+			order_num,
+		</if>
+                		        <if test="path != null">
+			path,
+		</if>
+                		        <if test="component != null">
+			component,
+		</if>
+                		        <if test="permissionType != null">
+			permission_type,
+		</if>
+                		        <if test="visible != null">
+			visible,
+		</if>
+                		        <if test="status != null">
+			status,
+		</if>
+                		        <if test="perms != null">
+			perms,
+		</if>
+                		        <if test="icon != null">
+			icon,
+		</if>
+                		        <if test="remark != null">
+			remark,
+		</if>
+                        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+                        <if test="id != null" >
+			#{id},                    
+        </if>
+                                <if test="createBy != null" >
+			#{createBy},                    
+        </if>
+                                <if test="createDate != null" >
+			#{createDate},                    
+        </if>
+                                <if test="updateBy != null" >
+			#{updateBy},                    
+        </if>
+                                <if test="updateDate != null" >
+			#{updateDate},                    
+        </if>
+                                <if test="permissionName != null" >
+			#{permissionName},                    
+        </if>
+                                <if test="parentId != null" >
+			#{parentId},                    
+        </if>
+                                <if test="orderNum != null" >
+			#{orderNum},                    
+        </if>
+                                <if test="path != null" >
+			#{path},                    
+        </if>
+                                <if test="component != null" >
+			#{component},                    
+        </if>
+                                <if test="permissionType != null" >
+			#{permissionType},                    
+        </if>
+                                <if test="visible != null" >
+			#{visible},                    
+        </if>
+                                <if test="status != null" >
+			#{status},                    
+        </if>
+                                <if test="perms != null" >
+			#{perms},                    
+        </if>
+                                <if test="icon != null" >
+			#{icon},                    
+        </if>
+                                <if test="remark != null" >
+			#{remark},                    
+        </if>
+                        </trim>
+    </insert>
+
+	<!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.Permission">
+    UPDATE permission
+     <set>		
+                    		create_by=#{createBy},        
+               		create_date=#{createDate},        
+               		update_by=#{updateBy},        
+               		update_date=#{updateDate},        
+               		permission_name=#{permissionName},        
+               		parent_id=#{parentId},        
+               		order_num=#{orderNum},        
+               		path=#{path},        
+               		component=#{component},        
+               		permission_type=#{permissionType},        
+               		visible=#{visible},        
+               		status=#{status},        
+               		perms=#{perms},        
+               		icon=#{icon},        
+               		remark=#{remark},        
+               </set>	
+    WHERE id = #{id}
+    </update>  
+    
+    
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.Permission">
+    UPDATE permission
+    <set>
+		    		<if test="createBy != null" >
+		create_by=#{createBy},                 
+	</if>
+	    		<if test="createDate != null" >
+		create_date=#{createDate},                 
+	</if>
+	    		<if test="updateBy != null" >
+		update_by=#{updateBy},                 
+	</if>
+	    		<if test="updateDate != null" >
+		update_date=#{updateDate},                 
+	</if>
+	    		<if test="permissionName != null" >
+		permission_name=#{permissionName},                 
+	</if>
+	    		<if test="parentId != null" >
+		parent_id=#{parentId},                 
+	</if>
+	    		<if test="orderNum != null" >
+		order_num=#{orderNum},                 
+	</if>
+	    		<if test="path != null" >
+		path=#{path},                 
+	</if>
+	    		<if test="component != null" >
+		component=#{component},                 
+	</if>
+	    		<if test="permissionType != null" >
+		permission_type=#{permissionType},                 
+	</if>
+	    		<if test="visible != null" >
+		visible=#{visible},                 
+	</if>
+	    		<if test="status != null" >
+		status=#{status},                 
+	</if>
+	    		<if test="perms != null" >
+		perms=#{perms},                 
+	</if>
+	    		<if test="icon != null" >
+		icon=#{icon},                 
+	</if>
+	    		<if test="remark != null" >
+		remark=#{remark},                 
+	</if>
+	        </set>
+    WHERE id = #{id}
+    </update>
+
+
+
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.UserRole">
+            <result column="id" property="id" />
+	        <result column="create_by" property="createBy" />
+	        <result column="create_date" property="createDate" />
+	        <result column="update_by" property="updateBy" />
+	        <result column="update_date" property="updateDate" />
+	        <result column="user_id" property="userId" />
+	        <result column="role_id" property="roleId" />
+		</resultMap>  
+    
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+         t.id
+        , t.create_by
+        , t.create_date
+        , t.update_by
+        , t.update_date
+        , t.user_id
+        , t.role_id
+        </sql> 
+    
+    <!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM user_role t
+	</select>
+ 
+ 	<!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM user_role t
+		WHERE id = #{id}
+	</select>
+
+	<!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.UserRole"
+		keyProperty="id" keyColumn="id" >
+	INSERT INTO user_role
+    	<trim prefix="(" suffix=")" suffixOverrides=",">	 
+    	    	    	id,
+    	    	    	    	create_by,
+    	    	    	    	create_date,
+    	    	    	    	update_by,
+    	    	    	    	update_date,
+    	    	    	    	user_id,
+    	    	    	    	role_id,
+    	    	    	</trim>
+    	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+    	    	        #{id},                   
+    			    	        #{createBy},                   
+    			    	        #{createDate},                   
+    			    	        #{updateBy},                   
+    			    	        #{updateDate},                   
+    			    	        #{userId},                   
+    			    	        #{roleId},                   
+    			    	</trim>
+	</insert>
+    
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.UserRole"
+        keyProperty="id" keyColumn="id" >
+        INSERT INTO user_role    
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+        		        <if test="id != null">
+			id,
+		</if>
+                		        <if test="createBy != null">
+			create_by,
+		</if>
+                		        <if test="createDate != null">
+			create_date,
+		</if>
+                		        <if test="updateBy != null">
+			update_by,
+		</if>
+                		        <if test="updateDate != null">
+			update_date,
+		</if>
+                		        <if test="userId != null">
+			user_id,
+		</if>
+                		        <if test="roleId != null">
+			role_id,
+		</if>
+                        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+                        <if test="id != null" >
+			#{id},                    
+        </if>
+                                <if test="createBy != null" >
+			#{createBy},                    
+        </if>
+                                <if test="createDate != null" >
+			#{createDate},                    
+        </if>
+                                <if test="updateBy != null" >
+			#{updateBy},                    
+        </if>
+                                <if test="updateDate != null" >
+			#{updateDate},                    
+        </if>
+                                <if test="userId != null" >
+			#{userId},                    
+        </if>
+                                <if test="roleId != null" >
+			#{roleId},                    
+        </if>
+                        </trim>
+    </insert>
+
+	<!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.UserRole">
+    UPDATE user_role
+     <set>		
+                    		create_by=#{createBy},        
+               		create_date=#{createDate},        
+               		update_by=#{updateBy},        
+               		update_date=#{updateDate},        
+               		user_id=#{userId},        
+               		role_id=#{roleId},        
+               </set>	
+    WHERE id = #{id}
+    </update>  
+    
+    
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.UserRole">
+    UPDATE user_role
+    <set>
+		    		<if test="createBy != null" >
+		create_by=#{createBy},                 
+	</if>
+	    		<if test="createDate != null" >
+		create_date=#{createDate},                 
+	</if>
+	    		<if test="updateBy != null" >
+		update_by=#{updateBy},                 
+	</if>
+	    		<if test="updateDate != null" >
+		update_date=#{updateDate},                 
+	</if>
+	    		<if test="userId != null" >
+		user_id=#{userId},                 
+	</if>
+	    		<if test="roleId != null" >
+		role_id=#{roleId},                 
+	</if>
+	        </set>
+    WHERE id = #{id}
+    </update>
+
+
+
+</mapper>
