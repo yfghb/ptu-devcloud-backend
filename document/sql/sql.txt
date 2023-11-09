@@ -1,5 +1,5 @@
 -- auto-generated definition
-create table method_log
+create table if not exists method_log
 (
     id           bigint            not null comment '主键id'
         primary key,
@@ -20,7 +20,7 @@ create table method_log
 
 
 -- auto-generated definition
-create table table_sequence
+create table if not exists table_sequence
 (
     id            bigint auto_increment comment '主键id'
         primary key,
@@ -37,3 +37,85 @@ create table table_sequence
 
 
 insert into table_sequence(sequence_name, create_date) value ('SEQ_METHOD_LOG', sysdate());
+
+create table if not exists user(
+    id                      bigint              not null comment '主键id'
+        primary key,
+    create_by               bigint              null comment '创建人',
+    create_date             datetime            null comment '创建时间',
+    update_by               bigint              null comment '更新人',
+    update_date             datetime            null comment '更新时间',
+    status                  tinyint             default true comment '用户状态: 启用(1/true), 禁用(0/false)',
+    login_account           varchar(32)         unique key not null comment '登录账号',
+    login_password          char(32)            default 'e10adc3949ba59abbe56e057f20f883e' comment '登录密码',
+    email                   varchar(64)         null comment '邮箱',
+    phone_number            varchar(32)         null comment '手机号',
+    user_name               varchar(32)         default '用户' comment '用户名',
+    avatar                  varchar(128)        null comment '头像'
+) comment '用户表';
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_USER', sysdate());
+
+create table if not exists permission
+(
+    id                      bigint                      not null comment '主键id'
+        primary key,
+    create_by               bigint                      null comment '创建人',
+    create_date             datetime                    null comment '创建时间',
+    update_by               bigint                      null comment '更新人',
+    update_date             datetime                    null comment '更新时间',
+    permission_name         varchar(50)                 not null comment '权限名称',
+    parent_id               bigint       default 0      null comment '父ID',
+    order_num               int          default 0      null comment '显示顺序',
+    path                    varchar(200) default ''     null comment '路由地址',
+    component               varchar(255)                null comment '组件路径',
+    permission_type         char                        null comment '权限类型（M菜单 F按钮）',
+    visible                 tinyint      default true   null comment '显示状态:显示(1/true), 隐藏(0/false)',
+    status                  tinyint      default true   null comment '权限状态:启用(1/true), 禁用(0/false)',
+    perms                   varchar(100)                null comment '权限表达式',
+    icon                    varchar(100) default '#'    null comment '菜单图标',
+    remark                  varchar(500) default ''     null comment '备注'
+) comment '权限表';
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_PERMISSION', sysdate());
+
+create table if not exists role(
+    id                      bigint                      not null comment '主键id'
+        primary key,
+    create_by               bigint                      null comment '创建人',
+    create_date             datetime                    null comment '创建时间',
+    update_by               bigint                      null comment '更新人',
+    update_date             datetime                    null comment '更新时间',
+    role_name               varchar(30)                 not null comment '角色名称',
+    order_num               int          default 0      not null comment '显示顺序',
+    status                  tinyint      default true   not null comment '角色状态:启用(1/true), 禁用(0/false)'
+) comment '角色表';
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_ROLE', sysdate());
+
+create table if not exists user_role(
+    id              bigint              not null comment '主键id'
+        primary key,
+    create_by       bigint              null comment '创建人',
+    create_date     datetime            null comment '创建时间',
+    update_by       bigint              null comment '更新人',
+    update_date     datetime            null comment '更新时间',
+    user_id         bigint              not null comment '用户id',
+    role_id         bigint              not null comment '角色id'
+) comment '用户和角色关联表';
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_USER_ROLE', sysdate());
+
+create table if not exists role_permission(
+    id              bigint              not null comment '主键id'
+        primary key,
+    create_by       bigint              null comment '创建人',
+    create_date     datetime            null comment '创建时间',
+    update_by       bigint              null comment '更新人',
+    update_date     datetime            null comment '更新时间',
+    role_id         bigint              not null comment '角色id',
+    permission_id   bigint              not null comment '权限id'
+) comment '角色权限关联表';
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_ROLE_PERMISSION', sysdate());
+
