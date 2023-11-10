@@ -1,5 +1,6 @@
 package com.ptu.devCloud.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -38,8 +39,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(user == null)return false;
         User selectedUser = userMapper.selectByAccount(user.getLoginAccount());
         if(selectedUser == null){
+            if(StringUtils.checkValNull(user.getUserName())){
+                user.setUserName("用户" + user.getLoginAccount());
+            }
             String md5Password = DigestUtils.md5DigestAsHex(user.getLoginPassword().getBytes());
             user.setLoginPassword(md5Password);
+            user.setStatus(true);
             userMapper.insert(user);
             return true;
         }
