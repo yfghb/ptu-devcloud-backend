@@ -5,6 +5,7 @@ import lombok.Data;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -60,5 +61,14 @@ public class Permission extends BaseEntity implements Serializable {
 	/** 备注 */
 	@TableField(value = "remark")
 	private String remark;
+
+	/** 子权限 */
+	@TableField(exist = false)
+	private List<Permission> children;
+
+	public Permission setChildren(List<Permission> list){
+		this.children = list;
+		return this;
+	}
 
 }

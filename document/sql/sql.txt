@@ -119,3 +119,29 @@ create table if not exists role_permission(
 
 insert into table_sequence(sequence_name, create_date) value ('SEQ_ROLE_PERMISSION', sysdate());
 
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (1,null,null,null,null,'仪表盘',0,1,'/dashboard','/views/dashboard/Dashboard','M',true,true,null,'DashboardOutlined',null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (2,null,null,null,null,'帮助',0,7,'/help',null,'M',true,true,null,'QuestionCircleOutlined',null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (3,null,null,null,null,'系统管理',0,2,'/system',null,'M',true,true,null,'SettingOutlined',null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (4,null,null,null,null,'接口日志',3,1,'/system/methodLog','/views/system/methodLog/MethodLogList','M',true,true,null,null,null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (5,null,null,null,null,'项目管理',0,3,'/project',null,'M',true,true,null,'ApartmentOutlined',null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (6,null,null,null,null,'任务管理',0,4,'/task',null,'M',true,true,null,'UnorderedListOutlined',null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (7,null,null,null,null,'文档管理',0,5,'/document',null,'M',true,true,null,'FileSearchOutlined',null);
+
+insert into permission(id, create_by, create_date, update_by, update_date, permission_name, parent_id, order_num, path, component, permission_type, visible, status, perms, icon, remark)
+ value (8,null,null,null,null,'个人中心',0,6,'/userCenter',null,'M',true,true,null,'UserOutlined',null);
+
+update table_sequence set table_id = '100' where sequence_name = 'SEQ_PERMISSION';
+

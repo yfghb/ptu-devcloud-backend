@@ -19,16 +19,16 @@
     <!-- 表字段 -->
     <sql id="baseColumns">
          t.id
-        , t.create_by as createBy
-        , t.create_date as createDate
-        , t.update_by as updateBy
-        , t.update_date as updateDate
+        , t.create_by
+        , t.create_date
+        , t.update_by
+        , t.update_date
         , t.status
-        , t.login_account as loginAccount
-        , t.login_password as loginPassword
+        , t.login_account
+        , t.login_password
         , t.email
-        , t.phone_number as phoneNumber
-        , t.user_name as userName
+        , t.phone_number
+        , t.user_name
         , t.avatar
         </sql> 
     
@@ -48,7 +48,7 @@
 		WHERE id = #{id} and t.status = true
 	</select>
 
-    <select id="selectByAccount" resultType="com.ptu.devCloud.entity.User">
+    <select id="selectByAccount" resultMap="BaseResultMap">
 		SELECT
 			<include refid="baseColumns" />
 		FROM user t
