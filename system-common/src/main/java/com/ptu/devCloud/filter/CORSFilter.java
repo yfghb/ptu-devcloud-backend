@@ -1,7 +1,6 @@
 package com.ptu.devCloud.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
@@ -25,8 +24,6 @@ import java.io.IOException;
 @Slf4j
 public class CORSFilter implements Filter {
 
-    @Value("${devCloud.crossOrigin}")
-    private String crossOrigin;
 
     @Override
     public void destroy() {
@@ -38,15 +35,12 @@ public class CORSFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)req;
         HttpServletResponse response = (HttpServletResponse) res;
         String originHeader = request.getHeader("Origin");
-        // 检查请求来源是否在白名单内
-        if(checkCrossOriginOK(originHeader)) {
-            response.setHeader("Access-Control-Allow-Origin", originHeader);
-        }
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         response.setCharacterEncoding("utf-8");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token,authorization");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, tokenId");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
 
@@ -58,14 +52,5 @@ public class CORSFilter implements Filter {
 
     }
 
-    private boolean checkCrossOriginOK(String originHeader) {
-        String[] whiteList = crossOrigin.split(",");
-        for(String url:whiteList){
-            if(url.equals(originHeader)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }
