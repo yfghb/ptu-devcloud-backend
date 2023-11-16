@@ -1,5 +1,6 @@
 package com.ptu.devCloud.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.User;
@@ -29,12 +30,16 @@ public class UserController {
      * @author Yang Fan
      * @since 2023/11/9 14:57
      * @param user user实体
-     * @return CommonResult<User>
+     * @return tokenId 令牌id
      */
     @PostMapping("/login")
     @EnableMethodLog(name = "用户登录")
-    public CommonResult<User> login(@RequestBody User user){
-        return CommonResult.success(userService.login(user));
+    public CommonResult<String> login(@RequestBody User user){
+        String tokenId = userService.login(user);
+        if(StringUtils.checkValNull(tokenId)){
+            return CommonResult.error("账号或密码不正确");
+        }
+        return CommonResult.success(tokenId);
     }
 
     /**

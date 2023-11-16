@@ -1,9 +1,11 @@
 package com.ptu.devCloud.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ptu.devCloud.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +27,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Override
-    public User login(User user) {
+    public String login(User user) {
         if(user == null || user.getLoginAccount() == null || user.getLoginPassword() == null)return null;
         User selectedUser = userMapper.selectByAccount(user.getLoginAccount());
-        String md5Password = DigestUtils.md5DigestAsHex(user.getLoginPassword().getBytes());
-        if(selectedUser != null && Objects.equals(selectedUser.getLoginPassword(), md5Password))return selectedUser;
+        String saltyPwd = CommonConstants.PASSWORD_SALT + user.getLoginPassword();
+        String md5Password = DigestUtils.md5DigestAsHex(saltyPwd.getBytes());
+        if(selectedUser != null && Objects.equals(selectedUser.getLoginPassword(), md5Password)){
+            // 即使token泄露也拿不到密码
+            selectedUser.setLoginPassword("*");
+            return JwtUtil.generate(selectedUser);
+        }
         return null;
     }
 
@@ -42,7 +49,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             if(StringUtils.checkValNull(user.getUserName())){
                 user.setUserName("用户" + user.getLoginAccount());
             }
-            String md5Password = DigestUtils.md5DigestAsHex(user.getLoginPassword().getBytes());
+            // 加盐，并进行二次MD5加密，减小前端MD5加密后的字符串被泄露的安全风险
+            String md5Password = DigestUtils.md5DigestAsHex((CommonConstants.PASSWORD_SALT + user.getLoginPassword()).getBytes());
             user.setLoginPassword(md5Password);
             user.setStatus(true);
             userMapper.insert(user);

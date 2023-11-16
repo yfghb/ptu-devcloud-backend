@@ -18,9 +18,9 @@ public interface UserService extends IService<User> {
      * @author Yang Fan
      * @since 2023/11/9 14:48
      * @param user user实体
-     * @return User
+     * @return tokenId 令牌id
      */
-    User login(User user);
+    String login(User user);
 
     /**
      * 新增单个用户
