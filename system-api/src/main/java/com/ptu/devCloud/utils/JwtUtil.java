@@ -16,9 +16,8 @@ public class JwtUtil {
      */
     public static String generate(Object data)  {
         String json = JSON.toJSONString(data);
-        Map<String, Object> map = JSON.parseObject(json);
         return  Jwts.builder()
-                .setClaims(map)
+                .setSubject(json)
                 .signWith(SignatureAlgorithm.HS256, CommonConstants.SECRET_KEY)
                 .compact();
     }

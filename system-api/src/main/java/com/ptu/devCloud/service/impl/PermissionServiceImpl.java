@@ -1,8 +1,10 @@
 package com.ptu.devCloud.service.impl;
 
+import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.mapper.PermissionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.PermissionService;
 import javax.annotation.Resource;
@@ -30,6 +32,16 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return builderTree(list, parentId);
     }
 
+    @Override
+    public boolean hasPermission(String permissionName) {
+        if(CommonConstants.IGNORE_PERMISSION.equals(permissionName))return true;
+        List<String> permissions = SecurityUtils.getLoginUser().getPermissions();
+        if(permissions == null){
+            return false;
+        }
+        return permissions.contains(permissionName);
+    }
+
     private List<Permission> builderTree(List<Permission> permissions, Long parentId) {
         return permissions.parallelStream()
                 .filter(permission -> permission.getParentId().equals(parentId))
@@ -44,4 +56,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .sorted((Comparator.comparingInt(Permission::getOrderNum)))
                 .collect(Collectors.toList());
     }
+
+
 }

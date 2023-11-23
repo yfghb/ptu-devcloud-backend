@@ -22,5 +22,12 @@ public interface PermissionService extends IService<Permission> {
      * @return List<Permission>
      */
     List<Permission> getPermissionsByParentId(Long parentId);
+
+    /**
+     * 判断当前用户是否有某个权限
+     * @param permissionName 权限名
+     * @return true/false
+     */
+    boolean hasPermission(String permissionName);
 	
 }

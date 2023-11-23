@@ -145,3 +145,6 @@ insert into permission(id, create_by, create_date, update_by, update_date, permi
 
 update table_sequence set table_id = '100' where sequence_name = 'SEQ_PERMISSION';
 
+alter table user modify login_password varchar(128) null comment '登录密码';
+
+

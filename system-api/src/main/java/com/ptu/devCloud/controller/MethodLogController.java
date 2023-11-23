@@ -5,6 +5,7 @@ import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.MethodLog;
 import com.ptu.devCloud.entity.vo.MethodLogPageVO;
 import com.ptu.devCloud.service.MethodLogService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class MethodLogController {
      * @return CommonResult<PageInfo<MethodLog>>
      */
     @PostMapping("/getPage")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<PageInfo<MethodLog>> getPage(@RequestBody MethodLogPageVO pageVO) {
         return CommonResult.success(methodLogService.getPage(pageVO));
     }
