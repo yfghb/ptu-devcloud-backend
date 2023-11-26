@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addUser(User user) {
-        if(user == null)return false;
+        if(user == null || user.getLoginAccount() == null)return false;
         User selectedUser = userMapper.selectByAccount(user.getLoginAccount());
         if(selectedUser == null){
             if(StringUtils.checkValNull(user.getUserName())){

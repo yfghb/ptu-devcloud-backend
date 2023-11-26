@@ -49,7 +49,7 @@ public class TokenFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authenticationToken = new
                     UsernamePasswordAuthenticationToken(loginUser, null, null);
             if(SecurityUtils.getAuthentication() == null){
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                SecurityUtils.setAuthentication(authenticationToken);
             }
             filterChain.doFilter(request, response);
         }

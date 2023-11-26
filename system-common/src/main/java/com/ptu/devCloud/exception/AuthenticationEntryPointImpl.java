@@ -3,6 +3,7 @@ package com.ptu.devCloud.exception;
 import com.alibaba.fastjson.JSON;
 import com.ptu.devCloud.constants.HttpCodeConstants;
 import com.ptu.devCloud.entity.CommonResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
@@ -17,12 +18,13 @@ import java.io.IOException;
  * @since 2023/11/22 17:15
  */
 @Component
+@Slf4j
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        authException.printStackTrace();
 
+        log.error(authException.getMessage());
         CommonResult<String> result = null;
         if(authException instanceof BadCredentialsException){
             result = CommonResult.error("用户名或密码错误");

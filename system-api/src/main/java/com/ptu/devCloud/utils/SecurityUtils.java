@@ -17,11 +17,19 @@ public class SecurityUtils
     public static LoginUser getLoginUser() {
         return (LoginUser) getAuthentication().getPrincipal();
     }
+
     /**
      * 获取Authentication
      */
     public static Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    /**
+     * 设置Authentication
+     */
+    public static void setAuthentication(Authentication authentication) {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

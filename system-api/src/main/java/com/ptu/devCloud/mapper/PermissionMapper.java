@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Permission;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * PermissionMapper
@@ -70,6 +71,14 @@ public interface PermissionMapper extends BaseMapper<Permission> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Permission permission);
-	
-	
+
+
+	/**
+	 * 根据父id查询子菜单列表
+	 * @author Yang Fan
+	 * @since 2023/11/23 14:39
+	 * @param parentId 父id(若为0, 则查询一级菜单)
+	 * @return 子菜单列表
+	 */
+	List<Permission> selectMenuList(@Param(value = "parentId") Long parentId);
 }

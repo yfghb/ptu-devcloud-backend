@@ -1,10 +1,11 @@
 package com.ptu.devCloud.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.service.PermissionService;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,11 +34,21 @@ public class PermissionController {
      * @return CommonResult<List<Permission>>
      */
     @GetMapping("/getPermissions")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId){
-        if(StringUtils.checkValNull(parentId)){
+        if(parentId == null){
             parentId = 0L;
         }
         return CommonResult.success(permissionService.getPermissionsByParentId(parentId));
+    }
+
+    @GetMapping("/getMenu")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<Permission>> getMenu(@Nullable Long parentId){
+        if(parentId == null){
+            parentId = 0L;
+        }
+        return CommonResult.success(permissionService.getMenu(parentId));
     }
     
 }

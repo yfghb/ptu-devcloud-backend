@@ -24,6 +24,15 @@ public interface PermissionService extends IService<Permission> {
     List<Permission> getPermissionsByParentId(Long parentId);
 
     /**
+     * 获取当前父id的子菜单
+     * @author Yang Fan
+     * @since 2023/11/23 14:32
+     * @param parentId 父id(若为0则代表获取一级菜单)
+     * @return List<Permission>
+     */
+    List<Permission> getMenu(Long parentId);
+
+    /**
      * 判断当前用户是否有某个权限
      * @param permissionName 权限名
      * @return true/false

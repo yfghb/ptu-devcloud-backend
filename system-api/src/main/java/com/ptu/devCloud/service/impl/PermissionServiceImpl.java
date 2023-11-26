@@ -33,6 +33,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
+    public List<Permission> getMenu(Long parentId) {
+        if(parentId == null) return new ArrayList<>();
+        List<Permission> list = permissionMapper.selectMenuList(parentId);
+        if(list==null || list.isEmpty())return new ArrayList<>();
+        return list;
+    }
+
+    @Override
     public boolean hasPermission(String permissionName) {
         if(CommonConstants.IGNORE_PERMISSION.equals(permissionName))return true;
         List<String> permissions = SecurityUtils.getLoginUser().getPermissions();

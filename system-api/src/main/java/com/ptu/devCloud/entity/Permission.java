@@ -19,8 +19,8 @@ import lombok.EqualsAndHashCode;
 public class Permission extends BaseEntity implements Serializable {
 
 	/** 权限名称 */
-	@TableField(value = "permission_name")
-	private String permissionName;
+	@TableField(value = "name")
+	private String name;
     
 	/** 父ID */
 	@TableField(value = "parent_id")
@@ -43,16 +43,16 @@ public class Permission extends BaseEntity implements Serializable {
 	private String permissionType;
     
 	/** 显示状态:显示(1/true), 隐藏(0/false) */
-	@TableField(value = "visible")
-	private Boolean visible;
+	@TableField(value = "render_menu")
+	private Boolean renderMenu;
     
 	/** 权限状态:启用(1/true), 禁用(0/false) */
 	@TableField(value = "status")
 	private Boolean status;
     
 	/** 权限表达式 */
-	@TableField(value = "perms")
-	private String perms;
+	@TableField(value = "permission")
+	private String permission;
     
 	/** 菜单图标 */
 	@TableField(value = "icon")
@@ -61,6 +61,10 @@ public class Permission extends BaseEntity implements Serializable {
 	/** 备注 */
 	@TableField(value = "remark")
 	private String remark;
+
+	/** 打开新页面/在当前页面打开 */
+	@TableField(value = "target")
+	private String target;
 
 	/** 子权限 */
 	@TableField(exist = false)

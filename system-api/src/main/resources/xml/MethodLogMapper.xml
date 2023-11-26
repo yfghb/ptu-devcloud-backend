@@ -39,6 +39,7 @@
         SELECT
         <include refid="baseColumns" />
         FROM method_log t
+        order by t.create_date desc
     </select>
 
     <!-- 根据主键获取单条记录 -->

@@ -147,4 +147,18 @@ update table_sequence set table_id = '100' where sequence_name = 'SEQ_PERMISSION
 
 alter table user modify login_password varchar(128) null comment '登录密码';
 
+alter table permission change permission_name name varchar(50) not null comment '权限名称';
+
+alter table permission alter column icon set default null;
+
+alter table permission change visible render_menu tinyint default 1 null comment '显示状态:显示(1/true), 隐藏(0/false)';
+
+alter table permission change perms permission varchar(100) null comment '权限表达式';
+
+alter table permission
+	add target varchar(16) default '_self' null comment '''_self''在当前页面打开，''_blank''打开新页面';
+
+
+
+
 
