@@ -19,6 +19,7 @@
 	        <result column="icon" property="icon" />
 	        <result column="remark" property="remark" />
 	        <result column="target" property="target" />
+	        <result column="title" property="title" />
 		</resultMap>
     
     <!-- 表字段 -->
@@ -40,6 +41,7 @@
         , t.icon
         , t.remark
 		, t.target
+		, t.title
         </sql> 
     
     <!-- 查询全部 -->
@@ -89,6 +91,7 @@
     	    	    	    	icon,
     	    	    	    	remark,
 	    						target,
+								title,
     	    	    	</trim>
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
     	    	        #{id},                   
@@ -107,7 +110,8 @@
     			    	        #{permission},
     			    	        #{icon},                   
     			    	        #{remark},
-	    						#{target}
+	    						#{target},
+	    						#{title},
     			    	</trim>
 	</insert>
     
@@ -167,6 +171,9 @@
 								<if test="target != null">
 			target,
 		</if>
+								<if test="title != null">
+			title,
+		</if>
                         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
                         <if test="id != null" >
@@ -220,6 +227,9 @@
 								<if test="target != null">
 			#{target},
         </if>
+            					<if test="title != null">
+			#{title},
+		</if>
                         </trim>
     </insert>
 
@@ -242,7 +252,8 @@
                		permission=#{permission},
                		icon=#{icon},        
                		remark=#{remark},
-        			target=#{target}
+        			target=#{target},
+        			title=#{title}
      </set>
     WHERE id = #{id}
     </update>  
@@ -300,6 +311,9 @@
 				<if test="target != null" >
 		target=#{target},
     </if>
+				<if test="title != null">
+		title=#{title},
+	</if>
 	        </set>
     WHERE id = #{id}
     </update>

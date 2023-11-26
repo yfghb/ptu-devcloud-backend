@@ -66,6 +66,10 @@ public class Permission extends BaseEntity implements Serializable {
 	@TableField(value = "target")
 	private String target;
 
+	/** 标题 */
+	@TableField(value = "title")
+	private String title;
+
 	/** 子权限 */
 	@TableField(exist = false)
 	private List<Permission> children;
