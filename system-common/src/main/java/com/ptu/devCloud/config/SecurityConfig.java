@@ -56,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/UserController/login").anonymous()
             .antMatchers("/UserController/add").anonymous()
             // 其余请求需要认证才能访问
-            .anyRequest().authenticated()
+            //.anyRequest().authenticated()
+            .anyRequest().anonymous()
             .and()
             //关闭默认的注销功能
             .logout().disable()

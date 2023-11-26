@@ -1,5 +1,6 @@
 package com.ptu.devCloud.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.mapper.PermissionMapper;
@@ -26,9 +27,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private PermissionMapper permissionMapper;
 
     @Override
-    public List<Permission> getPermissionsByParentId(Long parentId) {
+    public List<Permission> getPermissionsByParentId(Long parentId, String type) {
         List<Permission> list = permissionMapper.listAll();
         if(list == null || list.isEmpty()) return new ArrayList<>();
+        if(!StringUtils.checkValNull(type)){
+            list = list.parallelStream().filter(obj -> type.equals(obj.getPermissionType())).collect(Collectors.toList());
+        }
         return builderTree(list, parentId);
     }
 
@@ -53,14 +57,24 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private List<Permission> builderTree(List<Permission> permissions, Long parentId) {
         return permissions.parallelStream()
                 .filter(permission -> permission.getParentId().equals(parentId))
-                .map(permission -> permission.setChildren(getChildren(permission, permissions)))
+                .peek(permission -> {
+                    permission.setChildren(getChildren(permission, permissions));
+                    if(permission.getChildren().isEmpty()){
+                        permission.setChildren(null);
+                    }
+                })
                 .sorted((Comparator.comparingInt(Permission::getOrderNum)))
                 .collect(Collectors.toList());
     }
     private List<Permission> getChildren(Permission permission, List<Permission> permissions) {
         return permissions.parallelStream()
                 .filter(p -> p.getParentId().equals(permission.getId()))
-                .map(p -> p.setChildren(getChildren(p,permissions)))
+                .peek(p -> {
+                    p.setChildren(getChildren(p, permissions));
+                    if(p.getChildren().isEmpty()){
+                        p.setChildren(null);
+                    }
+                })
                 .sorted((Comparator.comparingInt(Permission::getOrderNum)))
                 .collect(Collectors.toList());
     }

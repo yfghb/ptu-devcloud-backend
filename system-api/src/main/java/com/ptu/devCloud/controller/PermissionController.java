@@ -27,19 +27,20 @@ public class PermissionController {
     private PermissionService permissionService;
 
     /**
-     * 获取权限树
+     * 获取资源树
      * @author Yang Fan
      * @since 2023/11/10 17:39
      * @param parentId 父id
+     * @param type 'M' 菜单, 'B' 按钮
      * @return CommonResult<List<Permission>>
      */
     @GetMapping("/getPermissions")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId){
+    public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId, @Nullable String type){
         if(parentId == null){
             parentId = 0L;
         }
-        return CommonResult.success(permissionService.getPermissionsByParentId(parentId));
+        return CommonResult.success(permissionService.getPermissionsByParentId(parentId, type));
     }
 
     @GetMapping("/getMenu")

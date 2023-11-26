@@ -134,6 +134,19 @@ alter table permission change perms permission varchar(100) null comment '权限
 alter table permission
 	add target varchar(16) default '_self' null comment '''_self''在当前页面打开，''_blank''打开新页面';
 
+alter table permission
+	add title varchar(64) null comment '标题';
+
+
+insert into permission(id, name, title, parent_id, order_num, path, component, permission_type, icon)
+values
+       (10, 'workplace','工作台' , 0, 10, '/workplace', '@/pages/workplace' , 'M', 'DashboardOutlined'),
+       (20, 'table','表格' , 0, 20, '/table', '@/pages/table' , 'M', 'TableOutlined'),
+       (30, 'personal','个人中心' , 0, 30, '/personal', '@/pages/personal' , 'M', 'ProfileOutlined'),
+       (40, 'system','系统配置' , 0, 40, '/system', '@/components/layout/BlankView.vue' , 'M', 'SettingOutlined'),
+       (50, 'menu','菜单管理' , 40, 10, '/system/menu', '@/pages/system' , 'M', null),
+       (60, 'user','用户管理' , 40, 20, '/system/user', '@/pages/user' , 'M', null);
+
 
 
 

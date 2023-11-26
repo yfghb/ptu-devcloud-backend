@@ -19,9 +19,10 @@ public interface PermissionService extends IService<Permission> {
      * @author Yang Fan
      * @since 2023/11/10 17:18
      * @param parentId 父id(若为0则代表获取所有菜单)
+     * @param type  'M' 菜单, 'B' 按钮
      * @return List<Permission>
      */
-    List<Permission> getPermissionsByParentId(Long parentId);
+    List<Permission> getPermissionsByParentId(Long parentId, String type);
 
     /**
      * 获取当前父id的子菜单

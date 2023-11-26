@@ -38,7 +38,7 @@ public class Permission extends BaseEntity implements Serializable {
 	@TableField(value = "component")
 	private String component;
     
-	/** 权限类型（M菜单 F按钮） */
+	/** 权限类型（M菜单 B按钮） */
 	@TableField(value = "permission_type")
 	private String permissionType;
     
@@ -69,6 +69,10 @@ public class Permission extends BaseEntity implements Serializable {
 	/** 标题 */
 	@TableField(value = "title")
 	private String title;
+
+	/** 父组件名称 */
+	@TableField(value = "parent")
+	public String parent;
 
 	/** 子权限 */
 	@TableField(exist = false)

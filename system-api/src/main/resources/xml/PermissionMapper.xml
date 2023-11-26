@@ -13,13 +13,14 @@
 	        <result column="path" property="path" />
 	        <result column="component" property="component" />
 	        <result column="permission_type" property="permissionType" />
-	        <result column="visible" property="renderMenu" />
+	        <result column="render_menu" property="renderMenu" />
 	        <result column="status" property="status" />
 	        <result column="permission" property="permission" />
 	        <result column="icon" property="icon" />
 	        <result column="remark" property="remark" />
 	        <result column="target" property="target" />
 	        <result column="title" property="title" />
+	        <result column="parent" property="parent" />
 		</resultMap>
     
     <!-- 表字段 -->
@@ -42,6 +43,7 @@
         , t.remark
 		, t.target
 		, t.title
+		, t.parent
         </sql> 
     
     <!-- 查询全部 -->
@@ -92,9 +94,10 @@
     	    	    	    	remark,
 	    						target,
 								title,
+								parent,
     	    	    	</trim>
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
-    	    	        #{id},                   
+    	    	        		#{id},
     			    	        #{createBy},                   
     			    	        #{createDate},                   
     			    	        #{updateBy},                   
@@ -112,6 +115,7 @@
     			    	        #{remark},
 	    						#{target},
 	    						#{title},
+								#{parent},
     			    	</trim>
 	</insert>
     
@@ -174,6 +178,9 @@
 								<if test="title != null">
 			title,
 		</if>
+            					<if test="parent != null">
+			parent
+		</if>
                         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
                         <if test="id != null" >
@@ -230,6 +237,9 @@
             					<if test="title != null">
 			#{title},
 		</if>
+								<if test="parent != null">
+			#{parent},
+		</if>
                         </trim>
     </insert>
 
@@ -253,7 +263,8 @@
                		icon=#{icon},        
                		remark=#{remark},
         			target=#{target},
-        			title=#{title}
+        			title=#{title},
+		 			parent=#{parent},
      </set>
     WHERE id = #{id}
     </update>  
@@ -313,6 +324,9 @@
     </if>
 				<if test="title != null">
 		title=#{title},
+	</if>
+				<if test="parent != null">
+		parent=#{parent},
 	</if>
 	        </set>
     WHERE id = #{id}
