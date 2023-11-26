@@ -147,6 +147,11 @@ values
        (50, 'menu','菜单管理' , 40, 10, '/system/menu', '@/pages/system' , 'M', null),
        (60, 'user','用户管理' , 40, 20, '/system/user', '@/pages/user' , 'M', null);
 
+alter table permission
+	add parent varchar(255) default null null comment '父组件名称';
+
+update permission set parent = 'system' where parent_id = '40';
+
 
 
 
