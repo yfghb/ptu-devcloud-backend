@@ -84,7 +84,10 @@ public class MapperAop {
             if (id != null) {
                 try {
                     BaseEntity baseEntity = (BaseEntity) obj;
-                    baseEntity.setId(id);
+                    if(baseEntity.getId() == null){
+                        baseEntity.setId(id);
+                    }
+                    // todo 设置创建人
                     baseEntity.setCreateBy(0L);
                     baseEntity.setCreateDate(new Date());
                 }
@@ -110,6 +113,7 @@ public class MapperAop {
             try{
                 BaseEntity baseEntity = (BaseEntity) obj;
                 baseEntity.setUpdateDate(new Date());
+                // todo 设置修改人
                 baseEntity.setUpdateBy(100L);
             }
             catch (Exception e) {
