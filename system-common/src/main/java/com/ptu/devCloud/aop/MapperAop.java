@@ -72,10 +72,15 @@ public class MapperAop {
         if (entity == null) {
             return;
         }
-        Collection<Object> list = (Collection<Object>) entity;
-        for(Object item : list) {
-            updatePublicField(item);
+        if(entity instanceof List){
+            Collection<Object> list = (Collection<Object>) entity;
+            for(Object item : list) {
+                updatePublicField(item);
+            }
+        }else {
+            updatePublicField(entity);
         }
+
     }
 
     private void generatePublicField(Object obj, String seqName) {
