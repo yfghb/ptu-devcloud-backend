@@ -1,7 +1,7 @@
 package com.ptu.devCloud.filter;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.constants.HttpCodeConstants;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.LoginUser;
@@ -32,7 +32,7 @@ public class TokenFilter extends OncePerRequestFilter {
         if(true){
             filterChain.doFilter(request, response);
         }
-        else if(StringUtils.checkValNull(token)){
+        else if(StrUtil.isEmpty(token)){
             String url = request.getRequestURL().toString();
             // 忽略登录和注册接口
             if(url.contains("/UserController/login") || url.contains("/UserController/add")){

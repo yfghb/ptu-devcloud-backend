@@ -1,7 +1,7 @@
 package com.ptu.devCloud.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.entity.TableSequence;
 import com.ptu.devCloud.mapper.TableSequenceMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -27,7 +27,7 @@ public class TableSequenceServiceImpl extends ServiceImpl<TableSequenceMapper, T
     @Transactional(rollbackFor = Exception.class)
     public Long generateId(String seqName) {
         Long id = null;
-        if (StringUtils.checkValNotNull(seqName) && !seqName.equals("SEQ_TABLE_SEQUENCE")) {
+        if (StrUtil.isNotEmpty(seqName) && !seqName.equals("SEQ_TABLE_SEQUENCE")) {
             LambdaQueryWrapper<TableSequence> lqw = new LambdaQueryWrapper<>();
             lqw.eq(TableSequence::getSequenceName, seqName);
             // 根据序列名查询

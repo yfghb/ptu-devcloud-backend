@@ -1,6 +1,6 @@
 package com.ptu.devCloud.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.User;
@@ -36,7 +36,7 @@ public class UserController {
     @EnableMethodLog(name = "用户登录")
     public CommonResult<String> login(@RequestBody User user){
         String tokenId = userService.login(user);
-        if(StringUtils.checkValNull(tokenId)){
+        if(StrUtil.isEmpty(tokenId)){
             return CommonResult.error("账号或密码不正确");
         }
         return CommonResult.success(tokenId);

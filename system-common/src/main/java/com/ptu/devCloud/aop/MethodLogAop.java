@@ -1,7 +1,7 @@
 package com.ptu.devCloud.aop;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.MethodLog;
@@ -55,7 +55,7 @@ public class MethodLogAop {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String methodName = signature.getMethod().getAnnotation(EnableMethodLog.class).name();
         // 方法名
-        methodLog.setMethodName((StringUtils.checkValNull(methodName)) ? joinPoint.getSignature().getName() : methodName);
+        methodLog.setMethodName((StrUtil.isEmpty(methodName)) ? joinPoint.getSignature().getName() : methodName);
         // 请求入参
         methodLog.setParamsJson(JSON.toJSONString(joinPoint.getArgs()));
         long startTime = System.currentTimeMillis();

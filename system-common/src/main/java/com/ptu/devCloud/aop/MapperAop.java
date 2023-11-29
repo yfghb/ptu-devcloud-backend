@@ -1,6 +1,6 @@
 package com.ptu.devCloud.aop;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.entity.BaseEntity;
 import com.ptu.devCloud.service.TableSequenceService;
@@ -47,7 +47,7 @@ public class MapperAop {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 获得序列名
         String seqName = signature.getMethod().getAnnotation(SeqName.class).value();
-        if (StringUtils.checkValNull(seqName)) {
+        if (StrUtil.isEmpty(seqName)) {
             log.error(joinPoint.getSignature().getDeclaringTypeName() + "\n找不到序列名，无法生成主键！");
         }
         else {

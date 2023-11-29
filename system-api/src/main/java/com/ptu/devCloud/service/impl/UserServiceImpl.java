@@ -1,6 +1,6 @@
 package com.ptu.devCloud.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.mapper.UserMapper;
@@ -58,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(user == null || user.getLoginAccount() == null)return false;
         User selectedUser = userMapper.selectByAccount(user.getLoginAccount());
         if(selectedUser == null){
-            if(StringUtils.checkValNull(user.getUserName())){
+            if(StrUtil.isEmpty(user.getUserName())){
                 user.setUserName("用户" + user.getLoginAccount());
             }
             // 加密密码

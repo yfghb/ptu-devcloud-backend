@@ -1,7 +1,7 @@
 package com.ptu.devCloud.service.impl;
 
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.mapper.PermissionMapper;
@@ -34,7 +34,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public List<Permission> getPermissionsByParentId(Long parentId, String type) {
         List<Permission> list = permissionMapper.listAll();
         if(list == null || list.isEmpty()) return new ArrayList<>();
-        if(!StringUtils.checkValNull(type)){
+        if(StrUtil.isNotEmpty(type)){
             list = list.parallelStream().filter(obj -> type.equals(obj.getPermissionType())).collect(Collectors.toList());
         }
         return builderTree(list, parentId);
