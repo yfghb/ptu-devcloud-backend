@@ -152,7 +152,9 @@ alter table permission
 
 update permission set parent = 'system' where parent_id = '40';
 
+update permission set icon = 'UserOutlined' where id = 30;
 
+update permission set component = '@/pages/system/menu' where id = 50;
 
 
 

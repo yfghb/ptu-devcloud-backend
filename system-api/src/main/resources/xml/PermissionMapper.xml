@@ -222,8 +222,8 @@
                                 <if test="status != null" >
 			#{status},                    
         </if>
-                                <if test="perms != null" >
-			#{perms},                    
+                                <if test="permission != null" >
+			#{permission},
         </if>
                                 <if test="icon != null" >
 			#{icon},                    

@@ -2,6 +2,7 @@ package com.ptu.devCloud.service.impl;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.mapper.PermissionMapper;
@@ -54,6 +55,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Transactional(rollbackFor = Exception.class)
     public void add(Permission permission) {
         if(permission == null)return;
+        if(StrUtil.isNotEmpty(permission.getParent())){
+            LambdaQueryWrapper<Permission> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(Permission::getName, permission.getParent());
+            // 设置父id
+            Permission parent = permissionMapper.selectOne(lqw);
+            if(parent!=null)permission.setParentId(parent.getId());
+        }
         permissionMapper.insertIgnoreNull(permission);
     }
 
