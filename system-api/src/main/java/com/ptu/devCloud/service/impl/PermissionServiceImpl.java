@@ -1,5 +1,6 @@
 package com.ptu.devCloud.service.impl;
 
+
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.Permission;
@@ -8,10 +9,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.PermissionService;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -37,14 +41,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<Permission> getMenu(Long parentId) {
-        if(parentId == null) return new ArrayList<>();
-        List<Permission> list = permissionMapper.selectMenuList(parentId);
-        if(list==null || list.isEmpty())return new ArrayList<>();
-        return list;
-    }
-
-    @Override
     public boolean hasPermission(String permissionName) {
         if(CommonConstants.IGNORE_PERMISSION.equals(permissionName))return true;
         List<String> permissions = SecurityUtils.getLoginUser().getPermissions();
@@ -54,6 +50,29 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return permissions.contains(permissionName);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void add(Permission permission) {
+        if(permission == null)return;
+        permissionMapper.insertIgnoreNull(permission);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePermissionById(Permission permission) {
+        if(permission == null || permission.getId() == null)return;
+        permissionMapper.updateIgnoreNull(permission);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deletePermissionById(Long id) {
+        if(Objects.nonNull(id)){
+            permissionMapper.deleteById(id);
+        }
+    }
+
+    /** 获取权限树 */
     private List<Permission> builderTree(List<Permission> permissions, Long parentId) {
         return permissions.parallelStream()
                 .filter(permission -> permission.getParentId().equals(parentId))
@@ -66,6 +85,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .sorted((Comparator.comparingInt(Permission::getOrderNum)))
                 .collect(Collectors.toList());
     }
+
+    /** 获取子权限 */
     private List<Permission> getChildren(Permission permission, List<Permission> permissions) {
         return permissions.parallelStream()
                 .filter(p -> p.getParentId().equals(permission.getId()))

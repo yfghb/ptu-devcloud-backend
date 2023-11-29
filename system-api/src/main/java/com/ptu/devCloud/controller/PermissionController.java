@@ -6,9 +6,7 @@ import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.service.PermissionService;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,7 +30,7 @@ public class PermissionController {
      * @since 2023/11/10 17:39
      * @param parentId 父id
      * @param type 'M' 菜单, 'B' 按钮
-     * @return CommonResult<List<Permission>>
+     * @return CommonResult<List<Permission>> 资源树
      */
     @GetMapping("/getPermissions")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
@@ -43,13 +41,46 @@ public class PermissionController {
         return CommonResult.success(permissionService.getPermissionsByParentId(parentId, type));
     }
 
-    @GetMapping("/getMenu")
+    /**
+     * 新增权限，忽略null字段
+     * @author Yang Fan
+     * @since 2023/11/29 16:45
+     * @param permission Permission实体
+     * @return CommonResult<String> 提示信息
+     */
+    @PostMapping("/add")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<Permission>> getMenu(@Nullable Long parentId){
-        if(parentId == null){
-            parentId = 0L;
-        }
-        return CommonResult.success(permissionService.getMenu(parentId));
+    public CommonResult<String> add(@RequestBody Permission permission){
+        permissionService.add(permission);
+        return CommonResult.success("操作成功！");
     }
-    
+
+    /**
+     * 修改，忽略null字段
+     * @author Yang Fan
+     * @since 2023/11/29 16:55
+     * @param permission Permission实体
+     * @return CommonResult<String> 提示信息
+     */
+    @PostMapping("/updateById")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> updateById(@RequestBody Permission permission){
+        permissionService.updatePermissionById(permission);
+        return CommonResult.success("操作成功！");
+    }
+
+    /**
+     * 以id删除
+     * @author Yang Fan
+     * @since 2023/11/29 17:03
+     * @param id 权限id
+     * @return CommonResult<String> 提示信息
+     */
+    @DeleteMapping("/deleteById")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> deleteById(@RequestParam Long id){
+        permissionService.deletePermissionById(id);
+        return CommonResult.success("操作成功！");
+    }
+
 }
