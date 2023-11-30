@@ -30,7 +30,7 @@ public class UserController {
      * @author Yang Fan
      * @since 2023/11/9 14:57
      * @param user user实体
-     * @return tokenId 令牌id
+     * @return CommonResult<String> 令牌id
      */
     @PostMapping("/login")
     @EnableMethodLog(name = "用户登录")

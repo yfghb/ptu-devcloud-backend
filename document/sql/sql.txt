@@ -156,5 +156,8 @@ update permission set icon = 'UserOutlined' where id = 30;
 
 update permission set component = '@/pages/system/menu' where id = 50;
 
+create unique index permission_name_uindex
+	on permission (name);
+
 
 

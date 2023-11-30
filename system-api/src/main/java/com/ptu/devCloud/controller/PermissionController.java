@@ -38,7 +38,10 @@ public class PermissionController {
         if(parentId == null){
             parentId = 0L;
         }
-        return CommonResult.success(permissionService.getPermissionsByParentId(parentId, type));
+        CommonResult<List<Permission>> result = CommonResult.success(permissionService.getPermissionsByParentId(parentId, type));
+        // 前端会在刷新页面时发请求，防止反复显示提示信息
+        result.setMsg(null);
+        return result;
     }
 
     /**

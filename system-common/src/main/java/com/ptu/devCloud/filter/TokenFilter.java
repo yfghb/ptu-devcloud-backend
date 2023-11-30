@@ -9,7 +9,6 @@ import com.ptu.devCloud.utils.JwtUtil;
 import com.ptu.devCloud.utils.SecurityUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import javax.servlet.FilterChain;
@@ -28,11 +27,8 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("tokenId");
-        if(true){
-            filterChain.doFilter(request, response);
-        }
-        else if(StrUtil.isEmpty(token)){
+        String token = request.getHeader("Authorization");
+        if(StrUtil.isEmpty(token)){
             String url = request.getRequestURL().toString();
             // 忽略登录和注册接口
             if(url.contains("/UserController/login") || url.contains("/UserController/add")){
