@@ -35,7 +35,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            CommonResult<String> result = CommonResult.error("登录认证过期");
+            CommonResult<String> result = CommonResult.error("登录认证过期, 请重新登录");
             result.setCode(HttpCodeConstants.NEED_LOGIN);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");

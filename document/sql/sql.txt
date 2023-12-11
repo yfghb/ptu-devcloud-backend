@@ -159,5 +159,12 @@ update permission set component = '@/pages/system/menu' where id = 50;
 create unique index permission_name_uindex
 	on permission (name);
 
+alter table method_log modify id bigint auto_increment comment '主键id';
+alter table permission modify id bigint auto_increment comment '主键id';
+alter table role modify id bigint auto_increment comment '主键id';
+alter table role_permission modify id bigint auto_increment comment '主键id';
+alter table user modify id bigint auto_increment comment '主键id';
+alter table user_role modify id bigint auto_increment comment '主键id';
 
+drop table table_sequence;
 

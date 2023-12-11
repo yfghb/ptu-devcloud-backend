@@ -3,8 +3,6 @@ package com.ptu.devCloud.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ptu.devCloud.annotation.SeqName;
-import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Permission;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,7 +39,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
      * @param permission 新增的记录
      * @return 返回影响行数
      */
-    @SeqName(value = TableSequenceConstants.Permission)
 	int insert(Permission permission);
 	
 	/**
@@ -51,7 +48,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
      * @param permission 新增的记录
      * @return 返回影响行数
      */
-    @SeqName(value = TableSequenceConstants.Permission)
 	int insertIgnoreNull(Permission permission);
 	
 	/**

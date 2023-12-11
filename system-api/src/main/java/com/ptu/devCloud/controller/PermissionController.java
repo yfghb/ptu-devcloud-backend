@@ -1,6 +1,7 @@
 package com.ptu.devCloud.controller;
 
 
+import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.service.PermissionService;
@@ -38,10 +39,7 @@ public class PermissionController {
         if(parentId == null){
             parentId = 0L;
         }
-        CommonResult<List<Permission>> result = CommonResult.success(permissionService.getPermissionsByParentId(parentId, type));
-        // 前端会在刷新页面时发请求，防止反复显示提示信息
-        result.setMsg(null);
-        return result;
+        return CommonResult.successNoMsg(permissionService.getPermissionsByParentId(parentId, type));
     }
 
     /**
@@ -53,6 +51,7 @@ public class PermissionController {
      */
     @PostMapping("/add")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @EnableMethodLog(name = "新增菜单/按钮")
     public CommonResult<String> add(@RequestBody Permission permission){
         permissionService.add(permission);
         return CommonResult.success("操作成功！");
@@ -67,6 +66,7 @@ public class PermissionController {
      */
     @PostMapping("/updateById")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @EnableMethodLog(name = "修改菜单/按钮")
     public CommonResult<String> updateById(@RequestBody Permission permission){
         permissionService.updatePermissionById(permission);
         return CommonResult.success("操作成功！");
@@ -81,6 +81,7 @@ public class PermissionController {
      */
     @DeleteMapping("/deleteById")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @EnableMethodLog(name = "删除菜单/按钮")
     public CommonResult<String> deleteById(@RequestParam Long id){
         permissionService.deletePermissionById(id);
         return CommonResult.success("操作成功！");
