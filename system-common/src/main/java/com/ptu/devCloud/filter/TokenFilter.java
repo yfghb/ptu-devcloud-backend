@@ -3,11 +3,12 @@ package com.ptu.devCloud.filter;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.ptu.devCloud.constants.HttpCodeConstants;
-import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.utils.JwtUtil;
 import com.ptu.devCloud.utils.SecurityUtils;
+import com.ptu.devCloud.utils.WebUtils;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 校验token的过滤器, 使用OncePerRequestFilter保证一次请求只经过一次filter
+ * 校验token的过滤器, 使用OncePerRequestFilter使一次请求只经过一次filter
  * @author Yang Fan
  * @since 2023/11/23 11:03
  */
@@ -35,22 +36,22 @@ public class TokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            CommonResult<String> result = CommonResult.error("登录认证过期, 请重新登录");
-            result.setCode(HttpCodeConstants.NEED_LOGIN);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            response.getWriter().print(JSON.toJSONString(result));
+            WebUtils.returnFalse(response, "登录认证过期, 请重新登录", HttpCodeConstants.NEED_LOGIN);
         }
         else {
-            // TODO 校验token是否正确
-            Claims claims = JwtUtil.parse(token);
-            LoginUser loginUser = JSON.parseObject(claims.getSubject(), LoginUser.class);
-            UsernamePasswordAuthenticationToken authenticationToken = new
-                    UsernamePasswordAuthenticationToken(loginUser, null, null);
-            if(SecurityUtils.getAuthentication() == null){
-                SecurityUtils.setAuthentication(authenticationToken);
+            // TODO 校验 token 是否在 redis 中存在
+            try{
+                Claims claims = JwtUtil.parse(token);
+                LoginUser loginUser = JSON.parseObject(claims.getSubject(), LoginUser.class);
+                UsernamePasswordAuthenticationToken authenticationToken = new
+                        UsernamePasswordAuthenticationToken(loginUser, null, null);
+                if(SecurityUtils.getAuthentication() == null){
+                    SecurityUtils.setAuthentication(authenticationToken);
+                }
+                filterChain.doFilter(request, response);
+            }catch (ExpiredJwtException e) {
+                WebUtils.returnFalse(response, "登录认证过期, 请重新登录", HttpCodeConstants.NEED_LOGIN);
             }
-            filterChain.doFilter(request, response);
         }
     }
 
