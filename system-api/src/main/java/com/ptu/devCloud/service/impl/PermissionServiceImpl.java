@@ -86,6 +86,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .filter(permission -> permission.getParentId().equals(parentId))
                 .peek(permission -> {
                     permission.setChildren(getChildren(permission, permissions));
+                    permission.setKey(permission.getId().toString());
+                    permission.setValue(permission.getId().toString());
                     if(permission.getChildren().isEmpty()){
                         permission.setChildren(null);
                     }
@@ -100,6 +102,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 .filter(p -> p.getParentId().equals(permission.getId()))
                 .peek(p -> {
                     p.setChildren(getChildren(p, permissions));
+                    p.setKey(p.getId().toString());
+                    p.setValue(p.getId().toString());
                     if(p.getChildren().isEmpty()){
                         p.setChildren(null);
                     }

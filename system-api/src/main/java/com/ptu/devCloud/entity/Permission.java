@@ -78,9 +78,13 @@ public class Permission extends BaseEntity implements Serializable {
 	@TableField(exist = false)
 	private List<Permission> children;
 
-	public Permission setChildren(List<Permission> list){
-		this.children = list;
-		return this;
-	}
+	/** 前端value值 */
+	@TableField(exist = false)
+	private String value;
+
+	/** 前端key值 */
+	@TableField(exist = false)
+	private String key;
+
 
 }
