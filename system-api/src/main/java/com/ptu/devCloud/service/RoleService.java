@@ -4,6 +4,7 @@ package com.ptu.devCloud.service;
 import com.ptu.devCloud.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 
 
 /**
@@ -13,6 +14,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
-
-	
+	/**
+	 * 查询角色列表
+	 * @param roleName 角色名称
+	 * @return List<Role>
+	 */
+	List<Role> list(String roleName);
 }

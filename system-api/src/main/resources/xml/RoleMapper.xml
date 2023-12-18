@@ -29,7 +29,6 @@
 		SELECT         
         	<include refid="baseColumns" />
 		FROM role t
-		where t.status = true
 	</select>
  
  	<!-- 根据主键获取单条记录 -->
