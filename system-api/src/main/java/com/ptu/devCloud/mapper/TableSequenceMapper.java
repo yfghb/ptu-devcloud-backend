@@ -1,20 +1,18 @@
 package com.ptu.devCloud.mapper;
 
 import java.util.List;
-
-import com.ptu.devCloud.annotation.SeqName;
-import com.ptu.devCloud.constants.TableSequenceConstants;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ptu.devCloud.entity.MethodLog;
+import com.ptu.devCloud.entity.TableSequence;
+import org.apache.ibatis.annotations.Param;
 
 /**
- * MethodLogMapper
+ * TableSequenceMapper
  * @author yang fan
  * @since 2023-09-30 16:24:11
  */
 @Mapper
-public interface MethodLogMapper extends BaseMapper<MethodLog> {
+public interface TableSequenceMapper extends BaseMapper<TableSequence> {
 
 	/**
      * 查询所有记录
@@ -22,7 +20,7 @@ public interface MethodLogMapper extends BaseMapper<MethodLog> {
      * @since 2023-09-30 16:24:11
      * @return 返回集合，没有返回空List
      */
-	List<MethodLog> listAll();
+	List<TableSequence> listAll();
 
 
 	/**
@@ -32,45 +30,50 @@ public interface MethodLogMapper extends BaseMapper<MethodLog> {
      * @param id 主键
      * @return 返回记录，没有返回null
      */
-	MethodLog getById(Long id);
+	TableSequence getById(Long id);
 	
 	/**
      * 新增，插入所有字段
      * @author yang fan
      * @since 2023-09-30 16:24:11
-     * @param methodLog 新增的记录
+     * @param tableSequence 新增的记录
      * @return 返回影响行数
      */
-	@SeqName(value = TableSequenceConstants.MethodLog)
-	int insert(MethodLog methodLog);
+	int insert(TableSequence tableSequence);
 	
 	/**
      * 新增，忽略null字段
      * @author yang fan
      * @since 2023-09-30 16:24:11
-     * @param methodLog 新增的记录
+     * @param tableSequence 新增的记录
      * @return 返回影响行数
      */
-	@SeqName(value = TableSequenceConstants.MethodLog)
-	int insertIgnoreNull(MethodLog methodLog);
+	int insertIgnoreNull(TableSequence tableSequence);
 	
 	/**
      * 修改，修改所有字段
      * @author yang fan
      * @since 2023-09-30 16:24:11
-     * @param methodLog 修改的记录
+     * @param tableSequence 修改的记录
      * @return 返回影响行数
      */
-	int update(MethodLog methodLog);
+	int update(TableSequence tableSequence);
 	
 	/**
      * 修改，忽略null字段
      * @author yang fan
      * @since 2023-09-30 16:24:11
-     * @param methodLog 修改的记录
+     * @param tableSequence 修改的记录
      * @return 返回影响行数
      */
-	int updateIgnoreNull(MethodLog methodLog);
-	
-	
+	int updateIgnoreNull(TableSequence tableSequence);
+
+	/**
+	 * 更新表序列值（这个方法不会被MapperAop扫描到）
+	 * @author Yang Fan
+	 * @since 2023/10/1 15:07
+	 * @param seqName 序列名称
+	 */
+	boolean changeId(@Param("seqName") String seqName, @Param("version") String version);
+
 }

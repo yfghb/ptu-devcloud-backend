@@ -1,7 +1,7 @@
 package com.ptu.devCloud.entity;
 
 
-import com.baomidou.mybatisplus.annotation.IdType;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,7 +18,7 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
 
     /** 主键id */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id")
     private Long id;
 
     /** 创建时间 */

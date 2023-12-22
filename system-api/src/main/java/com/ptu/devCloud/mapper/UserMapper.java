@@ -3,6 +3,8 @@ package com.ptu.devCloud.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ptu.devCloud.annotation.SeqName;
+import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,6 +41,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param user 新增的记录
      * @return 返回影响行数
      */
+    @SeqName(value = TableSequenceConstants.User)
 	int insert(User user);
 	
 	/**
@@ -48,6 +51,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param user 新增的记录
      * @return 返回影响行数
      */
+    @SeqName(value = TableSequenceConstants.User)
 	int insertIgnoreNull(User user);
 	
 	/**

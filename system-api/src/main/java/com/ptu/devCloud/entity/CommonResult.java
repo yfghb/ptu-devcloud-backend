@@ -29,7 +29,7 @@ public class CommonResult<T> {
     public static <T> CommonResult<T> success(T object) {
         CommonResult<T> commonResult = new CommonResult<>();
         commonResult.data = object;
-        commonResult.msg = CommonConstants.COMMON_SUCCESS_STRING;
+        commonResult.msg = CommonConstants.COMMON_SUCCESS_CHINESE;
         commonResult.code = HttpCodeConstants.SUCCESS;
         return commonResult;
     }
@@ -46,6 +46,13 @@ public class CommonResult<T> {
         CommonResult<T> commonResult = new CommonResult<>();
         commonResult.msg = msg;
         commonResult.code = HttpCodeConstants.SYSTEM_ERROR;
+        return commonResult;
+    }
+
+    public static <T> CommonResult<T> error(String msg, int httpCode) {
+        CommonResult<T> commonResult = new CommonResult<>();
+        commonResult.msg = msg;
+        commonResult.code = httpCode;
         return commonResult;
     }
 

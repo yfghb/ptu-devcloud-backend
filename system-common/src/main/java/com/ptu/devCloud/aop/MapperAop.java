@@ -1,13 +1,18 @@
 package com.ptu.devCloud.aop;
 
-
+import cn.hutool.core.util.StrUtil;
+import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.entity.BaseEntity;
+import com.ptu.devCloud.service.TableSequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +34,8 @@ public class MapperAop {
     @Pointcut("execution(* com.ptu.devCloud.mapper..*Mapper.update*(..))")
     public void updatePointCut(){}
 
+    @Resource
+    private TableSequenceService tableSequenceService;
 
     @Before("insertPointCut()")
     public void beforeInsert(JoinPoint joinPoint) {
@@ -37,15 +44,24 @@ public class MapperAop {
         if (entity == null) {
             return;
         }
-        // 填充公共字段
-        if (entity instanceof List) {
-            List<Object> list = (List<Object>) entity;
-            for(Object item : list) {
-                generatePublicField(item);
-            }
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        // 获得序列名
+        String seqName = signature.getMethod().getAnnotation(SeqName.class).value();
+        if (StrUtil.isEmpty(seqName)) {
+            log.error(joinPoint.getSignature().getDeclaringTypeName() + "\n找不到序列名，无法生成主键！");
         }
         else {
-            generatePublicField(entity);
+            if (entity instanceof List) {
+                List<Object> list = (List<Object>) entity;
+                for(Object item : list) {
+                    // 填充公共字段
+                    generatePublicField(item, seqName);
+                }
+            }
+            else {
+                generatePublicField(entity, seqName);
+            }
+
         }
 
     }
@@ -67,12 +83,17 @@ public class MapperAop {
 
     }
 
-    private void generatePublicField(Object obj) {
+    private void generatePublicField(Object obj, String seqName) {
         if (obj instanceof BaseEntity) {
             try {
                 BaseEntity baseEntity = (BaseEntity) obj;
+                if(baseEntity.getId() == null){
+                    baseEntity.setId(tableSequenceService.generateId(seqName));
+                }
                 // todo 设置创建人
-                baseEntity.setCreateBy(0L);
+                if(baseEntity.getCreateBy() == null) {
+                    baseEntity.setCreateBy(0L);
+                }
                 baseEntity.setCreateDate(new Date());
             }
             catch (Exception e) {
@@ -87,7 +108,9 @@ public class MapperAop {
                 BaseEntity baseEntity = (BaseEntity) obj;
                 baseEntity.setUpdateDate(new Date());
                 // todo 设置修改人
-                baseEntity.setUpdateBy(100L);
+                if (baseEntity.getUpdateBy() == null) {
+                    baseEntity.setUpdateBy(100L);
+                }
             }
             catch (Exception e) {
                 log.error("MapperAop: 更新公共字段异常！\n" + e);

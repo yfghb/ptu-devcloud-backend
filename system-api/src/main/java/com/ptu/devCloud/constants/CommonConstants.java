@@ -17,8 +17,9 @@ public class CommonConstants {
             new ThreadPoolExecutor.CallerRunsPolicy()
     );
 
-    // SUCCESS 字符串
-    public static final String COMMON_SUCCESS_STRING = "SUCCESS";
+
+    // 成功 字符串
+    public static final String COMMON_SUCCESS_CHINESE = "成功";
 
     // jwt 加密密钥
     public static final String SECRET_KEY = "SECRET_KEY";

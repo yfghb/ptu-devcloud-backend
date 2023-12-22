@@ -35,11 +35,8 @@ public class PermissionController {
      */
     @GetMapping("/getPermissions")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId, @Nullable String type){
-        if(parentId == null){
-            parentId = 0L;
-        }
-        return CommonResult.successNoMsg(permissionService.getPermissionsByParentId(parentId, type));
+    public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId, @Nullable String type, @Nullable Long roleId){
+        return CommonResult.successNoMsg(permissionService.getPermissions(parentId, type, roleId));
     }
 
     /**

@@ -27,6 +27,7 @@ create table if not exists table_sequence
     sequence_name varchar(64)      not null comment 'SEQ_表名大写',
     table_id      bigint default 1 not null comment '表主键',
     step          int    default 1 null comment '自增步长',
+    version       char(32)         null comment '版本号(乐观锁)',
     create_by     bigint           null comment '创建人',
     create_date   datetime         null comment '创建时间',
     update_by     bigint           null comment '更新人',
@@ -159,12 +160,5 @@ update permission set component = '@/pages/system/menu' where id = 50;
 create unique index permission_name_uindex
 	on permission (name);
 
-alter table method_log modify id bigint auto_increment comment '主键id';
-alter table permission modify id bigint auto_increment comment '主键id';
-alter table role modify id bigint auto_increment comment '主键id';
-alter table role_permission modify id bigint auto_increment comment '主键id';
-alter table user modify id bigint auto_increment comment '主键id';
-alter table user_role modify id bigint auto_increment comment '主键id';
 
-drop table table_sequence;
 

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.TableSequenceMapper">
+    <resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.TableSequence">
+        <result column="id" property="id" />
+        <result column="sequence_name" property="sequenceName" />
+        <result column="table_id" property="tableId" />
+        <result column="step" property="step" />
+        <result column="version" property="version" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+        t.id
+        , t.sequence_name
+        , t.table_id
+        , t.step
+        , t.version
+        , t.create_by
+        , t.create_date
+        , t.update_by
+        , t.update_date
+    </sql>
+
+    <!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumns" />
+        FROM table_sequence t
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+        SELECT
+        <include refid="baseColumns" />
+        FROM table_sequence t
+        WHERE id = #{id}
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.TableSequence"
+            keyProperty="id" keyColumn="id" useGeneratedKeys="true"
+    >
+        INSERT INTO table_sequence
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            sequence_name,
+            table_id,
+            step,
+            version,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{sequenceName},
+            #{tableId},
+            #{step},
+            #{version},
+            #{createBy},
+            #{createDate},
+            #{updateBy},
+            #{updateDate},
+        </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.TableSequence"
+            keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO table_sequence
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceName != null">
+                sequence_name,
+            </if>
+            <if test="tableId != null">
+                table_id,
+            </if>
+            <if test="step != null">
+                step,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="sequenceName != null" >
+                #{sequenceName},
+            </if>
+            <if test="tableId != null" >
+                #{tableId},
+            </if>
+            <if test="step != null" >
+                #{step},
+            </if>
+            <if test="version != null" >
+                #{version},
+            </if>
+            <if test="createBy != null" >
+                #{createBy},
+            </if>
+            <if test="createDate != null" >
+                #{createDate},
+            </if>
+            <if test="updateBy != null" >
+                #{updateBy},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.TableSequence">
+        UPDATE table_sequence
+        <set>
+            sequence_name=#{sequenceName},
+            table_id=#{tableId},
+            step=#{step},
+            version=#{version},
+            create_by=#{createBy},
+            create_date=#{createDate},
+            update_by=#{updateBy},
+            update_date=#{updateDate},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.TableSequence">
+        UPDATE table_sequence
+        <set>
+            <if test="sequenceName != null" >
+                sequence_name=#{sequenceName},
+            </if>
+            <if test="tableId != null" >
+                table_id=#{tableId},
+            </if>
+            <if test="step != null" >
+                step=#{step},
+            </if>
+            <if test="version != null" >
+                version=#{version},
+            </if>
+            <if test="createBy != null" >
+                create_by=#{createBy},
+            </if>
+            <if test="createDate != null" >
+                create_date=#{createDate},
+            </if>
+            <if test="updateBy != null" >
+                update_by=#{updateBy},
+            </if>
+            <if test="updateDate != null" >
+                update_date=#{updateDate},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="changeId">
+        <if test="seqName != null and seqName != ''">
+            update table_sequence t set t.table_id = t.table_id + t.step
+            where t.sequence_name = #{seqName} and t.version = #{version}
+        </if>
+    </update>
+
+
+</mapper>

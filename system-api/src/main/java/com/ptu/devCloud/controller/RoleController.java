@@ -2,12 +2,10 @@ package com.ptu.devCloud.controller;
 
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Role;
+import com.ptu.devCloud.entity.vo.RoleVO;
 import com.ptu.devCloud.service.RoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,10 +31,35 @@ public class RoleController {
      */
     @GetMapping("/list")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<Role>> list(String roleName){
+    public CommonResult<List<RoleVO>> list(String roleName){
         return CommonResult.successNoMsg(roleService.list(roleName));
     }
 
+    /**
+     * 添加角色
+     * @author Yang Fan
+     * @since 2023/12/22 16:57
+     * @param roleVO RoleVO
+     * @return CommonResult<String>提示信息
+     */
+    @PostMapping("/add")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> add(@RequestBody RoleVO roleVO){
+        roleService.addRole(roleVO);
+        return CommonResult.success("添加角色成功！");
+    }
 
-    
+    /**
+     * 修改角色
+     * @author Yang Fan
+     * @since 2023/12/22 17:12
+     * @param roleVO RoleVO
+     * @return CommonResult<String>提示信息
+     */
+    @PostMapping("/edit")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> edit(@RequestBody RoleVO roleVO){
+        roleService.editRole(roleVO);
+        return CommonResult.success("修改角色成功");
+    }
 }
