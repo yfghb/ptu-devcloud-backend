@@ -18,5 +18,5 @@ public class RoleVO extends Role implements Serializable {
     /**
      * 权限id列表
      */
-    private List<Long> permissionIdList;
+    private List<String> permissionIdList;
 }

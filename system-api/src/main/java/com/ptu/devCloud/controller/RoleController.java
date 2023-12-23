@@ -59,6 +59,20 @@ public class RoleController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<String> edit(@RequestBody RoleVO roleVO){
         roleService.editRole(roleVO);
-        return CommonResult.success("修改角色成功");
+        return CommonResult.success("修改角色成功！");
+    }
+
+    /**
+     * 批量删除角色
+     * @author Yang Fan
+     * @since 2023/12/23 19:39
+     * @param idList 角色id列表
+     * @return CommonResult<String>提示信息
+     */
+    @DeleteMapping("/delete")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> delete(@RequestBody List<Long> idList){
+        roleService.removeRoleBatch(idList);
+        return CommonResult.success("删除成功！");
     }
 }

@@ -1,18 +1,17 @@
 package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
-import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.entity.Role;
 import com.ptu.devCloud.entity.RolePermission;
 import com.ptu.devCloud.entity.vo.RoleVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.RoleMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ptu.devCloud.service.PermissionService;
 import com.ptu.devCloud.service.RolePermissionService;
 import com.ptu.devCloud.service.TableSequenceService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +42,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private RolePermissionService rolePermissionService;
     @Resource
     private TableSequenceService tableSequenceService;
-    @Resource
-    private PermissionService permissionService;
 
     @Override
     @SeqName(value = TableSequenceConstants.Role)
@@ -67,10 +64,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         for(Role role:roleList){
             RoleVO roleVO = new RoleVO();
             BeanUtil.copyProperties(role, roleVO);
-            List<Long> permissionIdList = rolePermissionService.lambdaQuery()
+            List<String> permissionIdList = rolePermissionService.lambdaQuery()
                     .eq(RolePermission::getRoleId, role.getId()).list()
                     .stream()
-                    .map(RolePermission::getPermissionId)
+                    .filter(obj -> obj.getPermissionId() != null)
+                    .map(obj -> obj.getPermissionId().toString())
                     .collect(Collectors.toList());
             roleVO.setPermissionIdList(permissionIdList);
             roleVOList.add(roleVO);
@@ -126,6 +124,33 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         });
     }
 
+    @Override
+    public void removeRoleBatch(List<Long> idList) {
+        if(CollUtil.isEmpty(idList))return;
+        List<Long> rolePermissionList = new ArrayList<>();
+        for(Long roleId:idList){
+            // 获取当前roleId的角色-权限关系列表
+            List<Long> list = rolePermissionService.lambdaQuery()
+                    .eq(RolePermission::getRoleId, roleId).list()
+                    .stream()
+                    .map(RolePermission::getId)
+                    .collect(Collectors.toList());
+            rolePermissionList.addAll(list);
+        }
+        transaction.execute(action -> {
+           try {
+               // 删除角色列表
+               this.removeByIds(idList);
+               // 删除角色-权限关系列表
+               rolePermissionService.removeByIds(rolePermissionList);
+               return true;
+           }catch (Exception e){
+               action.setRollbackOnly();
+               throw new JobException("批量删除角色失败！问题：" + e.getMessage());
+           }
+        });
+    }
+
     /** 解析 roleVo 得到 RolePermissionList 和 role */
     private void parseRoleVO(RoleVO roleVO, List<RolePermission> list, Role role){
         if (roleVO == null) return;
@@ -134,22 +159,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         } else {
             BeanUtil.copyProperties(roleVO, role);
         }
-        Set<Long> idSet = new HashSet<>();
         // 收集角色-权限关系列表
-        for(Long permissionId: roleVO.getPermissionIdList()){
-            idSet.add(permissionId);
+        for(String permissionId: roleVO.getPermissionIdList()){
             RolePermission rolePermission = new RolePermission();
             rolePermission.setRoleId(role.getId());
-            rolePermission.setPermissionId(permissionId);
-            list.add(rolePermission);
-            // 获取权限对象的父id, 并添加
-            Permission permission = permissionService.getById(permissionId);
-            if(permission.getParentId() != 0 && idSet.add(permission.getParentId())){
-                RolePermission obj = new RolePermission();
-                obj.setRoleId(role.getId());
-                obj.setPermissionId(permissionId);
-                list.add(obj);
+            if(StrUtil.isNotEmpty(permissionId)) {
+                rolePermission.setPermissionId(Long.valueOf(permissionId));
             }
+            list.add(rolePermission);
         }
     }
 }

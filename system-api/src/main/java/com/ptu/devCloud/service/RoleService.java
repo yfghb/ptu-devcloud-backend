@@ -38,4 +38,12 @@ public interface RoleService extends IService<Role> {
 	 * @param roleVO RoleVO
 	 */
 	void editRole(RoleVO roleVO);
+
+	/**
+	 * 批量删除角色和角色-权限关系
+	 * @author Yang Fan
+	 * @since 2023/12/23 19:34
+	 * @param idList 角色id列表
+	 */
+	void removeRoleBatch(List<Long> idList);
 }
