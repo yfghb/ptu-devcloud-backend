@@ -4,7 +4,9 @@ package com.ptu.devCloud.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.CommonConstants;
+import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.entity.RolePermission;
 import com.ptu.devCloud.mapper.PermissionMapper;
@@ -16,12 +18,7 @@ import com.ptu.devCloud.service.PermissionService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -35,8 +32,22 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Resource
     private PermissionMapper permissionMapper;
+
     @Resource
     private RolePermissionService rolePermissionService;
+
+
+    @Override
+    @SeqName(value = TableSequenceConstants.Permission)
+    public boolean save(Permission entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    @SeqName(value = TableSequenceConstants.Permission)
+    public boolean saveBatch(Collection<Permission> entityList) {
+        return super.saveBatch(entityList);
+    }
 
     @Override
     public List<Permission> getPermissions(Long parentId, String type, Long roleId) {
@@ -46,7 +57,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             parentId = 0L;
         }
         if(StrUtil.isNotEmpty(type)){
-            list = list.parallelStream().filter(obj -> type.equals(obj.getPermissionType())).collect(Collectors.toList());
+            list = list.stream().filter(obj -> type.equals(obj.getPermissionType())).collect(Collectors.toList());
         }
         if(roleId != null) {
             // 获取当前角色下的权限id列表
@@ -57,7 +68,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 rolePermissionList.forEach(obj -> map.putIfAbsent(obj.getPermissionId(), true));
             }
             // 保留当前角色的权限，过滤其他权限
-            list = list.parallelStream().filter(obj -> map.get(obj.getId())!=null).collect(Collectors.toList());
+            list = list.stream().filter(obj -> map.get(obj.getId())!=null).collect(Collectors.toList());
          }
         return builderTree(list, parentId);
     }

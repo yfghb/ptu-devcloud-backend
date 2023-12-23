@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * @since 2023/10/2 15:09
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD})
 public @interface SeqName {
     String value() default "";
 }

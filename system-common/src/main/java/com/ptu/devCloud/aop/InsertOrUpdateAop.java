@@ -3,6 +3,7 @@ package com.ptu.devCloud.aop;
 import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.entity.BaseEntity;
+import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.service.TableSequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -11,27 +12,27 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+
 
 
 /**
- * mapper切面，为insert，update方法填充公共字段
+ * mapper, service切面，为insert，update方法填充公共字段
  * @author Yang Fan
  * @since 2023/10/1 14:15
  */
 @Slf4j
 @Aspect
 @Component
-public class MapperAop {
+public class InsertOrUpdateAop {
 
-    @Pointcut("execution(* com.ptu.devCloud.mapper..*Mapper.insert*(..))")
+    @Pointcut("@annotation(com.ptu.devCloud.annotation.SeqName)")
     public void insertPointCut(){}
 
-    @Pointcut("execution(* com.ptu.devCloud.mapper..*Mapper.update*(..))")
+    @Pointcut("execution(* com.ptu.devCloud.mapper..*Mapper.update*(..))" +
+            "|| execution(* com.baomidou.mybatisplus.extension.service.IService.update*(..))")
     public void updatePointCut(){}
 
     @Resource
@@ -39,48 +40,43 @@ public class MapperAop {
 
     @Before("insertPointCut()")
     public void beforeInsert(JoinPoint joinPoint) {
-        // 获取入参
-        Object entity = joinPoint.getArgs()[0];
-        if (entity == null) {
-            return;
-        }
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 获得序列名
         String seqName = signature.getMethod().getAnnotation(SeqName.class).value();
         if (StrUtil.isEmpty(seqName)) {
-            log.error(joinPoint.getSignature().getDeclaringTypeName() + "\n找不到序列名，无法生成主键！");
+            log.warn(joinPoint.getSignature().getDeclaringTypeName() + "\n序列名为空，无法生成主键！");
         }
         else {
-            if (entity instanceof List) {
-                List<Object> list = (List<Object>) entity;
-                for(Object item : list) {
-                    // 填充公共字段
-                    generatePublicField(item, seqName);
+            // 获取入参, 为参数表每一个可能是baseEntity实例的对象生成主键
+            Object[] args = joinPoint.getArgs();
+            for (Object entity:args){
+                if (entity instanceof Collection) {
+                    Collection<?> list = (Collection<?>) entity;
+                    for(Object item : list) {
+                        // 填充公共字段
+                        generatePublicField(item, seqName);
+                    }
+                }
+                else {
+                    generatePublicField(entity, seqName);
                 }
             }
-            else {
-                generatePublicField(entity, seqName);
-            }
-
         }
-
     }
 
     @Before("updatePointCut()")
     public void beforeUpdate(JoinPoint joinPoint) {
-        Object entity = joinPoint.getArgs()[0];
-        if (entity == null) {
-            return;
-        }
-        if(entity instanceof List){
-            Collection<Object> list = (Collection<Object>) entity;
-            for(Object item : list) {
-                updatePublicField(item);
+        Object[] args = joinPoint.getArgs();
+        for(Object entity:args){
+            if(entity instanceof Collection){
+                Collection<?> list = (Collection<?>) entity;
+                for(Object item : list) {
+                    updatePublicField(item);
+                }
+            }else {
+                updatePublicField(entity);
             }
-        }else {
-            updatePublicField(entity);
         }
-
     }
 
     private void generatePublicField(Object obj, String seqName) {
@@ -97,7 +93,7 @@ public class MapperAop {
                 baseEntity.setCreateDate(new Date());
             }
             catch (Exception e) {
-                log.error("MapperAop: 填充公共字段异常！\n" + e);
+                throw new JobException("InsertOrUpdateAop: 填充公共字段异常！\n" + e.getMessage());
             }
         }
     }
@@ -113,7 +109,7 @@ public class MapperAop {
                 }
             }
             catch (Exception e) {
-                log.error("MapperAop: 更新公共字段异常！\n" + e);
+                throw new JobException("InsertOrUpdateAop: 更新公共字段异常！\n" + e.getMessage());
             }
         }
     }

@@ -1,10 +1,10 @@
 package com.ptu.devCloud.service;
 
 
+
 import com.ptu.devCloud.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.vo.RoleVO;
-
 import java.util.List;
 
 
@@ -14,6 +14,7 @@ import java.util.List;
  * @since 2023-11-09 10:12:44
  */
 public interface RoleService extends IService<Role> {
+
 
 	/**
 	 * 查询角色列表

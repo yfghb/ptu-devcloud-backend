@@ -2,6 +2,8 @@ package com.ptu.devCloud.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ptu.devCloud.annotation.SeqName;
+import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.MethodLog;
 import com.ptu.devCloud.entity.vo.MethodLogPageVO;
 import com.ptu.devCloud.mapper.MethodLogMapper;
@@ -11,6 +13,7 @@ import com.ptu.devCloud.service.MethodLogService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,6 +27,17 @@ public class MethodLogServiceImpl extends ServiceImpl<MethodLogMapper, MethodLog
     @Resource
     private MethodLogMapper methodLogMapper;
 
+    @Override
+    @SeqName(value = TableSequenceConstants.MethodLog)
+    public boolean save(MethodLog entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    @SeqName(value = TableSequenceConstants.MethodLog)
+    public boolean saveBatch(Collection<MethodLog> entityList) {
+        return super.saveBatch(entityList);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

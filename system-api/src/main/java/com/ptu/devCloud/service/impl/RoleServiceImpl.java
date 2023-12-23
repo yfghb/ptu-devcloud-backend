@@ -3,11 +3,13 @@ package com.ptu.devCloud.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Permission;
 import com.ptu.devCloud.entity.Role;
 import com.ptu.devCloud.entity.RolePermission;
 import com.ptu.devCloud.entity.vo.RoleVO;
+import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.RoleMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.PermissionService;
@@ -20,10 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +47,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private PermissionService permissionService;
 
     @Override
+    @SeqName(value = TableSequenceConstants.Role)
+    public boolean save(Role entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    @SeqName(value = TableSequenceConstants.Role)
+    public boolean saveBatch(Collection<Role> entityList) {
+        return super.saveBatch(entityList);
+    }
+
+    @Override
     public List<RoleVO> list(String roleName) {
         LambdaQueryWrapper<Role> lqw = new LambdaQueryWrapper<>();
         lqw.like(StrUtil.isNotEmpty(roleName), Role::getRoleName, roleName);
@@ -58,7 +69,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             BeanUtil.copyProperties(role, roleVO);
             List<Long> permissionIdList = rolePermissionService.lambdaQuery()
                     .eq(RolePermission::getRoleId, role.getId()).list()
-                    .parallelStream()
+                    .stream()
                     .map(RolePermission::getPermissionId)
                     .collect(Collectors.toList());
             roleVO.setPermissionIdList(permissionIdList);
@@ -78,13 +89,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         parseRoleVO(roleVO, rolePermissionList, role);
         transaction.execute(action -> {
             try {
+                // 新增角色, 忽略null字段
                 roleMapper.insertIgnoreNull(role);
-                rolePermissionService.saveRolePermissionList(rolePermissionList);
+                // 批量新增角色-权限关系
+                rolePermissionService.saveBatch(rolePermissionList);
                 return true;
             }catch (Exception e) {
                 action.setRollbackOnly();
-                log.warn("新增角色失败！问题：" + e.getMessage());
-                return false;
+                throw new JobException("新增角色失败！问题：" + e.getMessage());
             }
         });
     }
@@ -98,23 +110,23 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         parseRoleVO(roleVO, rolePermissionList, role);
         LambdaQueryWrapper<RolePermission> rolePermissionLQW = new LambdaQueryWrapper<>();
         rolePermissionLQW.eq(RolePermission::getRoleId, role.getId());
-        transaction.execute((action) -> {
+        transaction.execute(action -> {
             try {
                 // 删除旧的角色-权限关系
                 rolePermissionService.remove(rolePermissionLQW);
                 // 更新角色
                 roleMapper.updateIgnoreNull(role);
                 // 新增角色-权限关系
-                rolePermissionService.saveRolePermissionList(rolePermissionList);
+                rolePermissionService.saveBatch(rolePermissionList);
                 return true;
             }catch (Exception e){
                 action.setRollbackOnly();
-                log.warn("编辑角色失败！问题：" + e.getMessage());
-                return false;
+                throw new JobException("编辑角色失败！问题：" + e.getMessage());
             }
         });
     }
 
+    /** 解析 roleVo 得到 RolePermissionList 和 role */
     private void parseRoleVO(RoleVO roleVO, List<RolePermission> list, Role role){
         if (roleVO == null) return;
         if(roleVO.getId() == null) {

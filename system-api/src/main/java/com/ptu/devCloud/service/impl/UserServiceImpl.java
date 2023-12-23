@@ -1,6 +1,8 @@
 package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.ptu.devCloud.annotation.SeqName;
+import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.mapper.UserMapper;
@@ -18,6 +20,7 @@ import com.ptu.devCloud.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +41,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Override
+    @SeqName(value = TableSequenceConstants.User)
+    public boolean save(User entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    @SeqName(value = TableSequenceConstants.User)
+    public boolean saveBatch(Collection<User> entityList) {
+        return super.saveBatch(entityList);
+    }
 
     @Override
     public String login(User user) {
