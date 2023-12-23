@@ -1,5 +1,6 @@
 package com.ptu.devCloud.aop;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.entity.BaseEntity;
@@ -13,9 +14,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-
+import java.util.List;
 
 
 /**
@@ -52,10 +54,7 @@ public class InsertOrUpdateAop {
             for (Object entity:args){
                 if (entity instanceof Collection) {
                     Collection<?> list = (Collection<?>) entity;
-                    for(Object item : list) {
-                        // 填充公共字段
-                        generatePublicField(item, seqName);
-                    }
+                    generatePublicFieldBatch(list, seqName);
                 }
                 else {
                     generatePublicField(entity, seqName);
@@ -81,20 +80,36 @@ public class InsertOrUpdateAop {
 
     private void generatePublicField(Object obj, String seqName) {
         if (obj instanceof BaseEntity) {
-            try {
+            BaseEntity baseEntity = (BaseEntity) obj;
+            if(baseEntity.getId() == null){
+                baseEntity.setId(tableSequenceService.generateId(seqName));
+            }
+            // todo 设置创建人
+            if(baseEntity.getCreateBy() == null) {
+                baseEntity.setCreateBy(0L);
+            }
+            baseEntity.setCreateDate(new Date());
+        }
+    }
+
+    /** 使用此方法避免for循环填充公共字段速度过慢的问题 */
+    private void generatePublicFieldBatch(Collection<?> collection, String seqName){
+        if(CollUtil.isEmpty(collection))return;
+        List<BaseEntity> list = new ArrayList<>();
+        for(Object obj:collection){
+            if(obj instanceof BaseEntity){
                 BaseEntity baseEntity = (BaseEntity) obj;
-                if(baseEntity.getId() == null){
-                    baseEntity.setId(tableSequenceService.generateId(seqName));
-                }
-                // todo 设置创建人
                 if(baseEntity.getCreateBy() == null) {
+                    // todo 设置创建人
                     baseEntity.setCreateBy(0L);
                 }
                 baseEntity.setCreateDate(new Date());
+                list.add(baseEntity);
             }
-            catch (Exception e) {
-                throw new JobException("InsertOrUpdateAop: 填充公共字段异常！\n" + e.getMessage());
-            }
+        }
+        List<Long> idList = tableSequenceService.generateIdBatch(seqName, list.size());
+        for(int i=0;i<idList.size();i++){
+            list.get(i).setId(idList.get(i));
         }
     }
 

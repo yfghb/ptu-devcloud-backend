@@ -176,7 +176,8 @@
     </update>
     <update id="changeId">
         <if test="seqName != null and seqName != ''">
-            update table_sequence t set t.table_id = t.table_id + t.step
+            update table_sequence t
+            set t.table_id = t.table_id + (#{size} * t.step)
             where t.sequence_name = #{seqName} and t.version = #{version}
         </if>
     </update>

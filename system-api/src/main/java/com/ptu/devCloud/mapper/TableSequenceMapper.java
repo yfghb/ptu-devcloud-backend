@@ -69,11 +69,13 @@ public interface TableSequenceMapper extends BaseMapper<TableSequence> {
 	int updateIgnoreNull(TableSequence tableSequence);
 
 	/**
-	 * 更新表序列值（这个方法不会被MapperAop扫描到）
+	 * 更新表序列值（这个方法不会被Aop扫描到）
 	 * @author Yang Fan
 	 * @since 2023/10/1 15:07
 	 * @param seqName 序列名称
+	 * @param version 乐观锁
+	 * @param size 数量(若为单个添加, 设置1, 若为批量, 设置size)
 	 */
-	boolean changeId(@Param("seqName") String seqName, @Param("version") String version);
+	boolean changeId(@Param("seqName") String seqName, @Param("version") String version, @Param("size")Integer size);
 
 }
