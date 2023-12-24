@@ -34,6 +34,14 @@ public class CommonResult<T> {
         return commonResult;
     }
 
+    public static <T> CommonResult<T> successWithMsg(T object, String msg) {
+        CommonResult<T> commonResult = new CommonResult<>();
+        commonResult.data = object;
+        commonResult.msg = msg;
+        commonResult.code = HttpCodeConstants.SUCCESS;
+        return commonResult;
+    }
+
     public static <T> CommonResult<T> successNoMsg(T object) {
         CommonResult<T> commonResult = new CommonResult<>();
         commonResult.data = object;

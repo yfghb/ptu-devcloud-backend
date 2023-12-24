@@ -39,7 +39,7 @@ public class UserController {
         if(StrUtil.isEmpty(tokenId)){
             return CommonResult.error("账号或密码不正确");
         }
-        return CommonResult.success(tokenId);
+        return CommonResult.successNoMsg(tokenId);
     }
 
     /**
@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping("/add")
     @EnableMethodLog(name = "新增单个用户")
     public CommonResult<Boolean> add(@RequestBody User user){
-        return CommonResult.success(userService.addUser(user));
+        return CommonResult.successWithMsg(userService.addUser(user), "添加用户成功");
     }
     
 }
