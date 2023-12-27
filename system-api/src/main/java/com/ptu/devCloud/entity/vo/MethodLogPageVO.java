@@ -1,22 +1,19 @@
 package com.ptu.devCloud.entity.vo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 
 
-
+/**
+ * MethodLogPageVO
+ * @author Yang Fan
+ * @since 2023/10/06 15:13
+ */
 @Data
-public class MethodLogPageVO implements Serializable {
-    /** 当前页 */
-    private Integer current;
+@EqualsAndHashCode(callSuper = true)
+public class MethodLogPageVO extends PageVO implements Serializable {
 
-    /** 一页显示条数 */
-    private Integer pageSize;
-
-    /** 时间范围-左区间 */
-    private String startDate;
-
-    /** 时间范围-右区间 */
-    private String endDate;
 
 }

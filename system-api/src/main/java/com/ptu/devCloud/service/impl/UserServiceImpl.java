@@ -2,10 +2,14 @@ package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.utils.JwtUtil;
@@ -88,13 +92,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> getList(User user) {
-        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
-        if (user != null) {
-            lqw.like(StrUtil.isNotEmpty(user.getUserName()), User::getUserName, user.getUserName());
-            lqw.eq(user.getStatus() != null, User::getStatus, user.getStatus());
+    public PageInfo<User> getList(UserPageVO pageVO) {
+        if(pageVO == null || pageVO.getCurrent() == null || pageVO.getPageSize() == null) {
+            return new PageInfo<>();
         }
-        return userMapper.selectList(lqw);
+        PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
+        List<User> userList = userMapper.selectListByQueryParams(pageVO);
+        return new PageInfo<>(userList);
     }
 
     @Override

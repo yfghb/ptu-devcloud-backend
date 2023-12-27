@@ -1,6 +1,8 @@
 package com.ptu.devCloud.mapper;
 
 import java.util.List;
+
+import com.ptu.devCloud.entity.vo.UserPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
@@ -80,6 +82,16 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @return User
 	 */
 	User selectByAccount(@Param(value = "loginAccount") String loginAccount);
+
+
+	/**
+	 * 条件查询用户列表
+	 * @author Yang Fan
+	 * @since 2023/12/27 15:10
+	 * @param params UserPageVO(查询条件)
+	 * @return List<User>
+	 */
+	List<User> selectListByQueryParams(@Param("params") UserPageVO params);
 	
 	
 }

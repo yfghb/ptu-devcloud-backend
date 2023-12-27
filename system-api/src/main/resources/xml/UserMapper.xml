@@ -30,7 +30,7 @@
         , t.phone_number
         , t.user_name
         , t.avatar
-        </sql> 
+        </sql>
     
     <!-- 查询全部 -->
     <select id="listAll" resultMap="BaseResultMap">
@@ -53,6 +53,39 @@
 			<include refid="baseColumns" />
 		FROM user t
 		WHERE t.login_account = #{loginAccount} and t.status = true
+	</select>
+    <select id="selectListByQueryParams" resultMap="BaseResultMap">
+		SELECT
+		<include refid="baseColumns" />
+		FROM user t
+		<where>
+			<if test="params.userName != null and params.userName != ''">
+				t.user_name like CONCAT(CONCAT('%', #{params.userName}), '%')
+			</if>
+			<if test="params.loginAccount != null and params.loginAccount != ''">
+				and t.login_account like CONCAT(CONCAT('%', #{params.loginAccount}), '%')
+			</if>
+			<if test="params.email != null and params.email != ''">
+				and t.email like CONCAT(CONCAT('%', #{params.email}), '%')
+			</if>
+			<if test="params.phoneNumber != null and params.phoneNumber != ''">
+				and t.phone_number like CONCAT(CONCAT('%', #{params.phoneNumber}), '%')
+			</if>
+			<if test="params.startDate != null">
+				<![CDATA[
+				and t.create_date >= #{params.startDate}
+				]]>
+			</if>
+			<if test="params.endDate != null">
+				<![CDATA[
+				and t.create_date <= #{params.endDate}
+				]]>
+			</if>
+			<if test="params.status != null and params.status != ''">
+				and t.status =#{params.status}
+			</if>
+		</where>
+		ORDER BY t.create_date DESC
 	</select>
 
     <!-- 插入全部字段 -->

@@ -1,8 +1,10 @@
 package com.ptu.devCloud.service;
 
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.UserPageVO;
 
 import java.util.List;
 
@@ -36,9 +38,9 @@ public interface UserService extends IService<User> {
      * 查询用户列表
      * @author Yang Fan
      * @since 2023/12/27 14:38
-     * @param user User实体(查询条件)
+     * @param pageVO UserPageVO
      * @return List<User>
      */
-    List<User> getList(User user);
+    PageInfo<User> getList(UserPageVO pageVO);
 	
 }

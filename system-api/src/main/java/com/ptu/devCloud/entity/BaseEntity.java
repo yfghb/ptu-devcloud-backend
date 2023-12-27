@@ -2,9 +2,9 @@ package com.ptu.devCloud.entity;
 
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,7 +22,7 @@ public abstract class BaseEntity implements Serializable {
     private Long id;
 
     /** 创建时间 */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "create_date")
     private Date createDate;
 
@@ -32,7 +32,7 @@ public abstract class BaseEntity implements Serializable {
 
     /** 更新时间 */
     @TableField(value = "update_date")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
 
     /** 更新人 */

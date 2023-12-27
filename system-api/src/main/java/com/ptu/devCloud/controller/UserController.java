@@ -1,18 +1,18 @@
 package com.ptu.devCloud.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.annotation.Resource;
-import java.util.List;
 
 
 /**
@@ -58,16 +58,16 @@ public class UserController {
     }
 
     /**
-     * 查询用户列表
+     * 查询用户列表分页
      * @author Yang Fan
      * @since 2023/12/27 14:41
-     * @param user User实体(查询条件)
+     * @param pageVO UserPageVO
      * @return CommonResult<List<User>>
      */
-    @PostMapping("/list")
+    @PostMapping("/page")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<User>> list(@RequestBody User user){
-        return CommonResult.successNoMsg(userService.getList(user));
+    public CommonResult<PageInfo<User>> page(@RequestBody UserPageVO pageVO){
+        return CommonResult.successNoMsg(userService.getList(pageVO));
     }
     
 }
