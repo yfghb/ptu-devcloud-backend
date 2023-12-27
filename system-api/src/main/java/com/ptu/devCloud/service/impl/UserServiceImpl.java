@@ -1,6 +1,7 @@
 package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.LoginUser;
@@ -84,6 +85,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<User> getList(User user) {
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        if (user != null) {
+            lqw.like(StrUtil.isNotEmpty(user.getUserName()), User::getUserName, user.getUserName());
+            lqw.eq(user.getStatus() != null, User::getStatus, user.getStatus());
+        }
+        return userMapper.selectList(lqw);
     }
 
     @Override

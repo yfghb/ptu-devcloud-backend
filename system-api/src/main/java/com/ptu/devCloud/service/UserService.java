@@ -4,6 +4,7 @@ package com.ptu.devCloud.service;
 import com.ptu.devCloud.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 
 
 /**
@@ -30,5 +31,14 @@ public interface UserService extends IService<User> {
      * @return boolean
      */
     boolean addUser(User user);
+
+    /**
+     * 查询用户列表
+     * @author Yang Fan
+     * @since 2023/12/27 14:38
+     * @param user User实体(查询条件)
+     * @return List<User>
+     */
+    List<User> getList(User user);
 	
 }
