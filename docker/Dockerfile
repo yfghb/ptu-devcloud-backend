@@ -8,7 +8,7 @@ MAINTAINER yangfan
 ENV JAVA_OPIS ""
 
 # 添加jar包到容器中(注意！请先执行shell拷贝jar包到docker目录下)
-ADD system-boot-1.0-SNAPSHOT.jar /home/app.jar
+ADD *.jar /home/app.jar
 
 EXPOSE 9090
 
