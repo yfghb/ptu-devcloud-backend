@@ -70,7 +70,7 @@ public class UserController {
 
     @GetMapping("/hello")
     public CommonResult<String> hello(){
-        return CommonResult.success("hello!");
+        return CommonResult.success("hello world!");
     }
     
 }
