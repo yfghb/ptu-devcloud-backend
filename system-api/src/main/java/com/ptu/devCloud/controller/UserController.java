@@ -8,10 +8,8 @@ import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 
 
@@ -68,6 +66,11 @@ public class UserController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<PageInfo<User>> page(@RequestBody UserPageVO pageVO){
         return CommonResult.successNoMsg(userService.getList(pageVO));
+    }
+
+    @GetMapping("/hello")
+    public CommonResult<String> hello(){
+        return CommonResult.success("hello!");
     }
     
 }
