@@ -4,7 +4,7 @@ import com.ptu.devCloud.constants.HttpCodeConstants;
 import java.io.Serializable;
 
 /**
- * 自定义异常
+ * 业务异常
  * @author Yang Fan
  * @since 2023/12/22 19:41
  */
@@ -23,10 +23,6 @@ public class JobException extends RuntimeException implements Serializable {
         super(message);
         this.code = HttpCodeConstants.SYSTEM_ERROR;
         this.msg = message;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public String getMessage() {

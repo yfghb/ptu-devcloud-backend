@@ -17,7 +17,7 @@ public class CommonResult<T> {
     // http状态码
     private Integer code;
 
-    // 错误信息
+    // 提示信息
     private String msg;
 
     // 数据

@@ -1,3 +1,7 @@
+create database if not exists ptu_dev_cloud;
+
+use ptu_dev_cloud;
+
 -- auto-generated definition
 create table if not exists method_log
 (
@@ -160,5 +164,8 @@ update permission set component = '@/pages/system/menu' where id = 50;
 create unique index permission_name_uindex
 	on permission (name);
 
+INSERT INTO user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar) VALUES (1, 0, '2023-11-25 10:52:43', null, null, 1, 'admin', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '', '', '用户admin', null);
+
+update table_sequence set table_id = 2 where sequence_name = 'SEQ_USER';
 
 
