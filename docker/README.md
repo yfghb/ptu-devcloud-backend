@@ -16,10 +16,10 @@ docker pull 远程仓库
 docker run -d -p 8080:8080 --name appname
 
 # 删除旧容器
-docker ps -a | grep appname | grep dev | awk '{print $1}' | xargs -I docker stop {} | xargs -I docker rm {}
+docker ps -a | grep appname | grep dev | awk '{print $1}' | xargs -i docker stop {} | xargs -I docker rm {}
 
 # 删除旧镜像
-docker images | grep -E appname | grep dev | awk '{print $3}' | uniq | xargs -I {} docker rmi --force {}
+docker images | grep appname | awk '{print $3}' | xargs -i docker rmi {}
 
 ```
 
