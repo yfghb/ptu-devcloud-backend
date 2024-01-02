@@ -10,6 +10,6 @@ ENV JAVA_OPIS ""
 # 添加jar包到容器中(注意！请先执行shell拷贝jar包到docker目录下)
 ADD *.jar /home/app.jar
 
-EXPOSE 9090
+EXPOSE 9091
 
 CMD ["sh", "-c", "echo \"****** 运行命令: java -jar ${JAVA_OPIS} /home/app.jar --spring.profiles.active=prod\" & java -jar ${JAVA_OPIS} /home/app.jar --spring.profiles.active=prod"]
