@@ -29,7 +29,7 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint, AccessD
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> exceptionHandler(Exception e) {
         String uuid = printErr(e, "error");
-        return CommonResult.error("系统异常, 异常号: " + uuid);
+        return CommonResult.error("系统异常, 异常号: " + uuid + e.getMessage());
     }
 
     @ExceptionHandler(value = JobException.class)
