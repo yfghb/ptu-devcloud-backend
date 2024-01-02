@@ -47,7 +47,16 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <!--编译配置文件-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.yml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
-
 
 </project>
