@@ -12,4 +12,4 @@ ADD *.jar /home/app.jar
 
 EXPOSE 9090
 
-CMD ["sh", "-c", "echo \"****** 运行命令: java -jar ${JAVA_OPIS} /home/app.jar\" & java -jar ${JAVA_OPIS} /home/app.jar"]
+CMD ["sh", "-c", "echo \"****** 运行命令: java -jar ${JAVA_OPIS} /home/app.jar --spring.profiles.active=prod\" & java -jar ${JAVA_OPIS} /home/app.jar --spring.profiles.active=prod"]

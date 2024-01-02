@@ -124,7 +124,7 @@ create table if not exists role_permission(
 
 insert into table_sequence(sequence_name, create_date) value ('SEQ_ROLE_PERMISSION', sysdate());
 
-update table_sequence set table_id = '100' where sequence_name = 'SEQ_PERMISSION';
+update table_sequence set table_id = '200' where sequence_name = 'SEQ_PERMISSION';
 
 alter table user modify login_password varchar(128) null comment '登录密码';
 
@@ -143,14 +143,15 @@ alter table permission
 	add title varchar(64) null comment '标题';
 
 
-insert into permission(id, name, title, parent_id, order_num, path, component, permission_type, icon)
-values
-       (10, 'workplace','工作台' , 0, 10, '/workplace', '@/pages/workplace' , 'M', 'DashboardOutlined'),
-       (20, 'table','表格' , 0, 20, '/table', '@/pages/table' , 'M', 'TableOutlined'),
-       (30, 'personal','个人中心' , 0, 30, '/personal', '@/pages/personal' , 'M', 'ProfileOutlined'),
-       (40, 'system','系统配置' , 0, 40, '/system', '@/components/layout/BlankView.vue' , 'M', 'SettingOutlined'),
-       (50, 'menu','菜单管理' , 40, 10, '/system/menu', '@/pages/system' , 'M', null),
-       (60, 'user','用户管理' , 40, 20, '/system/user', '@/pages/user' , 'M', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (10, null, null, null, null, 'workplace', 0, 10, '/workplace', '@/pages/workplace', 'M', 1, 1, null, 'DashboardOutlined', '', '_self', '工作台', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (20, null, null, null, null, 'table', 0, 20, '/table', '@/pages/table', 'M', 1, 1, null, 'TableOutlined', '', '_self', '表格', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (30, null, null, 100, '2023-11-29 18:01:19', 'personal', 0, 30, '/personal', '@/pages/personal', 'M', 1, 1, null, 'UserOutlined', '', '_self', '个人中心', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (40, null, null, null, null, 'system', 0, 40, '/system', '@/components/layout/BlankView.vue', 'M', 1, 1, null, 'SettingOutlined', '', '_self', '系统配置', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (50, null, null, null, null, 'menu', 40, 10, '/system/menu', '@/pages/system/menu', 'M', 1, 1, null, null, '', '_self', '菜单管理', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (60, null, null, 100, '2023-12-01 09:24:22', 'user', 40, 20, '/system/user', '@/pages/system/user', 'M', 1, 1, null, null, '', '_self', '用户管理', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (102, 0, '2023-11-29 22:29:57', 100, '2023-11-29 22:30:16', 'methodLog', 40, 1, '/system/methodLog', '@/pages/system/methodLog', 'M', 1, 1, null, null, '', '_self', '接口日志', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (103, 0, '2023-12-11 09:41:39', 100, '2023-12-24 17:01:14', 'role', 40, 30, '/system/role', '@/pages/system/role', 'M', 1, 1, null, null, '', '_self', '角色管理', 'system');
+
 
 alter table permission
 	add parent varchar(255) default null null comment '父组件名称';

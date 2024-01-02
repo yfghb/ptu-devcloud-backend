@@ -1,0 +1,5 @@
+spring:
+  config:
+    import: prod/druid.yml,prod/mybatis-plus.yml,prod/pageHelper.yml
+server:
+  port: 9091

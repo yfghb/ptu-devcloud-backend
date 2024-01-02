@@ -1,0 +1,5 @@
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false # 关闭驼峰命名法映射
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: /xml/**.xml
