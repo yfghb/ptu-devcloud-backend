@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.RolePermissionService;
 import com.ptu.devCloud.service.TableSequenceService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.RoleService;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -137,10 +138,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                     .collect(Collectors.toList());
             rolePermissionList.addAll(list);
         }
+        RoleServiceImpl proxy = (RoleServiceImpl)AopContext.currentProxy();
         transaction.execute(action -> {
            try {
                // 删除角色列表
-               this.removeByIds(idList);
+               proxy.removeByIds(idList);
                // 删除角色-权限关系列表
                rolePermissionService.removeByIds(rolePermissionList);
                return true;

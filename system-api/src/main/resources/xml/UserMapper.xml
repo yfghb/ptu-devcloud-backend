@@ -264,7 +264,18 @@
 	        </set>
     WHERE id = #{id}
     </update>
-
+    <update id="updateStatusByIdList">
+		update user set status = #{status}
+		where id in
+		<if test="userIds == null">
+			<!-- 使sql报错 -->
+			;
+		</if>
+		<foreach item="item" collection="userIds"
+				 open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
 
 
 </mapper>

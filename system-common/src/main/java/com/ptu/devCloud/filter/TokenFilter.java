@@ -32,7 +32,7 @@ public class TokenFilter extends OncePerRequestFilter {
         if(StrUtil.isEmpty(token)){
             String url = request.getRequestURL().toString();
             // 忽略登录和注册接口
-            if(url.contains("/UserController/login") || url.contains("/UserController/add") || url.contains("/UserController/hello")){
+            if(url.contains("/UserController/login") || url.contains("/UserController/add")){
                 filterChain.doFilter(request, response);
                 return;
             }

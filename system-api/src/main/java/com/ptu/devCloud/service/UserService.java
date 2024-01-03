@@ -4,6 +4,8 @@ package com.ptu.devCloud.service;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 
 import java.util.List;
@@ -42,5 +44,22 @@ public interface UserService extends IService<User> {
      * @return List<User>
      */
     PageInfo<User> getList(UserPageVO pageVO);
+
+    /**
+     * 以用户id查询角色名称列表
+     * @author Yang Fan
+     * @since 2024/1/3 19:15
+     * @param userId 用户id
+     * @return List<String>
+     */
+    List<String> getRoleNameList(Long userId);
+
+    /**
+     * 改变用户状态
+     * @author Yang Fan
+     * @since 2024/1/3 19:39
+     * @param statusVO StatusVO
+     */
+    void changeStatus(StatusVO statusVO);
 	
 }

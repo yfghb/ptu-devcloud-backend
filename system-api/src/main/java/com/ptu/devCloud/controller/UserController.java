@@ -5,12 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -68,9 +70,31 @@ public class UserController {
         return CommonResult.successNoMsg(userService.getList(pageVO));
     }
 
-    @GetMapping("/hello")
-    public CommonResult<String> hello(){
-        return CommonResult.success("hello world!");
+    /**
+     * 以用户id查询角色名称列表
+     * @author Yang Fan
+     * @since 2024/1/3 19:15
+     * @param userId 用户id
+     * @return CommonResult<List<String>>
+     */
+    @GetMapping("/getRoleNameList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<String>> getRoleNameList(@RequestParam("userId") Long userId){
+        return CommonResult.successNoMsg(userService.getRoleNameList(userId));
+    }
+
+    /**
+     * 改变用户状态
+     * @author Yang Fan
+     * @since 2024/1/3 19:39
+     * @param statusVO StatusVO
+     * @return CommonResult<String>
+     */
+    @PostMapping("/changeStatus")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO) throws InterruptedException {
+        userService.changeStatus(statusVO);
+        return CommonResult.success(null);
     }
     
 }

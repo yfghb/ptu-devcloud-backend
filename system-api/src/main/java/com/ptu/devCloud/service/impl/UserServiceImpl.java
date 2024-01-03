@@ -1,17 +1,23 @@
 package com.ptu.devCloud.service.impl;
 
+
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.LoginUser;
+import com.ptu.devCloud.entity.Role;
 import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.UserRole;
+import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ptu.devCloud.service.RoleService;
+import com.ptu.devCloud.service.UserRoleService;
 import com.ptu.devCloud.utils.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,6 +52,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private UserRoleService userRoleService;
+
+    @Resource
+    private RoleService roleService;
 
     @Override
     @SeqName(value = TableSequenceConstants.User)
@@ -99,6 +111,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
         List<User> userList = userMapper.selectListByQueryParams(pageVO);
         return new PageInfo<>(userList);
+    }
+
+    @Override
+    public List<String> getRoleNameList(Long userId) {
+        List<String> roleList = new ArrayList<>();
+        if(userId == null) return roleList;
+        List<UserRole> userRoleList = userRoleService.lambdaQuery().eq(UserRole::getUserId, userId).list();
+        for(UserRole userRole:userRoleList){
+            Role role = roleService.lambdaQuery().eq(Role::getId, userRole.getRoleId()).one();
+            if(role != null && StrUtil.isNotEmpty(role.getRoleName())){
+                roleList.add(role.getRoleName());
+            }
+        }
+        return roleList;
+    }
+
+    @Override
+    public void changeStatus(StatusVO statusVO) {
+        if(CollUtil.isEmpty(statusVO.getUserIds()) || statusVO.getStatus() == null)return;
+        List<Long> list = new ArrayList<>();
+        statusVO.getUserIds().forEach(id -> list.add(Long.valueOf(id)));
+        userMapper.updateStatusByIdList(list, statusVO.getStatus());
     }
 
     @Override

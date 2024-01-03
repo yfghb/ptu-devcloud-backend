@@ -98,14 +98,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void updatePermissionById(Permission permission) {
         if(permission == null || permission.getId() == null)return;
         permissionMapper.updateIgnoreNull(permission);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deletePermissionById(Long id) {
         if(Objects.nonNull(id)){
             permissionMapper.deleteById(id);

@@ -29,7 +29,7 @@ public class CommonResult<T> {
     public static <T> CommonResult<T> success(T object) {
         CommonResult<T> commonResult = new CommonResult<>();
         commonResult.data = object;
-        commonResult.msg = object instanceof String ? (String) object : CommonConstants.COMMON_SUCCESS_CHINESE;
+        commonResult.msg = CommonConstants.COMMON_SUCCESS_CHINESE;
         commonResult.code = HttpCodeConstants.SUCCESS;
         return commonResult;
     }

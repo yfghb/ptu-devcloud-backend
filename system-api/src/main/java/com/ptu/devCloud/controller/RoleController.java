@@ -45,7 +45,7 @@ public class RoleController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<String> add(@RequestBody RoleVO roleVO){
         roleService.addRole(roleVO);
-        return CommonResult.success("添加角色成功！");
+        return CommonResult.successWithMsg(null,"添加角色成功！");
     }
 
     /**
@@ -59,7 +59,7 @@ public class RoleController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<String> edit(@RequestBody RoleVO roleVO){
         roleService.editRole(roleVO);
-        return CommonResult.success("修改角色成功！");
+        return CommonResult.successWithMsg(null,"修改角色成功！");
     }
 
     /**
@@ -73,7 +73,7 @@ public class RoleController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<String> delete(@RequestBody List<Long> idList){
         roleService.removeRoleBatch(idList);
-        return CommonResult.success("删除成功！");
+        return CommonResult.successWithMsg(null,"删除成功！");
     }
 
     /**

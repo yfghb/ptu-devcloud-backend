@@ -92,6 +92,15 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @return List<User>
 	 */
 	List<User> selectListByQueryParams(@Param("params") UserPageVO params);
-	
+
+	/**
+	 * 改变用户状态
+	 * @author Yang Fan
+	 * @since 2024/1/3 19:37
+	 * @param userIds 用户id列表
+	 * @param status 状态
+	 * @return int
+	 */
+	int updateStatusByIdList(@Param("userIds") List<Long> userIds, @Param("status") Boolean status);
 	
 }
