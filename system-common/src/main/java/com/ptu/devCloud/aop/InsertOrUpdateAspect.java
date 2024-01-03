@@ -28,7 +28,7 @@ import java.util.List;
 @Slf4j
 @Aspect
 @Component
-public class InsertOrUpdateAop {
+public class InsertOrUpdateAspect {
 
     @Pointcut("@annotation(com.ptu.devCloud.annotation.SeqName)")
     public void insertPointCut(){}
@@ -94,7 +94,7 @@ public class InsertOrUpdateAop {
 
     /**
      * 使用此方法避免for循环生成主键速度过慢的问题
-     * 10000条数据插入: 2.3s左右 (for循环生成单个: 19s左右) 性能提升10倍
+     * 10000条数据插入: 2.3s左右
      */
     private void generatePublicFieldBatch(Collection<?> collection, String seqName){
         if(CollUtil.isEmpty(collection))return;
@@ -127,7 +127,7 @@ public class InsertOrUpdateAop {
                 }
             }
             catch (Exception e) {
-                throw new JobException("InsertOrUpdateAop: 更新公共字段异常！\n" + e.getMessage());
+                throw new JobException("InsertOrUpdateAspect: 更新公共字段异常！\n" + e.getMessage());
             }
         }
     }

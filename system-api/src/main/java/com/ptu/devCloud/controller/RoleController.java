@@ -23,7 +23,7 @@ public class RoleController {
     private RoleService roleService;
 
     /**
-     * 查询角色列表
+     * 查询角色列表(附带角色-权限关系)
      * @author Yang Fan
      * @since 2023/12/18 15:47
      * @return CommonResult<List<Role>>
@@ -74,5 +74,17 @@ public class RoleController {
     public CommonResult<String> delete(@RequestBody List<Long> idList){
         roleService.removeRoleBatch(idList);
         return CommonResult.success("删除成功！");
+    }
+
+    /**
+     * 查询角色列表(不带角色-权限关系)
+     * @author Yang Fan
+     * @since 2024/1/3 15:52
+     * @return CommonResult<List<RoleVO>>
+     */
+    @GetMapping("/roleList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<RoleVO>> roleList(){
+        return CommonResult.successNoMsg(roleService.getRoleList());
     }
 }

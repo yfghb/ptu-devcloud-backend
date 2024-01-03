@@ -17,7 +17,7 @@ public interface RoleService extends IService<Role> {
 
 
 	/**
-	 * 查询角色列表
+	 * 查询角色列表(附带角色-权限关系)
 	 * @param roleName 角色名称
 	 * @return List<RoleVO>
 	 */
@@ -46,4 +46,12 @@ public interface RoleService extends IService<Role> {
 	 * @param idList 角色id列表
 	 */
 	void removeRoleBatch(List<Long> idList);
+
+	/**
+	 * 查询角色列表(不带角色-权限关系)
+	 * @author Yang Fan
+	 * @since 2024/1/3 15:48
+	 * @return List<RoleVO>
+	 */
+	List<RoleVO> getRoleList();
 }

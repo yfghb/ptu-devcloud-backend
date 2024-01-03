@@ -151,6 +151,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         });
     }
 
+    @Override
+    public List<RoleVO> getRoleList() {
+        List<Role> roleList = roleMapper.listAll();
+        List<RoleVO> roleVOList = new ArrayList<>();
+        for(Role role:roleList){
+            RoleVO roleVO = new RoleVO();
+            BeanUtil.copyProperties(role, roleVO);
+            roleVO.setKey(role.getId().toString());
+            roleVOList.add(roleVO);
+        }
+        return roleVOList;
+    }
+
     /** 解析 roleVo 得到 RolePermissionList 和 role */
     private void parseRoleVO(RoleVO roleVO, List<RolePermission> list, Role role){
         if (roleVO == null) return;

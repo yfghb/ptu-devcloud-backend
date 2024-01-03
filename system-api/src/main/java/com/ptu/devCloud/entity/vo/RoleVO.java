@@ -16,6 +16,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class RoleVO extends Role implements Serializable {
     /**
+     * 前端列表key值 (id)
+     */
+    private String key;
+    /**
      * 权限id列表
      */
     private List<String> permissionIdList;

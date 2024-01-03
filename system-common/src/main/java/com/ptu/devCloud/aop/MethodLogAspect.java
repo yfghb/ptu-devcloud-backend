@@ -23,14 +23,14 @@ import javax.annotation.Resource;
 
 
 /**
- * 给 controller 包下的所有方法记录日志
+ * 给 EnableMethodLog注解 的方法记录日志
  * @author Yang Fan
  * @since 2023/9/30 15:14
  */
 @Slf4j
 @Aspect
 @Component
-public class MethodLogAop {
+public class MethodLogAspect {
 
     @Resource
     private MethodLogService methodLogService;
