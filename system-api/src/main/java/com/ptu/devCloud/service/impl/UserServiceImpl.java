@@ -104,7 +104,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public PageInfo<User> getList(UserPageVO pageVO) {
+    public PageInfo<User> getPage(UserPageVO pageVO) {
         if(pageVO == null || pageVO.getCurrent() == null || pageVO.getPageSize() == null) {
             return new PageInfo<>();
         }

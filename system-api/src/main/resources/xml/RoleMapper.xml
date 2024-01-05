@@ -38,6 +38,20 @@
 		FROM role t
 		WHERE id = #{id} and t.status = true
 	</select>
+	<select id="selectListByQueryParams" resultMap="BaseResultMap">
+		SELECT
+		<include refid="baseColumns" />
+		FROM role t
+		<where>
+			<if test="params.roleName != null and params.roleName != ''">
+				t.roleName like CONCAT(CONCAT('%', #{params.roleName}), '%')
+			</if>
+			<if test="params.status != null">
+				and t.status = #{params.status}
+			</if>
+		</where>
+		ORDER BY t.create_date DESC
+	</select>
 
 	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Role"

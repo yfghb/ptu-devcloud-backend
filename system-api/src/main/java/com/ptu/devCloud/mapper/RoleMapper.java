@@ -1,11 +1,14 @@
 package com.ptu.devCloud.mapper;
 
 import java.util.List;
+
+import com.ptu.devCloud.entity.vo.RolePageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Role;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * RoleMapper
@@ -70,6 +73,14 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Role role);
-	
+
+	/**
+	 * 条件查询
+	 * @author Yang Fan
+	 * @since 2024/1/5 15:32
+	 * @param params RolePageVO
+	 * @return List<Role>
+	 */
+	List<Role> selectListByQueryParams(@Param("params") RolePageVO params);
 	
 }

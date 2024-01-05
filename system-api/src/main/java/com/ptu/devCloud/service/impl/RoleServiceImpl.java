@@ -4,10 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Role;
 import com.ptu.devCloud.entity.RolePermission;
+import com.ptu.devCloud.entity.vo.RolePageVO;
 import com.ptu.devCloud.entity.vo.RoleVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.RoleMapper;
@@ -57,10 +60,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<RoleVO> list(String roleName) {
-        LambdaQueryWrapper<Role> lqw = new LambdaQueryWrapper<>();
-        lqw.like(StrUtil.isNotEmpty(roleName), Role::getRoleName, roleName);
-        List<Role> roleList = roleMapper.selectList(lqw);
+    public PageInfo<RoleVO> getPage(RolePageVO pageVO) {
+        if(pageVO == null || pageVO.getCurrent() == null || pageVO.getPageSize() == null) {
+            return new PageInfo<>();
+        }
+        PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
+        List<Role> roleList = roleMapper.selectListByQueryParams(pageVO);
         List<RoleVO> roleVOList = new ArrayList<>();
         for(Role role:roleList){
             RoleVO roleVO = new RoleVO();
@@ -74,7 +79,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             roleVO.setPermissionIdList(permissionIdList);
             roleVOList.add(roleVO);
         }
-        return roleVOList;
+        return new PageInfo<>(roleVOList);
     }
 
     @Override

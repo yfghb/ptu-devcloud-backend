@@ -2,8 +2,10 @@ package com.ptu.devCloud.service;
 
 
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.RolePageVO;
 import com.ptu.devCloud.entity.vo.RoleVO;
 import java.util.List;
 
@@ -18,10 +20,12 @@ public interface RoleService extends IService<Role> {
 
 	/**
 	 * 查询角色列表(附带角色-权限关系)
-	 * @param roleName 角色名称
-	 * @return List<RoleVO>
+	 * @author Yang Fan
+	 * @since 2024/1/5 15:24
+	 * @param pageVO RolePageVO
+	 * @return PageInfo<RoleVO>
 	 */
-	List<RoleVO> list(String roleName);
+	PageInfo<RoleVO> getPage(RolePageVO pageVO);
 
 	/**
 	 * 添加角色，角色-权限关系

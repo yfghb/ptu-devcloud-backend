@@ -67,7 +67,7 @@ public class UserController {
     @PostMapping("/page")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<PageInfo<User>> page(@RequestBody UserPageVO pageVO){
-        return CommonResult.successNoMsg(userService.getList(pageVO));
+        return CommonResult.successNoMsg(userService.getPage(pageVO));
     }
 
     /**

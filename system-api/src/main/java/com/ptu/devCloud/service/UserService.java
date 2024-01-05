@@ -4,7 +4,6 @@ package com.ptu.devCloud.service;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 
@@ -43,7 +42,7 @@ public interface UserService extends IService<User> {
      * @param pageVO UserPageVO
      * @return List<User>
      */
-    PageInfo<User> getList(UserPageVO pageVO);
+    PageInfo<User> getPage(UserPageVO pageVO);
 
     /**
      * 以用户id查询角色名称列表

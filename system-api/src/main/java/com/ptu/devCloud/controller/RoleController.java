@@ -1,6 +1,8 @@
 package com.ptu.devCloud.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.CommonResult;
+import com.ptu.devCloud.entity.vo.RolePageVO;
 import com.ptu.devCloud.entity.vo.RoleVO;
 import com.ptu.devCloud.service.RoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,10 +30,10 @@ public class RoleController {
      * @since 2023/12/18 15:47
      * @return CommonResult<List<Role>>
      */
-    @GetMapping("/list")
+    @PostMapping("/page")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<RoleVO>> list(String roleName){
-        return CommonResult.successNoMsg(roleService.list(roleName));
+    public CommonResult<PageInfo<RoleVO>> page(@RequestBody RolePageVO rolePageVO){
+        return CommonResult.successNoMsg(roleService.getPage(rolePageVO));
     }
 
     /**
