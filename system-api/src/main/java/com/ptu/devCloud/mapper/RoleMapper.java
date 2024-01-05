@@ -3,6 +3,7 @@ package com.ptu.devCloud.mapper;
 import java.util.List;
 
 import com.ptu.devCloud.entity.vo.RolePageVO;
+import com.ptu.devCloud.entity.vo.RoleVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
@@ -79,8 +80,8 @@ public interface RoleMapper extends BaseMapper<Role> {
 	 * @author Yang Fan
 	 * @since 2024/1/5 15:32
 	 * @param params RolePageVO
-	 * @return List<Role>
+	 * @return List<RoleVO>
 	 */
-	List<Role> selectListByQueryParams(@Param("params") RolePageVO params);
+	List<RoleVO> selectListByQueryParams(@Param("params") RolePageVO params);
 	
 }

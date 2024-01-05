@@ -65,19 +65,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             return new PageInfo<>();
         }
         PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
-        List<Role> roleList = roleMapper.selectListByQueryParams(pageVO);
-        List<RoleVO> roleVOList = new ArrayList<>();
-        for(Role role:roleList){
-            RoleVO roleVO = new RoleVO();
-            BeanUtil.copyProperties(role, roleVO);
+        List<RoleVO> roleVOList = roleMapper.selectListByQueryParams(pageVO);
+        for(RoleVO vo:roleVOList){
             List<String> permissionIdList = rolePermissionService.lambdaQuery()
-                    .eq(RolePermission::getRoleId, role.getId()).list()
+                    .eq(RolePermission::getRoleId, vo.getId()).list()
                     .stream()
                     .filter(obj -> obj.getPermissionId() != null)
                     .map(obj -> obj.getPermissionId().toString())
                     .collect(Collectors.toList());
-            roleVO.setPermissionIdList(permissionIdList);
-            roleVOList.add(roleVO);
+            vo.setPermissionIdList(permissionIdList);
         }
         return new PageInfo<>(roleVOList);
     }

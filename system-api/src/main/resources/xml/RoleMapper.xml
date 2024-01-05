@@ -38,9 +38,16 @@
 		FROM role t
 		WHERE id = #{id} and t.status = true
 	</select>
-	<select id="selectListByQueryParams" resultMap="BaseResultMap">
+	<select id="selectListByQueryParams" resultType="com.ptu.devCloud.entity.vo.RoleVO">
 		SELECT
-		<include refid="baseColumns" />
+		t.id
+		, t.create_by as "createBy"
+		, t.create_date as "createDate"
+		, t.update_by as "updateBy"
+		, t.update_date as "updateDate"
+		, t.role_name as "roleName"
+		, t.order_num as "orderNum"
+		, t.status
 		FROM role t
 		<where>
 			<if test="params.roleName != null and params.roleName != ''">
