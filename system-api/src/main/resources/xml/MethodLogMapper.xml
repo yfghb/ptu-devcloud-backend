@@ -49,6 +49,36 @@
         FROM method_log t
         WHERE id = #{id}
     </select>
+    <select id="selectListByQueryParams" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumns" />
+        FROM method_log t
+        <where>
+            <if test="params.methodName != null and params.methodName != ''">
+                t.method_name like CONCAT(CONCAT('%', #{params.methodName}), '%')
+            </if>
+            <if test="params.methodPath != null and params.methodPath != ''">
+                and t.method_path like CONCAT(CONCAT('%', #{params.methodPath}), '%')
+            </if>
+            <if test="params.url != null and params.url != ''">
+                and t.url like CONCAT(CONCAT('%', #{params.url}), '%')
+            </if>
+            <if test="params.startDate != null">
+                <![CDATA[
+				and t.create_date >= #{params.startDate}
+				]]>
+            </if>
+            <if test="params.endDate != null">
+                <![CDATA[
+				and t.create_date <= #{params.endDate}
+				]]>
+            </if>
+            <if test="params.passFlag != null">
+                and t.pass_flag = #{params.passFlag}
+            </if>
+        </where>
+        ORDER BY t.create_date DESC
+    </select>
 
     <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.MethodLog"

@@ -15,5 +15,21 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class MethodLogPageVO extends PageVO implements Serializable {
 
+    /**
+     * 接口名
+     */
+    private String methodName;
+    /**
+     * 接口路径
+     */
+    private String methodPath;
+    /**
+     * url
+     */
+    private String url;
+    /**
+     * 是否成功
+     */
+    private Boolean passFlag;
 
 }

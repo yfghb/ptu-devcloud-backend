@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
+import com.ptu.devCloud.entity.vo.MethodLogPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.entity.MethodLog;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * MethodLogMapper
@@ -71,6 +73,13 @@ public interface MethodLogMapper extends BaseMapper<MethodLog> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(MethodLog methodLog);
-	
-	
+
+	/**
+	 * 条件查询
+	 * @author Yang Fan
+	 * @since 2024/1/6 10:26
+	 * @param params MethodLogPageVO
+	 * @return List<MethodLog>
+	 */
+	List<MethodLog> selectListByQueryParams(@Param("params") MethodLogPageVO params);
 }

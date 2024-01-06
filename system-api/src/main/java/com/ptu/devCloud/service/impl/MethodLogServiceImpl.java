@@ -51,7 +51,7 @@ public class MethodLogServiceImpl extends ServiceImpl<MethodLogMapper, MethodLog
             return new PageInfo<>();
         }
         PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
-        List<MethodLog> list = methodLogMapper.listAll();
+        List<MethodLog> list = methodLogMapper.selectListByQueryParams(pageVO);
         return new PageInfo<>(list);
     }
 }
