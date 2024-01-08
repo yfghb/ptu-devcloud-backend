@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -34,5 +35,17 @@ public class UserRoleController {
         return CommonResult.successWithMsg(null,"保存成功");
     }
 
+    /**
+     * 以用户id查询关联的角色id列表
+     * @author Yang Fan
+     * @since 2024/1/8 19:44
+     * @param userId 用户id
+     * @return List<String> 角色id列表
+     */
+    @GetMapping("/getRoleIds")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<String>> getRoleIds(@RequestParam("userId") Long userId){
+        return CommonResult.successNoMsg(userRoleService.getRoleIdsByUserId(userId));
+    }
     
 }

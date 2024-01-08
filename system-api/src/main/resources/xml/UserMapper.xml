@@ -81,8 +81,8 @@
 				and t.create_date <= #{params.endDate}
 				]]>
 			</if>
-			<if test="params.status != null and params.status != ''">
-				and t.status =#{params.status}
+			<if test="params.status != null">
+				and t.status = #{params.status}
 			</if>
 		</where>
 		ORDER BY t.create_date DESC

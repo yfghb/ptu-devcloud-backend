@@ -156,7 +156,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public List<RoleVO> getRoleList() {
-        List<Role> roleList = roleMapper.listAll();
+        LambdaQueryWrapper<Role> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Role::getStatus,true);
+        List<Role> roleList = roleMapper.selectList(lqw);
         List<RoleVO> roleVOList = new ArrayList<>();
         for(Role role:roleList){
             RoleVO roleVO = new RoleVO();

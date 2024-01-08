@@ -85,4 +85,15 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         });
 
     }
+
+    @Override
+    public List<String> getRoleIdsByUserId(Long userId) {
+        if(userId == null) throw new JobException("用户id不能为空");
+        LambdaQueryWrapper<UserRole> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(UserRole::getUserId, userId);
+        List<UserRole> userRoleList = userRoleMapper.selectList(lqw);
+        List<String> roleIds = new ArrayList<>();
+        userRoleList.forEach(obj -> roleIds.add(String.valueOf(obj.getRoleId())));
+        return roleIds;
+    }
 }
