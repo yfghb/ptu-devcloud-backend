@@ -37,11 +37,7 @@ public class UserController {
     @PostMapping("/login")
     @EnableMethodLog(name = "用户登录")
     public CommonResult<String> login(@RequestBody User user){
-        String tokenId = userService.login(user);
-        if(StrUtil.isEmpty(tokenId)){
-            return CommonResult.error("账号或密码不正确");
-        }
-        return CommonResult.successNoMsg(tokenId);
+        return CommonResult.successNoMsg(userService.login(user));
     }
 
     /**
@@ -66,6 +62,7 @@ public class UserController {
      */
     @PostMapping("/page")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @EnableMethodLog(name = "用户分页查询")
     public CommonResult<PageInfo<User>> page(@RequestBody UserPageVO pageVO){
         return CommonResult.successNoMsg(userService.getPage(pageVO));
     }

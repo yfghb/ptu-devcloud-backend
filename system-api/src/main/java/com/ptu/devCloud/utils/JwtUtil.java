@@ -25,7 +25,7 @@ public class JwtUtil {
      * @return token
      */
     public static String generate(Object data)  {
-        String json = JSON.toJSONString(data);
+        String json = JSON.toJSONString(data, true);
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(System.currentTimeMillis()));
@@ -58,7 +58,7 @@ public class JwtUtil {
      * @return token
      */
     public static String generateWithExpiration(Object data, Date expiration)  {
-        String json = JSON.toJSONString(data);
+        String json = JSON.toJSONString(data, true);
         Date now = new Date(System.currentTimeMillis());
         if (expiration == null || expiration.compareTo(now) < 0){
             expiration = new Date(System.currentTimeMillis() + DAY);

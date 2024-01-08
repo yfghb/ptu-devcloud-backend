@@ -8,6 +8,7 @@ import com.ptu.devCloud.entity.MethodLog;
 import com.ptu.devCloud.entity.thread.AsyncLogTask;
 import com.ptu.devCloud.entity.thread.ThreadTask;
 import com.ptu.devCloud.entity.CommonResult;
+import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.service.MethodLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -57,7 +58,7 @@ public class MethodLogAspect {
         // 方法名
         methodLog.setMethodName((StrUtil.isEmpty(methodName)) ? joinPoint.getSignature().getName() : methodName);
         // 请求入参
-        methodLog.setParamsJson(JSON.toJSONString(joinPoint.getArgs()));
+        methodLog.setParamsJson(JSON.toJSONString(joinPoint.getArgs(), true));
         long startTime = System.currentTimeMillis();
         try{
             result = joinPoint.proceed();
@@ -68,14 +69,14 @@ public class MethodLogAspect {
             log.error(methodLog.getMethodName() + "\n" + methodLog.getMethodPath() + "\n" + e);
             // 方法异常标志
             methodLog.setPassFlag(false);
-            result = CommonResult.error(e.toString());
+            throw new JobException(e.getMessage());
         }
         finally {
             long endTime = System.currentTimeMillis();
             // 方法耗时（秒）（保留两位小数）
             methodLog.setConsumeTime(String.format("%.2f", (double) (endTime - startTime) / 1000));
             // 方法出参
-            methodLog.setResultJson(JSON.toJSONString(result));
+            methodLog.setResultJson(JSON.toJSONString(result, true));
             // 提交异步日志任务
             ThreadTask asyncLogTask = new AsyncLogTask(methodLog, methodLogService);
             CommonConstants.COMMON_THREAD_POOL.submit(asyncLogTask);

@@ -14,6 +14,7 @@ import com.ptu.devCloud.entity.UserRole;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
+import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.RoleService;
@@ -79,7 +80,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 UsernamePasswordAuthenticationToken(user.getLoginAccount(),user.getLoginPassword());
         Authentication authentication = authenticationManager.authenticate(token);
         if(Objects.isNull(authentication)){
-            return null;
+            throw new JobException("账号或密码不正确");
         }
         return JwtUtil.generate(authentication.getPrincipal());
     }

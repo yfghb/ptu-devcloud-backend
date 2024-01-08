@@ -34,8 +34,8 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint, AccessD
 
     @ExceptionHandler(value = JobException.class)
     public CommonResult<String> jobExceptionHandler(JobException e) {
-        String uuid = printErr(e, "warn");
-        return CommonResult.error("服务异常, 异常号: " + uuid);
+        printErr(e, "warn");
+        return CommonResult.error(e.getMessage());
     }
 
     @Override
