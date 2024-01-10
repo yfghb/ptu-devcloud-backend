@@ -28,4 +28,8 @@ public class DictItem extends BaseEntity implements Serializable {
 	@TableField(value = "status")
 	private Boolean status;
 
+	/** 排序 */
+	@TableField(value = "order_num")
+	private Integer orderNum;
+
 }

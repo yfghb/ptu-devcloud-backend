@@ -11,7 +11,8 @@
 	        <result column="update_by" property="updateBy" />
 	        <result column="update_date" property="updateDate" />
 	        <result column="status" property="status" />
-		</resultMap>  
+	        <result column="order_num" property="orderNum" />
+		</resultMap>
     
     <!-- 表字段 -->
     <sql id="baseColumns">
@@ -24,6 +25,7 @@
         , t.update_by
         , t.update_date
         , t.status
+		, t.order_num
         </sql> 
     
  
@@ -40,27 +42,29 @@
 		keyProperty="id" keyColumn="id" >
 	INSERT INTO dict_item
     	<trim prefix="(" suffix=")" suffixOverrides=",">	 
-    	    	    	id,
-    	    	    	    	dict_id,
-    	    	    	    	item_name,
-    	    	    	    	item_value,
-    	    	    	    	create_by,
-    	    	    	    	create_date,
-    	    	    	    	update_by,
-    	    	    	    	update_date,
-    	    	    	    	status,
-    	    	    	</trim>
+			id,
+			dict_id,
+			item_name,
+			item_value,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			status,
+			order_num,
+		</trim>
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
-    	    	        #{id},                   
-    			    	        #{dictId},                   
-    			    	        #{itemName},                   
-    			    	        #{itemValue},                   
-    			    	        #{createBy},                   
-    			    	        #{createDate},                   
-    			    	        #{updateBy},                   
-    			    	        #{updateDate},                   
-    			    	        #{status},                   
-    			    	</trim>
+			#{id},
+			#{dictId},
+			#{itemName},
+			#{itemValue},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate},
+			#{status},
+	    	#{orderNum},
+		</trim>
 	</insert>
     
     <!-- 插入不为NULL的字段 -->
@@ -95,6 +99,9 @@
                 		        <if test="status != null">
 			status,
 		</if>
+								<if test="orderNum != null">
+			order_num,
+		</if>
                         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
                         <if test="id != null" >
@@ -124,6 +131,9 @@
                                 <if test="status != null" >
 			#{status},                    
         </if>
+								<if test="orderNum != null">
+			#{orderNum},
+		</if>
                         </trim>
     </insert>
 
@@ -131,15 +141,16 @@
     <update id="update" parameterType="com.ptu.devCloud.entity.DictItem">
     UPDATE dict_item
      <set>		
-                    		dict_id=#{dictId},        
-               		item_name=#{itemName},        
-               		item_value=#{itemValue},        
-               		create_by=#{createBy},        
-               		create_date=#{createDate},        
-               		update_by=#{updateBy},        
-               		update_date=#{updateDate},        
-               		status=#{status},        
-               </set>	
+		dict_id=#{dictId},
+		item_name=#{itemName},
+		item_value=#{itemValue},
+		create_by=#{createBy},
+		create_date=#{createDate},
+		update_by=#{updateBy},
+		update_date=#{updateDate},
+		status=#{status},
+		order_num=#{orderNum},
+	</set>
     WHERE id = #{id}
     </update>  
     
@@ -148,7 +159,7 @@
     <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.DictItem">
     UPDATE dict_item
     <set>
-		    		<if test="dictId != null" >
+				<if test="dictId != null" >
 		dict_id=#{dictId},                 
 	</if>
 	    		<if test="itemName != null" >
@@ -171,6 +182,9 @@
 	</if>
 	    		<if test="status != null" >
 		status=#{status},                 
+	</if>
+				<if test="orderNum != null">
+		order_num=#{orderNum},
 	</if>
 	        </set>
     WHERE id = #{id}
