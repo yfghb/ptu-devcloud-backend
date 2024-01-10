@@ -14,4 +14,8 @@ public class TableSequenceConstants {
 
     public static final String RolePermission = "SEQ_ROLE_PERMISSION";
 
+    public static final String Dict = "SEQ_DICT";
+
+    public static final String DictItem = "SEQ_DICT_ITEM";
+
 }

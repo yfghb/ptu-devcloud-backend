@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.DictItemMapper">
+	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.DictItem">
+            <result column="id" property="id" />
+	        <result column="dict_id" property="dictId" />
+	        <result column="item_name" property="itemName" />
+	        <result column="item_value" property="itemValue" />
+	        <result column="create_by" property="createBy" />
+	        <result column="create_date" property="createDate" />
+	        <result column="update_by" property="updateBy" />
+	        <result column="update_date" property="updateDate" />
+	        <result column="status" property="status" />
+		</resultMap>  
+    
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+         t.id
+        , t.dict_id
+        , t.item_name
+        , t.item_value
+        , t.create_by
+        , t.create_date
+        , t.update_by
+        , t.update_date
+        , t.status
+        </sql> 
+    
+ 
+ 	<!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM dict_item t
+		WHERE id = #{id}
+	</select>
+
+	<!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.DictItem"
+		keyProperty="id" keyColumn="id" >
+	INSERT INTO dict_item
+    	<trim prefix="(" suffix=")" suffixOverrides=",">	 
+    	    	    	id,
+    	    	    	    	dict_id,
+    	    	    	    	item_name,
+    	    	    	    	item_value,
+    	    	    	    	create_by,
+    	    	    	    	create_date,
+    	    	    	    	update_by,
+    	    	    	    	update_date,
+    	    	    	    	status,
+    	    	    	</trim>
+    	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+    	    	        #{id},                   
+    			    	        #{dictId},                   
+    			    	        #{itemName},                   
+    			    	        #{itemValue},                   
+    			    	        #{createBy},                   
+    			    	        #{createDate},                   
+    			    	        #{updateBy},                   
+    			    	        #{updateDate},                   
+    			    	        #{status},                   
+    			    	</trim>
+	</insert>
+    
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.DictItem"
+        keyProperty="id" keyColumn="id" >
+        INSERT INTO dict_item    
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+        		        <if test="id != null">
+			id,
+		</if>
+                		        <if test="dictId != null">
+			dict_id,
+		</if>
+                		        <if test="itemName != null">
+			item_name,
+		</if>
+                		        <if test="itemValue != null">
+			item_value,
+		</if>
+                		        <if test="createBy != null">
+			create_by,
+		</if>
+                		        <if test="createDate != null">
+			create_date,
+		</if>
+                		        <if test="updateBy != null">
+			update_by,
+		</if>
+                		        <if test="updateDate != null">
+			update_date,
+		</if>
+                		        <if test="status != null">
+			status,
+		</if>
+                        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+                        <if test="id != null" >
+			#{id},                    
+        </if>
+                                <if test="dictId != null" >
+			#{dictId},                    
+        </if>
+                                <if test="itemName != null" >
+			#{itemName},                    
+        </if>
+                                <if test="itemValue != null" >
+			#{itemValue},                    
+        </if>
+                                <if test="createBy != null" >
+			#{createBy},                    
+        </if>
+                                <if test="createDate != null" >
+			#{createDate},                    
+        </if>
+                                <if test="updateBy != null" >
+			#{updateBy},                    
+        </if>
+                                <if test="updateDate != null" >
+			#{updateDate},                    
+        </if>
+                                <if test="status != null" >
+			#{status},                    
+        </if>
+                        </trim>
+    </insert>
+
+	<!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.DictItem">
+    UPDATE dict_item
+     <set>		
+                    		dict_id=#{dictId},        
+               		item_name=#{itemName},        
+               		item_value=#{itemValue},        
+               		create_by=#{createBy},        
+               		create_date=#{createDate},        
+               		update_by=#{updateBy},        
+               		update_date=#{updateDate},        
+               		status=#{status},        
+               </set>	
+    WHERE id = #{id}
+    </update>  
+    
+    
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.DictItem">
+    UPDATE dict_item
+    <set>
+		    		<if test="dictId != null" >
+		dict_id=#{dictId},                 
+	</if>
+	    		<if test="itemName != null" >
+		item_name=#{itemName},                 
+	</if>
+	    		<if test="itemValue != null" >
+		item_value=#{itemValue},                 
+	</if>
+	    		<if test="createBy != null" >
+		create_by=#{createBy},                 
+	</if>
+	    		<if test="createDate != null" >
+		create_date=#{createDate},                 
+	</if>
+	    		<if test="updateBy != null" >
+		update_by=#{updateBy},                 
+	</if>
+	    		<if test="updateDate != null" >
+		update_date=#{updateDate},                 
+	</if>
+	    		<if test="status != null" >
+		status=#{status},                 
+	</if>
+	        </set>
+    WHERE id = #{id}
+    </update>
+
+
+
+</mapper>

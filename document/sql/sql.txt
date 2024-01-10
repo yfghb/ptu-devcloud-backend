@@ -167,4 +167,30 @@ INSERT INTO permission (id, create_by, create_date, update_by, update_date, name
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (102, 0, '2023-11-29 22:29:57', 100, '2023-11-29 22:30:16', 'methodLog', 40, 1, '/system/methodLog', '@/pages/system/methodLog', 'M', 1, 1, null, null, '', '_self', '接口日志', 'system');
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (103, 0, '2023-12-11 09:41:39', 100, '2023-12-24 17:01:14', 'role', 40, 30, '/system/role', '@/pages/system/role', 'M', 1, 1, null, null, '', '_self', '角色管理', 'system');
 
+create table if not exists dict(
+    id             bigint                   not null comment '主键id'
+        primary key,
+    dict_name      varchar(64)              not null comment '字典名称',
+    dict_value     varchar(32)              not null unique key comment '字典值',
+    create_by      bigint                   null comment '创建人',
+    create_date    datetime                 null comment '创建时间',
+    update_by      bigint                   null comment '更新人',
+    update_date    datetime                 null comment '更新时间',
+    status         tinyint     default 1    null comment '状态: 启用(1/true), 禁用(0/false)'
+);
+insert into table_sequence(sequence_name, create_date) value ('SEQ_DICT', sysdate());
 
+create table if not exists dict_item(
+    id             bigint                   not null comment '主键id'
+        primary key,
+    dict_id        bigint                   not null comment '字典id',
+    item_name      varchar(64)              null comment '名称',
+    item_value     varchar(32)              null comment '值',
+    create_by      bigint                   null comment '创建人',
+    create_date    datetime                 null comment '创建时间',
+    update_by      bigint                   null comment '更新人',
+    update_date    datetime                 null comment '更新时间',
+    status         tinyint     default 1    null comment '状态: 启用(1/true), 禁用(0/false)'
+);
+
+insert into table_sequence(sequence_name, create_date) value ('SEQ_DICT_ITEM', sysdate());
