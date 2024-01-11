@@ -32,8 +32,35 @@
 		FROM dict t
 		WHERE id = #{id}
 	</select>
+    <select id="selectListByQueryParams" resultMap="BaseResultMap">
+		SELECT
+		<include refid="baseColumns" />
+		FROM dict t
+		<where>
+			<if test="params.dictName != null and params.dictName != ''">
+				t.dict_name like CONCAT(CONCAT('%', #{params.dictName}), '%')
+			</if>
+			<if test="params.dictValue != null and params.dictValue != ''">
+				and t.dict_value like CONCAT(CONCAT('%', #{params.dictValue}), '%')
+			</if>
+			<if test="params.startDate != null">
+				<![CDATA[
+					and t.create_date >= #{params.startDate}
+				]]>
+			</if>
+			<if test="params.endDate != null">
+				<![CDATA[
+					and t.create_date <= #{params.endDate}
+				]]>
+			</if>
+			<if test="params.status != null">
+				and t.status = #{params.status}
+			</if>
+		</where>
+		ORDER BY t.create_date DESC
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Dict"
 		keyProperty="id" keyColumn="id" >
 	INSERT INTO dict

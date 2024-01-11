@@ -1,11 +1,14 @@
 package com.ptu.devCloud.mapper;
 
 import java.util.List;
+
+import com.ptu.devCloud.entity.vo.DictPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Dict;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * DictMapper
@@ -61,6 +64,16 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Dict dict);
+
+
+	/**
+	 * 条件查询
+	 * @author Yang Fan
+	 * @since 2024/1/11 10:12
+	 * @param params DictPageVO
+	 * @return List<Dict>
+	 */
+	List<Dict> selectListByQueryParams(@Param("params") DictPageVO params);
 	
 	
 }

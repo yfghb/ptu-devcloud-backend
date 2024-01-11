@@ -32,4 +32,8 @@ public class DictItem extends BaseEntity implements Serializable {
 	@TableField(value = "order_num")
 	private Integer orderNum;
 
+	/** 是否新增对象 */
+	@TableField(exist = false)
+	private Boolean newItem;
+
 }
