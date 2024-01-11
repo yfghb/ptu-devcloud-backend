@@ -6,6 +6,8 @@ import com.ptu.devCloud.entity.Dict;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.vo.DictPageVO;
 import com.ptu.devCloud.entity.vo.DictVO;
+import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.StatusVO;
 
 
 /**
@@ -40,5 +42,21 @@ public interface DictService extends IService<Dict> {
      * @return DictVO
      */
     DictVO getVoById(Long id);
+
+    /**
+     * 启用/禁用
+     * @author Yang Fan
+     * @since 2024/1/11 13:23
+     * @param statusVO StatusVO
+     */
+    void changeStatus(StatusVO statusVO);
+
+    /**
+     * 删除数据字典
+     * @author Yang Fan
+     * @since 2024/1/11 13:56
+     * @param idsVO dictIds
+     */
+    void deleteByIds(IdsVO idsVO);
 	
 }

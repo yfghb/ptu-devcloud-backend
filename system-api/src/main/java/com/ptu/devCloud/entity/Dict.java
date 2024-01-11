@@ -15,9 +15,9 @@ public class Dict extends BaseEntity implements Serializable {
 	@TableField(value = "dict_name")
 	private String dictName;
     
-	/** 字典key */
-	@TableField(value = "dict_value")
-	private String dictValue;
+	/** 字典编码 */
+	@TableField(value = "dict_code")
+	private String dictCode;
     
 	/** 状态: 启用(1/true), 禁用(0/false) */
 	@TableField(value = "status")

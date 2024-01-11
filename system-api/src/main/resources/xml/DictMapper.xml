@@ -4,7 +4,7 @@
 	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.Dict">
             <result column="id" property="id" />
 	        <result column="dict_name" property="dictName" />
-	        <result column="dict_value" property="dictValue" />
+	        <result column="dict_code" property="dictCode" />
 	        <result column="create_by" property="createBy" />
 	        <result column="create_date" property="createDate" />
 	        <result column="update_by" property="updateBy" />
@@ -16,7 +16,7 @@
     <sql id="baseColumns">
          t.id
         , t.dict_name
-        , t.dict_value
+        , t.dict_code
         , t.create_by
         , t.create_date
         , t.update_by
@@ -40,8 +40,8 @@
 			<if test="params.dictName != null and params.dictName != ''">
 				t.dict_name like CONCAT(CONCAT('%', #{params.dictName}), '%')
 			</if>
-			<if test="params.dictValue != null and params.dictValue != ''">
-				and t.dict_value like CONCAT(CONCAT('%', #{params.dictValue}), '%')
+			<if test="params.dictCode != null and params.dictCode != ''">
+				and t.dict_code like CONCAT(CONCAT('%', #{params.dictCode}), '%')
 			</if>
 			<if test="params.startDate != null">
 				<![CDATA[
@@ -67,7 +67,7 @@
     	<trim prefix="(" suffix=")" suffixOverrides=",">	 
     	    	    	id,
     	    	    	    	dict_name,
-    	    	    	    	dict_value,
+    	    	    	    	dict_code,
     	    	    	    	create_by,
     	    	    	    	create_date,
     	    	    	    	update_by,
@@ -77,7 +77,7 @@
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
     	    	        #{id},                   
     			    	        #{dictName},                   
-    			    	        #{dictValue},                   
+    			    	        #{dictCode},
     			    	        #{createBy},                   
     			    	        #{createDate},                   
     			    	        #{updateBy},                   
@@ -97,8 +97,8 @@
                 		        <if test="dictName != null">
 			dict_name,
 		</if>
-                		        <if test="dictValue != null">
-			dict_value,
+                		        <if test="dictCode != null">
+			dict_code,
 		</if>
                 		        <if test="createBy != null">
 			create_by,
@@ -123,8 +123,8 @@
                                 <if test="dictName != null" >
 			#{dictName},                    
         </if>
-                                <if test="dictValue != null" >
-			#{dictValue},                    
+                                <if test="dictCode != null" >
+			#{dictCode},
         </if>
                                 <if test="createBy != null" >
 			#{createBy},                    
@@ -149,7 +149,7 @@
     UPDATE dict
      <set>		
                     		dict_name=#{dictName},        
-               		dict_value=#{dictValue},        
+               		dict_code=#{dictCode},
                		create_by=#{createBy},        
                		create_date=#{createDate},        
                		update_by=#{updateBy},        
@@ -167,8 +167,8 @@
 		    		<if test="dictName != null" >
 		dict_name=#{dictName},                 
 	</if>
-	    		<if test="dictValue != null" >
-		dict_value=#{dictValue},                 
+	    		<if test="dictCode != null" >
+		dict_code=#{dictCode},
 	</if>
 	    		<if test="createBy != null" >
 		create_by=#{createBy},                 
@@ -188,7 +188,18 @@
 	        </set>
     WHERE id = #{id}
     </update>
-
+	<update id="updateStatusByIdList">
+		UPDATE dict SET status = #{status}
+		WHERE id IN
+		<if test="dictIds == null">
+			<!-- 使sql报错 -->
+			;
+		</if>
+		<foreach item="item" collection="dictIds"
+				 open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
 
 
 </mapper>

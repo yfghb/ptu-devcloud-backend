@@ -196,3 +196,5 @@ create table if not exists dict_item(
 insert into table_sequence(sequence_name, create_date) value ('SEQ_DICT_ITEM', sysdate());
 
 alter table dict_item add order_num int default 1 null comment '排序';
+
+alter table dict change dict_value dict_code varchar(32) not null comment '字典编码';

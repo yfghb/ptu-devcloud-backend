@@ -9,11 +9,14 @@ import com.ptu.devCloud.entity.Dict;
 import com.ptu.devCloud.entity.DictItem;
 import com.ptu.devCloud.entity.vo.DictPageVO;
 import com.ptu.devCloud.entity.vo.DictVO;
+import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.DictMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.DictItemService;
 import com.ptu.devCloud.service.TableSequenceService;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.DictService;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -86,9 +89,12 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                     dictItemService.updateBatchById(updateDictItemList);
                 }
                 return true;
-            }catch (Exception e){
+            }catch (DuplicateKeyException e){
                 action.setRollbackOnly();
-                throw new JobException("保存数据字典失败！" + e.getMessage());
+                throw new JobException("字典编码重复！");
+            } catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("保存数据字典失败！");
             }
         });
     }
@@ -114,5 +120,39 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         vo.setDict(dict);
         vo.setItemList(itemList);
         return vo;
+    }
+
+    @Override
+    public void changeStatus(StatusVO statusVO) {
+        if(CollUtil.isEmpty(statusVO.getDictIds()) || statusVO.getStatus() == null)return;
+        List<Long> list = new ArrayList<>();
+        statusVO.getDictIds().forEach(id -> list.add(Long.valueOf(id)));
+        dictMapper.updateStatusByIdList(list,statusVO.getStatus());
+    }
+
+    @Override
+    public void deleteByIds(IdsVO idsVO) {
+        if(idsVO == null || CollUtil.isEmpty(idsVO.getDictIds())){
+            throw new JobException("id不能为空");
+        }
+        List<Long> ids = new ArrayList<>();
+        idsVO.getDictIds().forEach(dictId -> ids.add(Long.valueOf(dictId)));
+        List<Long> itemIds = new ArrayList<>();
+        for(Long dictId:ids){
+            List<DictItem> list = dictItemService.lambdaQuery().eq(DictItem::getDictId, dictId).list();
+            list.forEach(obj -> itemIds.add(obj.getId()));
+        }
+        transaction.execute(action -> {
+            try {
+                dictMapper.deleteBatchIds(ids);
+                if(CollUtil.isNotEmpty(itemIds)){
+                    dictItemService.removeByIds(itemIds);
+                }
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("失败！");
+            }
+        });
     }
 }

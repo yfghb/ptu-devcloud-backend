@@ -74,6 +74,14 @@ public interface DictMapper extends BaseMapper<Dict> {
 	 * @return List<Dict>
 	 */
 	List<Dict> selectListByQueryParams(@Param("params") DictPageVO params);
-	
-	
+
+	/**
+	 * 启用/禁用
+	 * @author Yang Fan
+	 * @since 2024/1/11 13:22
+	 * @param dictIds List<Long>
+	 * @param status Boolean
+	 * @return int
+	 */
+	int updateStatusByIdList(@Param("dictIds") List<Long> dictIds, @Param("status") Boolean status);
 }

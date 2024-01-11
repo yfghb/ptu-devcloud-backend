@@ -20,4 +20,8 @@ public class IdsVO implements Serializable {
      * 角色id列表
      */
     private List<String> roleIds;
+    /**
+     * 数据字典id列表
+     */
+    private List<String> dictIds;
 }

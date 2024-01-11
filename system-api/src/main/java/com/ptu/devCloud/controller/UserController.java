@@ -1,6 +1,5 @@
 package com.ptu.devCloud.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
@@ -89,7 +88,7 @@ public class UserController {
      */
     @PostMapping("/changeStatus")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO) throws InterruptedException {
+    public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO) {
         userService.changeStatus(statusVO);
         return CommonResult.success(null);
     }

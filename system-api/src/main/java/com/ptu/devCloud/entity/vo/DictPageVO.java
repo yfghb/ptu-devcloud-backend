@@ -22,7 +22,7 @@ public class DictPageVO extends PageVO implements Serializable {
     /**
      * 字典key
      */
-    private String dictValue;
+    private String dictCode;
 
     /**
      * 启用/禁用

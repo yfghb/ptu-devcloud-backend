@@ -5,14 +5,11 @@ import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Dict;
 import com.ptu.devCloud.entity.vo.DictPageVO;
 import com.ptu.devCloud.entity.vo.DictVO;
+import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.StatusVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.ptu.devCloud.service.DictService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -66,5 +63,33 @@ public class DictController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<DictVO> getDictAndItemByDictId(@RequestParam("dictId")Long dictId){
         return CommonResult.successNoMsg(dictService.getVoById(dictId));
+    }
+
+    /**
+     * 启用/禁用
+     * @author Yang Fan
+     * @since 2024/1/11 13:23
+     * @param statusVO StatusVO
+     * @return CommonResult<String>
+     */
+    @PostMapping("/changeStatus")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO){
+        dictService.changeStatus(statusVO);
+        return CommonResult.success(null);
+    }
+
+    /**
+     * 删除数据字典
+     * @author Yang Fan
+     * @since 2024/1/11 13:56
+     * @param idsVO dictIds
+     * @return CommonResult<String>
+     */
+    @DeleteMapping("/deleteByIds")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> deleteByIds(@RequestBody IdsVO idsVO){
+        dictService.deleteByIds(idsVO);
+        return CommonResult.success(null);
     }
 }
