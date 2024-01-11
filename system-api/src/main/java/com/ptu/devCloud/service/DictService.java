@@ -38,10 +38,10 @@ public interface DictService extends IService<Dict> {
      * 查询数据字典和字典对象
      * @author Yang Fan
      * @since 2024/1/11 10:23
-     * @param id dictId
+     * @param dictCode dictCode
      * @return DictVO
      */
-    DictVO getVoById(Long id);
+    DictVO getByDictCode(String dictCode);
 
     /**
      * 启用/禁用

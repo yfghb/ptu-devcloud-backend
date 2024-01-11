@@ -24,9 +24,9 @@ public class DictItem extends BaseEntity implements Serializable {
 	@TableField(value = "item_value")
 	private String itemValue;
     
-	/** 状态: 启用(1/true), 禁用(0/false) */
+	/** 状态 */
 	@TableField(value = "status")
-	private Boolean status;
+	private String status;
 
 	/** 排序 */
 	@TableField(value = "order_num")

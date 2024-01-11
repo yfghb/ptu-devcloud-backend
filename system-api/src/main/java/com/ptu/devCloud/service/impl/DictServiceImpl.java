@@ -1,6 +1,8 @@
 package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.SeqName;
@@ -110,13 +112,19 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public DictVO getVoById(Long id) {
-        if(id == null){
-            throw new JobException("id不能为空");
+    public DictVO getByDictCode(String dictCode) {
+        if(StrUtil.isEmpty(dictCode)){
+            throw new JobException("dictCode不能为空");
         }
-        Dict dict = dictMapper.getById(id);
-        List<DictItem> itemList = dictItemService.lambdaQuery().eq(DictItem::getDictId, id).list();
         DictVO vo = new DictVO();
+        LambdaQueryWrapper<Dict> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Dict::getDictCode, dictCode);
+        Dict dict = dictMapper.selectOne(lqw);
+        if(dict == null) return vo;
+        List<DictItem> itemList = dictItemService.lambdaQuery()
+                .eq(DictItem::getDictId, dict.getId())
+                .orderByAsc(DictItem::getOrderNum)
+                .list();
         vo.setDict(dict);
         vo.setItemList(itemList);
         return vo;

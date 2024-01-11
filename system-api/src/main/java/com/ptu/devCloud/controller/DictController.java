@@ -56,13 +56,13 @@ public class DictController {
      * 查询数据字典和字典对象
      * @author Yang Fan
      * @since 2024/1/11 10:23
-     * @param dictId dictId
+     * @param dictCode dictCode
      * @return CommonResult<DictVO>
      */
-    @GetMapping("/getDictAndItemByDictId")
+    @GetMapping("/getByDictCode")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<DictVO> getDictAndItemByDictId(@RequestParam("dictId")Long dictId){
-        return CommonResult.successNoMsg(dictService.getVoById(dictId));
+    public CommonResult<DictVO> getDictAndItemByDictId(@RequestParam("dictCode")String dictCode){
+        return CommonResult.successNoMsg(dictService.getByDictCode(dictCode));
     }
 
     /**

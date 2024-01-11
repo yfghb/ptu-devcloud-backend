@@ -198,3 +198,7 @@ insert into table_sequence(sequence_name, create_date) value ('SEQ_DICT_ITEM', s
 alter table dict_item add order_num int default 1 null comment '排序';
 
 alter table dict change dict_value dict_code varchar(32) not null comment '字典编码';
+
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (106, 0, '2024-01-10 12:49:00', 100, '2024-01-10 12:49:21', 'dict', 40, 2, '/system/dict', '@/pages/system/dict', 'M', 1, 1, null, null, '', '_self', '数据字典', 'system');
+
+alter table dict_item modify status varchar(16) default '1' null comment '状态';
