@@ -62,33 +62,36 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public void saveDictAndItem(DictVO dictVO) {
         if (dictVO == null || dictVO.getDict() == null)return;
         List<DictItem> insertDictItemList = new ArrayList<>();
-        List<DictItem> updateDictItemList = new ArrayList<>();
         Dict dict = dictVO.getDict();
         boolean isAdd = false;
         if(dict.getId() == null){
             isAdd = true;
             dict.setId(tableSequenceService.generateId(TableSequenceConstants.Dict));
         }
+        List<Long> deleteDictItemIds = new ArrayList<>();
+        if(!isAdd) {
+            // 如果不是新增，则收集旧字典对象的id
+            List<DictItem> list = dictItemService.lambdaQuery().eq(DictItem::getDictId, dict.getId()).list();
+            list.forEach(obj -> deleteDictItemIds.add(obj.getId()));
+        }
         for(DictItem item: dictVO.getItemList()){
-            // 如果是新增则设置id为空
-            if(item.getNewItem() != null && item.getNewItem()){
-                item.setId(null);
-                insertDictItemList.add(item);
-                item.setDictId(dict.getId());
-            }else {
-                updateDictItemList.add(item);
-            }
+            item.setId(null);
+            item.setDictId(dict.getId());
+            insertDictItemList.add(item);
         }
         boolean finalIsAdd = isAdd;
         transaction.execute(action -> {
             try {
                 if(finalIsAdd)dictMapper.insert(dict);
-                else dictMapper.updateIgnoreNull(dict);
+                else {
+                    dictMapper.updateIgnoreNull(dict);
+                    // 如果不是新增，则删除旧字典对象
+                    if(CollUtil.isNotEmpty(deleteDictItemIds)){
+                        dictItemService.removeByIds(deleteDictItemIds);
+                    }
+                }
                 if(CollUtil.isNotEmpty(insertDictItemList)){
                     dictItemService.saveBatch(insertDictItemList);
-                }
-                if(CollUtil.isNotEmpty(updateDictItemList)){
-                    dictItemService.updateBatchById(updateDictItemList);
                 }
                 return true;
             }catch (DuplicateKeyException e){
@@ -112,19 +115,23 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public DictVO getByDictCode(String dictCode) {
+    public DictVO getByDictCode(String dictCode, Boolean enableFiltering) {
         if(StrUtil.isEmpty(dictCode)){
             throw new JobException("dictCode不能为空");
         }
         DictVO vo = new DictVO();
         LambdaQueryWrapper<Dict> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Dict::getDictCode, dictCode);
+        if(enableFiltering)lqw.eq(Dict::getStatus, "1");
+        // 查询数据字典
         Dict dict = dictMapper.selectOne(lqw);
         if(dict == null) return vo;
-        List<DictItem> itemList = dictItemService.lambdaQuery()
-                .eq(DictItem::getDictId, dict.getId())
-                .orderByAsc(DictItem::getOrderNum)
-                .list();
+        LambdaQueryWrapper<DictItem> itemLqw = new LambdaQueryWrapper<>();
+        if(enableFiltering)itemLqw.eq(DictItem::getStatus, "1");
+        itemLqw.eq(DictItem::getDictId, dict.getId());
+        itemLqw.orderByAsc(DictItem::getOrderNum);
+        //查询字典对象
+        List<DictItem> itemList = dictItemService.list(itemLqw);
         vo.setDict(dict);
         vo.setItemList(itemList);
         return vo;
@@ -132,7 +139,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     @Override
     public void changeStatus(StatusVO statusVO) {
-        if(CollUtil.isEmpty(statusVO.getDictIds()) || statusVO.getStatus() == null)return;
+        if(CollUtil.isEmpty(statusVO.getDictIds()) || StrUtil.isEmpty(statusVO.getStatus()))return;
         List<Long> list = new ArrayList<>();
         statusVO.getDictIds().forEach(id -> list.add(Long.valueOf(id)));
         dictMapper.updateStatusByIdList(list,statusVO.getStatus());

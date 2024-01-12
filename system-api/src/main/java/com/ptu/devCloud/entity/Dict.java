@@ -18,9 +18,9 @@ public class Dict extends BaseEntity implements Serializable {
 	/** 字典编码 */
 	@TableField(value = "dict_code")
 	private String dictCode;
-    
-	/** 状态: 启用(1/true), 禁用(0/false) */
+
+	/** 状态: 启用/禁用 '1'/'0' */
 	@TableField(value = "status")
-	private Boolean status;
+	private String status;
 
 }

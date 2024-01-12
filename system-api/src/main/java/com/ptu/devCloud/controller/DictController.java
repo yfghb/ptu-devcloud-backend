@@ -7,6 +7,7 @@ import com.ptu.devCloud.entity.vo.DictPageVO;
 import com.ptu.devCloud.entity.vo.DictVO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.StatusVO;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.ptu.devCloud.service.DictService;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +62,10 @@ public class DictController {
      */
     @GetMapping("/getByDictCode")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<DictVO> getDictAndItemByDictId(@RequestParam("dictCode")String dictCode){
-        return CommonResult.successNoMsg(dictService.getByDictCode(dictCode));
+    public CommonResult<DictVO> getDictAndItemByDictId(@RequestParam("dictCode")String dictCode,
+                                                       @Nullable Boolean enableFiltering){
+        if(enableFiltering == null) enableFiltering = false;
+        return CommonResult.successNoMsg(dictService.getByDictCode(dictCode, enableFiltering));
     }
 
     /**

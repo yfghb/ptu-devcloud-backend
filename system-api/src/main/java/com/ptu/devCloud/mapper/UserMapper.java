@@ -101,6 +101,6 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @param status 状态
 	 * @return int
 	 */
-	int updateStatusByIdList(@Param("userIds") List<Long> userIds, @Param("status") Boolean status);
+	int updateStatusByIdList(@Param("userIds") List<Long> userIds, @Param("status") String status);
 	
 }

@@ -14,7 +14,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class StatusVO extends IdsVO implements Serializable {
     /**
-     * 状态
+     *  状态: 启用/禁用 '1'/'0'
      */
-    private Boolean status;
+    private String status;
 }

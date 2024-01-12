@@ -39,9 +39,10 @@ public interface DictService extends IService<Dict> {
      * @author Yang Fan
      * @since 2024/1/11 10:23
      * @param dictCode dictCode
+     * @param enableFiltering 是否开启过滤(被禁用的数据字典)
      * @return DictVO
      */
-    DictVO getByDictCode(String dictCode);
+    DictVO getByDictCode(String dictCode, Boolean enableFiltering);
 
     /**
      * 启用/禁用

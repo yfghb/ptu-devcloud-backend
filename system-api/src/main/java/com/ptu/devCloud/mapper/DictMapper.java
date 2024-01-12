@@ -83,5 +83,5 @@ public interface DictMapper extends BaseMapper<Dict> {
 	 * @param status Boolean
 	 * @return int
 	 */
-	int updateStatusByIdList(@Param("dictIds") List<Long> dictIds, @Param("status") Boolean status);
+	int updateStatusByIdList(@Param("dictIds") List<Long> dictIds, @Param("status") String status);
 }

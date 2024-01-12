@@ -24,10 +24,10 @@ public class Role extends BaseEntity implements Serializable {
 	/** 显示顺序 */
 	@TableField(value = "order_num")
 	private Integer orderNum;
-    
-	/** 角色状态:启用(1/true), 禁用(0/false) */
+
+	/** 状态: 启用/禁用 '1'/'0' */
 	@TableField(value = "status")
-	private Boolean status;
+	private String status;
     
 
 }

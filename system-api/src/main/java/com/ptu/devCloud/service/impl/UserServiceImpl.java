@@ -97,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 加密密码
             String encodePassword = passwordEncoder.encode(user.getLoginPassword());
             user.setLoginPassword(encodePassword);
-            user.setStatus(true);
+            user.setStatus("1");
             userMapper.insert(user);
             return true;
         }

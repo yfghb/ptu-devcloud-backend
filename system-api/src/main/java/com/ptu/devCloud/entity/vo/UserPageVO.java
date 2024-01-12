@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class UserPageVO extends PageVO implements Serializable {
-    /** 用户状态: 启用(1/true), 禁用(0/false) */
-    private Boolean status;
+    /** 状态 '1'/'0' 启用/禁用 */
+    private String status;
 
     /** 登录账号 */
     private String loginAccount;

@@ -20,5 +20,5 @@ public class RolePageVO extends PageVO implements Serializable {
     /**
      * 是否有效
      */
-    private Boolean status;
+    private String status;
 }

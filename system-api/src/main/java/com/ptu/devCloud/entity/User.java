@@ -16,9 +16,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "user")
 public class User extends BaseEntity implements Serializable {
-	/** 用户状态: 启用(1/true), 禁用(0/false) */
+	/** 状态: 启用/禁用 '1'/'0' */
 	@TableField(value = "status")
-	private Boolean status;
+	private String status;
     
 	/** 登录账号 */
 	@TableField(value = "login_account")

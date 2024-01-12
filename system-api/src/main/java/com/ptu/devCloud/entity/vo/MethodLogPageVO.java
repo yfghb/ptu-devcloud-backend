@@ -28,8 +28,8 @@ public class MethodLogPageVO extends PageVO implements Serializable {
      */
     private String url;
     /**
-     * 是否成功
+     * 是否成功 '1'/'0' 成功/失败
      */
-    private Boolean passFlag;
+    private String passFlag;
 
 }

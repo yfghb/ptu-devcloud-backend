@@ -25,7 +25,7 @@ public class DictPageVO extends PageVO implements Serializable {
     private String dictCode;
 
     /**
-     * 启用/禁用
+     * 启用/禁用 '1'/'0'
      */
-    private Boolean status;
+    private String status;
 }

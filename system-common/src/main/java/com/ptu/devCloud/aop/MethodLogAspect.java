@@ -7,7 +7,6 @@ import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.MethodLog;
 import com.ptu.devCloud.entity.thread.AsyncLogTask;
 import com.ptu.devCloud.entity.thread.ThreadTask;
-import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.service.MethodLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +67,7 @@ public class MethodLogAspect {
             methodLog.setErrorMsg(e.toString());
             log.error(methodLog.getMethodName() + "\n" + methodLog.getMethodPath() + "\n" + e);
             // 方法异常标志
-            methodLog.setPassFlag(false);
+            methodLog.setPassFlag("0");
             throw new JobException(e.getMessage());
         }
         finally {

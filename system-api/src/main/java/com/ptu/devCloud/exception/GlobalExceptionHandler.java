@@ -59,7 +59,8 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint, AccessD
 
     private String printErr(Exception e, String type) {
         String uuid = UUID.fastUUID().toString(true);
-        String basicMsg = "\n异常号: " + uuid + "\n基本信息: " + e.toString() + "\n栈信息:";
+        String basicMsg = "--------------------" + (type.equals("error") ? "系统异常" : "业务异常") + "--------------------" +
+                "\n异常号: " + uuid + "\n基本信息: " + e.toString() + "\n栈信息:";
         switch (type) {
             case "error":
                 log.error(basicMsg);
