@@ -7,6 +7,7 @@ import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.service.UserService;
+import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,17 @@ public class UserController {
     }
 
     /**
+     * 获取当前用户所拥有的权限
+     * @author Yang Fan
+     * @since 2024/1/15 17:50
+     * @return CommonResult<List<String>>
+     */
+    @GetMapping("/getPermissions")
+    public CommonResult<List<String>> getPermissions(){
+        return CommonResult.successNoMsg(SecurityUtils.getLoginUser().getPermissions());
+    }
+
+    /**
      * 新增单个用户
      * @author Yang Fan
      * @since 2023/11/9 14:57
@@ -60,7 +72,7 @@ public class UserController {
      * @return CommonResult<List<User>>
      */
     @PostMapping("/page")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-user-view')")
     @EnableMethodLog(name = "用户分页查询")
     public CommonResult<PageInfo<User>> page(@RequestBody UserPageVO pageVO){
         return CommonResult.successNoMsg(userService.getPage(pageVO));
@@ -74,7 +86,7 @@ public class UserController {
      * @return CommonResult<List<String>>
      */
     @GetMapping("/getRoleNameList")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-user-view')")
     public CommonResult<List<String>> getRoleNameList(@RequestParam("userId") Long userId){
         return CommonResult.successNoMsg(userService.getRoleNameList(userId));
     }
@@ -87,7 +99,7 @@ public class UserController {
      * @return CommonResult<String>
      */
     @PostMapping("/changeStatus")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-user-changeStatus')")
     public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO) {
         userService.changeStatus(statusVO);
         return CommonResult.success(null);

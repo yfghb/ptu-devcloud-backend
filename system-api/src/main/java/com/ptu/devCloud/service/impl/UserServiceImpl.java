@@ -31,10 +31,7 @@ import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -143,8 +140,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(Objects.isNull(user)){
             return null;
         }
-        // TODO 以用户id查询权限表达式列表
-        List<String> permissions = new ArrayList<>();
-        return new LoginUser(user, permissions);
+        // 获取权限
+        List<String> permissions = userMapper.selectPermissionStrByUserId(user.getId());
+        // 补充view的权限
+        Map<String,Boolean> map = new HashMap<>(32);
+        for(String perm:permissions){
+            map.putIfAbsent(perm, true);
+            String[] split = perm.split("-");
+            if (split[split.length-1].equals("view"))continue;
+            StringBuilder viewPermission = new StringBuilder();
+            for(int i=0;i<split.length;i++){
+                if(i!=split.length-1){
+                    viewPermission.append(split[i]).append("-");
+                } else {
+                    viewPermission.append("view");
+                }
+            }
+            map.putIfAbsent(viewPermission.toString(), true);
+        }
+        return new LoginUser(user, new ArrayList<>(map.keySet()));
     }
 }

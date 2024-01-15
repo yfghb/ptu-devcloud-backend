@@ -35,7 +35,9 @@ public class PermissionController {
      */
     @GetMapping("/getPermissions")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId, @Nullable String type, @Nullable Long roleId){
+    public CommonResult<List<Permission>> getPermissions(@Nullable Long parentId,
+                                                         @Nullable String type,
+                                                         @Nullable Long roleId){
         return CommonResult.successNoMsg(permissionService.getPermissions(parentId, type, roleId));
     }
 
@@ -47,7 +49,7 @@ public class PermissionController {
      * @return CommonResult<String> 提示信息
      */
     @PostMapping("/add")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-menu-add')")
     @EnableMethodLog(name = "新增菜单/按钮")
     public CommonResult<String> add(@RequestBody Permission permission){
         permissionService.add(permission);
@@ -62,7 +64,7 @@ public class PermissionController {
      * @return CommonResult<String> 提示信息
      */
     @PostMapping("/updateById")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-menu-edit')")
     @EnableMethodLog(name = "修改菜单/按钮")
     public CommonResult<String> updateById(@RequestBody Permission permission){
         permissionService.updatePermissionById(permission);
@@ -77,7 +79,7 @@ public class PermissionController {
      * @return CommonResult<String> 提示信息
      */
     @DeleteMapping("/deleteById")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-menu-delete')")
     @EnableMethodLog(name = "删除菜单/按钮")
     public CommonResult<String> deleteById(@RequestParam Long id){
         permissionService.deletePermissionById(id);

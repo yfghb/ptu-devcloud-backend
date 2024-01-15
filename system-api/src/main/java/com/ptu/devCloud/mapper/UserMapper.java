@@ -102,5 +102,14 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @return int
 	 */
 	int updateStatusByIdList(@Param("userIds") List<Long> userIds, @Param("status") String status);
+
+	/**
+	 * 以userId查询权限表达式列表
+	 * @author Yang Fan
+	 * @since 2024/1/15 10:30
+	 * @param userId Long 用户id
+	 * @return List<String> 权限表达式列表
+	 */
+	List<String> selectPermissionStrByUserId(@Param("userId") Long userId);
 	
 }

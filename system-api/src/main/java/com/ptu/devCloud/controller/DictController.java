@@ -34,7 +34,7 @@ public class DictController {
      * @return CommonResult<String>
      */
     @PostMapping("/saveDictAndItem")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-dict-save')")
     public CommonResult<String> saveDictAndItem(@RequestBody DictVO dictVO){
         dictService.saveDictAndItem(dictVO);
         return CommonResult.successWithMsg(null,"保存成功");
@@ -48,7 +48,7 @@ public class DictController {
      * @return CommonResult<PageInfo<Dict>>
      */
     @PostMapping("/page")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-dict-view')")
     public CommonResult<PageInfo<Dict>> page(@RequestBody DictPageVO pageVO){
         return CommonResult.successNoMsg(dictService.page(pageVO));
     }
@@ -76,7 +76,7 @@ public class DictController {
      * @return CommonResult<String>
      */
     @PostMapping("/changeStatus")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-dict-changeStatus')")
     public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO){
         dictService.changeStatus(statusVO);
         return CommonResult.success(null);
@@ -90,7 +90,7 @@ public class DictController {
      * @return CommonResult<String>
      */
     @DeleteMapping("/deleteByIds")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-dict-delete')")
     public CommonResult<String> deleteByIds(@RequestBody IdsVO idsVO){
         dictService.deleteByIds(idsVO);
         return CommonResult.success(null);

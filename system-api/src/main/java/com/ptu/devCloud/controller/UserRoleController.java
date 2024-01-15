@@ -29,7 +29,7 @@ public class UserRoleController {
      * @param idsVO IdsVO
      */
     @PostMapping("/resetUserRole")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-user-resetRole')")
     public CommonResult<String> saveUserRole(@RequestBody IdsVO idsVO){
         userRoleService.resetUserRoleByIds(idsVO);
         return CommonResult.successWithMsg(null,"保存成功");

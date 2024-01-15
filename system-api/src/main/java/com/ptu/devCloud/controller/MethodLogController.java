@@ -34,7 +34,7 @@ public class MethodLogController {
      * @return CommonResult<PageInfo<MethodLog>>
      */
     @PostMapping("/getPage")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-methodLog-view')")
     public CommonResult<PageInfo<MethodLog>> getPage(@RequestBody MethodLogPageVO pageVO) {
         return CommonResult.successNoMsg(methodLogService.getPage(pageVO));
     }

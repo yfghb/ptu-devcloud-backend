@@ -38,6 +38,12 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint, AccessD
         return CommonResult.error(e.getMessage());
     }
 
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public CommonResult<String> accessDeniedExceptionHandler(AccessDeniedException e){
+        printErr(e, "warn");
+        return CommonResult.error("您没有当前操作的权限: msg=" + e.getMessage(), HttpCodeConstants.ACCESS_DENIED);
+    }
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
         log.warn("AccessDenied! "+accessDeniedException.getMessage());
@@ -59,7 +65,7 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint, AccessD
 
     private String printErr(Exception e, String type) {
         String uuid = UUID.fastUUID().toString(true);
-        String basicMsg = "--------------------" + (type.equals("error") ? "系统异常" : "业务异常") + "--------------------" +
+        String basicMsg = "\n--------------------" + (type.equals("error") ? "系统异常" : "业务异常") + "--------------------" +
                 "\n异常号: " + uuid + "\n基本信息: " + e.toString() + "\n栈信息:";
         switch (type) {
             case "error":

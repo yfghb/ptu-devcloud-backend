@@ -36,7 +36,7 @@ public class RoleController {
      * @return CommonResult<List<Role>>
      */
     @PostMapping("/page")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-view')")
     public CommonResult<PageInfo<RoleVO>> page(@RequestBody RolePageVO rolePageVO){
         return CommonResult.successNoMsg(roleService.getPage(rolePageVO));
     }
@@ -49,7 +49,7 @@ public class RoleController {
      * @return CommonResult<String>提示信息
      */
     @PostMapping("/add")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-add')")
     public CommonResult<String> add(@RequestBody RoleVO roleVO){
         roleService.addRole(roleVO);
         return CommonResult.successWithMsg(null,"添加角色成功！");
@@ -63,7 +63,7 @@ public class RoleController {
      * @return CommonResult<String>提示信息
      */
     @PostMapping("/edit")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-edit')")
     public CommonResult<String> edit(@RequestBody RoleVO roleVO){
         roleService.editRole(roleVO);
         return CommonResult.successWithMsg(null,"修改角色成功！");
@@ -77,7 +77,7 @@ public class RoleController {
      * @return CommonResult<String>提示信息
      */
     @DeleteMapping("/delete")
-    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-delete')")
     public CommonResult<String> delete(@RequestBody List<Long> idList){
         roleService.removeRoleBatch(idList);
         return CommonResult.successWithMsg(null,"删除成功！");

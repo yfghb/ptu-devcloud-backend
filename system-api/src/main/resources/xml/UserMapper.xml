@@ -88,7 +88,17 @@
 		ORDER BY t.create_date DESC
 	</select>
 
-    <!-- 插入全部字段 -->
+	<select id="selectPermissionStrByUserId" resultType="java.lang.String">
+		select
+		       p.permission
+		from permission p
+		left join role_permission rp on rp.permission_id = p.id
+		left join role r on rp.role_id = r.id
+		left join user_role ur on r.id = ur.role_id
+		where ur.user_id = #{userId} and p.permission is not null and p.permission != ''
+	</select>
+
+	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.User"
 		keyProperty="id" keyColumn="id" >
 	INSERT INTO user
