@@ -11,7 +11,6 @@ import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Role;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.UserRole;
-import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.exception.JobException;
@@ -146,17 +145,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Map<String,Boolean> map = new HashMap<>(32);
         for(String perm:permissions){
             map.putIfAbsent(perm, true);
-            String[] split = perm.split("-");
-            if (split[split.length-1].equals("view"))continue;
-            StringBuilder viewPermission = new StringBuilder();
-            for(int i=0;i<split.length;i++){
-                if(i!=split.length-1){
-                    viewPermission.append(split[i]).append("-");
-                } else {
-                    viewPermission.append("view");
-                }
+            String[] splitPerm = perm.split("-");
+            if (splitPerm[splitPerm.length-1].equals("view"))continue;
+            StringBuilder builder = new StringBuilder();
+            for(int i=0;i<splitPerm.length-1;i++){
+                builder.append(splitPerm[i]).append("-");
+                map.putIfAbsent(builder + "view", true);
             }
-            map.putIfAbsent(viewPermission.toString(), true);
         }
         return new LoginUser(user, new ArrayList<>(map.keySet()));
     }

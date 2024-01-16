@@ -47,6 +47,7 @@ public class UserController {
      * @return CommonResult<List<String>>
      */
     @GetMapping("/getPermissions")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<List<String>> getPermissions(){
         return CommonResult.successNoMsg(SecurityUtils.getLoginUser().getPermissions());
     }
