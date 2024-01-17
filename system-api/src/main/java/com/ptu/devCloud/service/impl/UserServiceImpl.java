@@ -139,6 +139,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(Objects.isNull(user)){
             return null;
         }
+        if("0".equals(user.getStatus())){
+            throw new JobException("对不起！当前用户封禁中");
+        }
         // 获取权限
         List<String> permissions = userMapper.selectPermissionStrByUserId(user.getId());
         // 补充view的权限

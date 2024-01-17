@@ -52,7 +52,7 @@
 		SELECT
 			<include refid="baseColumns" />
 		FROM user t
-		WHERE t.login_account = #{loginAccount} and t.status = true
+		WHERE t.login_account = #{loginAccount}
 	</select>
     <select id="selectListByQueryParams" resultMap="BaseResultMap">
 		SELECT
