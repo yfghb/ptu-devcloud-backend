@@ -1,6 +1,7 @@
 package com.ptu.devCloud.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.vo.RolePageVO;
 import com.ptu.devCloud.entity.vo.RoleVO;
@@ -50,6 +51,7 @@ public class RoleController {
      */
     @PostMapping("/add")
     @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-add')")
+    @EnableMethodLog(name = "添加角色")
     public CommonResult<String> add(@RequestBody RoleVO roleVO){
         roleService.addRole(roleVO);
         return CommonResult.successWithMsg(null,"添加角色成功！");
@@ -64,6 +66,7 @@ public class RoleController {
      */
     @PostMapping("/edit")
     @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-edit')")
+    @EnableMethodLog(name = "修改角色")
     public CommonResult<String> edit(@RequestBody RoleVO roleVO){
         roleService.editRole(roleVO);
         return CommonResult.successWithMsg(null,"修改角色成功！");
@@ -78,6 +81,7 @@ public class RoleController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("@permissionServiceImpl.hasPermission('system-role-delete')")
+    @EnableMethodLog(name = "批量删除角色")
     public CommonResult<String> delete(@RequestBody List<Long> idList){
         roleService.removeRoleBatch(idList);
         return CommonResult.successWithMsg(null,"删除成功！");

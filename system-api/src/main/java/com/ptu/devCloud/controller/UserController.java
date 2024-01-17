@@ -74,7 +74,6 @@ public class UserController {
      */
     @PostMapping("/page")
     @PreAuthorize("@permissionServiceImpl.hasPermission('system-user-view')")
-    @EnableMethodLog(name = "用户分页查询")
     public CommonResult<PageInfo<User>> page(@RequestBody UserPageVO pageVO){
         return CommonResult.successNoMsg(userService.getPage(pageVO));
     }

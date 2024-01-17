@@ -1,5 +1,6 @@
 package com.ptu.devCloud.controller;
 
+import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.service.UserRoleService;
@@ -23,13 +24,14 @@ public class UserRoleController {
     private UserRoleService userRoleService;
 
     /**
-     * 去除旧的，保存新的用户-关系
+     * 重新设置用户-角色关系
      * @author Yang Fan
      * @since 2024/1/3 18:34
      * @param idsVO IdsVO
      */
     @PostMapping("/resetUserRole")
     @PreAuthorize("@permissionServiceImpl.hasPermission('system-user-resetRole')")
+    @EnableMethodLog(name = "重新设置用户-角色关系")
     public CommonResult<String> saveUserRole(@RequestBody IdsVO idsVO){
         userRoleService.resetUserRoleByIds(idsVO);
         return CommonResult.successWithMsg(null,"保存成功");

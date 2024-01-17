@@ -1,0 +1,101 @@
+
+use ptu_dev_cloud;
+
+
+-- [init user start]
+INSERT INTO user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar) VALUES (1, 0, '2023-11-25 10:52:43', null, null, '1', 'admin', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '', '', '用户admin', null);
+INSERT INTO user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar) VALUES (2, 0, '2023-11-25 10:52:43', null, null, '1', 'test', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '', '', '用户test', null);
+-- [init user start]
+
+
+-- [init role start]
+INSERT INTO role (id, create_by, create_date, update_by, update_date, role_name, order_num, status) VALUES (1, 0, '2023-12-23 20:04:47', 100, '2024-01-15 10:13:41', '超级管理员', 0, '1');
+INSERT INTO role (id, create_by, create_date, update_by, update_date, role_name, order_num, status) VALUES (2, 0, '2024-01-15 17:08:04', 100, '2024-01-17 14:43:39', '测试角色', 0, '1');
+-- [init role end]
+
+
+-- [init permission start]
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (10, null, null, null, null, 'workplace', 0, 10, '/workplace', '@/pages/workplace', 'M', 1, 1, null, 'DashboardOutlined', '', '_self', '工作台', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (20, null, null, null, null, 'table', 0, 20, '/table', '@/pages/table', 'M', 1, 1, null, 'TableOutlined', '', '_self', '表格', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (30, null, null, 100, '2023-11-29 18:01:19', 'personal', 0, 30, '/personal', '@/pages/personal', 'M', 1, 1, null, 'UserOutlined', '', '_self', '个人中心', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (40, null, null, 100, '2024-01-15 09:33:17', 'system', 0, 40, '/system', '@/components/layout/BlankView.vue', 'M', 1, 1, 'system-view', 'SettingOutlined', '', '_self', '系统管理', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (50, null, null, 100, '2024-01-15 09:34:30', 'menu', 40, 10, '/system/menu', '@/pages/system/menu', 'M', 1, 1, 'system-menu-view', null, '', '_self', '菜单管理', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (60, null, null, 100, '2024-01-15 09:34:46', 'user', 40, 20, '/system/user', '@/pages/system/user', 'M', 1, 1, 'system-user-view', null, '', '_self', '用户管理', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (102, 0, '2023-11-29 22:29:57', 100, '2024-01-15 09:33:42', 'methodLog', 40, 1, '/system/methodLog', '@/pages/system/methodLog', 'M', 1, 1, 'system-methodLog-view', null, '', '_self', '接口日志', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (103, 0, '2023-12-11 09:41:39', 100, '2024-01-15 09:34:57', 'role', 40, 30, '/system/role', '@/pages/system/role', 'M', 1, 1, 'system-role-view', null, '', '_self', '角色管理', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (106, 0, '2024-01-10 12:49:00', 100, '2024-01-17 11:13:44', 'dict', 40, 2, '/system/dict', '@/pages/system/dict', 'M', 1, 1, 'system-dict-view', null, '', '_self', '数据字典', 'system');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (111, 0, '2024-01-15 09:37:26', 100, '2024-01-17 11:14:50', 'dict_save_btn', 106, 1, '/dict_save_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-dict-save', null, '', '_self', 'dict_save_btn', 'dict');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (112, 0, '2024-01-15 09:40:32', 100, '2024-01-16 11:42:30', 'dict_status_btn', 106, 2, '/dict_status_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-dict-changeStatus', null, '', '_self', 'dict_status_btn', 'dict');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (113, 0, '2024-01-15 09:41:15', 100, '2024-01-16 11:42:36', 'dict_delete_btn', 106, 3, '/dict_delete_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-dict-delete', null, '', '_self', 'dict_delete_btn', 'dict');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (114, 0, '2024-01-15 09:43:09', 100, '2024-01-16 11:43:02', 'menu_add_btn', 50, 1, '/menu_add_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-menu-add', null, '', '_self', 'menu_add_btn', 'menu');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (115, 0, '2024-01-15 09:43:51', 100, '2024-01-16 11:43:08', 'menu_edit_btn', 50, 2, '/menu_edit_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-menu-edit', null, '', '_self', 'menu_edit_btn', 'menu');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (116, 0, '2024-01-15 09:45:03', 100, '2024-01-16 11:43:14', 'menu_delete_btn', 50, 3, '/menu_delete_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-menu-delete', null, '', '_self', 'menu_delete_btn', 'menu');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (117, 0, '2024-01-15 09:47:06', 100, '2024-01-16 11:43:33', 'user_resetRole_btn', 60, 1, '/user_resetRole_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-user-resetRole', null, '', '_self', 'user_resetRole_btn', 'user');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (118, 0, '2024-01-15 09:48:09', 100, '2024-01-16 11:43:40', 'user_status_btn', 60, 2, '/user_status_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-user-changeStatus', null, '', '_self', 'user_status_btn', 'user');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (119, 0, '2024-01-15 09:49:25', 100, '2024-01-17 09:26:25', 'role_add_btn', 103, 1, '/role_add_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-role-add', null, '', '_self', 'role_add_btn', 'role');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (120, 0, '2024-01-15 09:50:08', 100, '2024-01-17 09:26:30', 'role_edit_btn', 103, 2, '/role_edit_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-role-edit', null, '', '_self', 'role_edit_btn', 'role');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (121, 0, '2024-01-15 09:50:41', 100, '2024-01-17 09:26:35', 'role_delete_btn', 103, 3, '/role_delete_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-role-delete', null, '', '_self', 'role_delete_btn', 'role');
+-- [init permission end]
+
+
+-- [init role_permission start]
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (1, 0, '2024-01-15 10:13:41', null, null, 1, 10);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (2, 0, '2024-01-15 10:13:41', null, null, 1, 20);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (3, 0, '2024-01-15 10:13:41', null, null, 1, 30);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (4, 0, '2024-01-15 10:13:41', null, null, 1, 102);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (5, 0, '2024-01-15 10:13:41', null, null, 1, 106);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (6, 0, '2024-01-15 10:13:41', null, null, 1, 111);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (7, 0, '2024-01-15 10:13:41', null, null, 1, 112);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (8, 0, '2024-01-15 10:13:41', null, null, 1, 113);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (9, 0, '2024-01-15 10:13:41', null, null, 1, 40);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (10, 0, '2024-01-15 10:13:41', null, null, 1, 50);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (11, 0, '2024-01-15 10:13:41', null, null, 1, 60);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (12, 0, '2024-01-15 10:13:41', null, null, 1, 103);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (13, 0, '2024-01-15 10:13:41', null, null, 1, 114);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (14, 0, '2024-01-15 10:13:41', null, null, 1, 115);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (15, 0, '2024-01-15 10:13:41', null, null, 1, 116);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (16, 0, '2024-01-15 10:13:41', null, null, 1, 117);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (17, 0, '2024-01-15 10:13:41', null, null, 1, 118);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (18, 0, '2024-01-15 10:13:41', null, null, 1, 119);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (19, 0, '2024-01-15 10:13:41', null, null, 1, 120);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (20, 0, '2024-01-15 10:13:41', null, null, 1, 121);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (21, 0, '2024-01-17 14:43:39', null, null, 2, 30);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (22, 0, '2024-01-17 14:43:39', null, null, 2, 20);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (23, 0, '2024-01-17 14:43:39', null, null, 2, 10);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (24, 0, '2024-01-17 14:43:39', null, null, 2, 114);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (25, 0, '2024-01-17 14:43:39', null, null, 2, 102);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (26, 0, '2024-01-17 14:43:39', null, null, 2, 111);
+-- [init role_permission end]
+
+
+-- [init user-role start]
+INSERT INTO user_role (id, create_by, create_date, update_by, update_date, user_id, role_id) VALUES (1, 0, '2024-01-05 17:51:00', null, null, 1, 1);
+INSERT INTO user_role (id, create_by, create_date, update_by, update_date, user_id, role_id) VALUES (2, 0, '2024-01-15 17:08:44', null, null, 2, 2);
+-- [init user-role end]
+
+
+-- [init table_sequence start]
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (1, 'SEQ_METHOD_LOG', 1, 1, '14ebafd8c6f24bd7ad52ee04856ad908', null, '2023-12-22 19:15:27', 100, '2024-01-17 14:43:40');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (2, 'SEQ_USER', 3, 1, null, null, '2023-12-22 19:15:27', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (3, 'SEQ_PERMISSION', 122, 1, 'd37af2c3d66f4fe881ac27e9e0b09427', null, '2023-12-22 19:15:27', 100, '2024-01-15 15:30:23');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (4, 'SEQ_ROLE', 3, 1, 'e1e40f9eea474defbc4d0aa5823c38a6', null, '2023-12-22 19:15:27', 100, '2024-01-15 17:08:04');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (5, 'SEQ_USER_ROLE', 3, 1, '83ac7086f75947878af08be0cd90fbc2', null, '2023-12-22 19:15:27', 100, '2024-01-15 17:08:44');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (6, 'SEQ_ROLE_PERMISSION', 27, 1, 'a335486c66c147fea4a6525f2ae46e48', null, '2023-12-22 19:15:27', 100, '2024-01-17 14:43:39');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (7, 'SEQ_DICT', 3, 1, 'dd122a602f5e413ba788843f8b7bb3b8', null, '2024-01-10 12:15:10', 100, '2024-01-15 16:09:27');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (8, 'SEQ_DICT_ITEM', 5, 1, 'dc3fa00fa53b4dbba705613dd7dc0248', null, '2024-01-10 12:15:10', 100, '2024-01-17 14:25:34');
+-- [init table_sequence end]
+
+
+-- [init dict start]
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (1, '通用状态', 'status', 0, '2024-01-11 10:48:07', 100, '2024-01-12 14:08:28', '1');
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (2, '接口请求状态', 'request_status', 0, '2024-01-11 17:17:07', 100, '2024-01-17 14:25:34', '1');
+-- [init dict end]
+
+
+-- [init dict_item start]
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (1, 1, '启用', '1', 0, '2024-01-12 14:08:28', 100, '2024-01-12 13:46:59', '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (2, 1, '禁用', '0', 0, '2024-01-12 14:08:28', 100, '2024-01-12 13:46:59', '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (3, 2, '正常', '1', 0, '2024-01-17 14:25:34', 100, '2024-01-12 13:34:17', '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (4, 2, '异常', '0', 0, '2024-01-17 14:25:34', 100, '2024-01-12 13:34:17', '1', 2);
+-- [init dict_item end]
+

@@ -1,6 +1,7 @@
 package com.ptu.devCloud.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Dict;
 import com.ptu.devCloud.entity.vo.DictPageVO;
@@ -35,6 +36,7 @@ public class DictController {
      */
     @PostMapping("/saveDictAndItem")
     @PreAuthorize("@permissionServiceImpl.hasPermission('system-dict-save')")
+    @EnableMethodLog(name = "新增/更新数据字典")
     public CommonResult<String> saveDictAndItem(@RequestBody DictVO dictVO){
         dictService.saveDictAndItem(dictVO);
         return CommonResult.successWithMsg(null,"保存成功");
