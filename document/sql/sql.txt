@@ -210,3 +210,8 @@ alter table method_log modify pass_flag varchar(16) default '1' null comment '�
 alter table role modify status varchar(16) default '1' not null comment '状态';
 
 alter table user modify status varchar(16) default '1' null comment '状态';
+
+create unique index permission_path_uindex
+	on permission (path);
+
+alter table permission modify permission_type char not null comment '权限类型（M菜单 B按钮）';
