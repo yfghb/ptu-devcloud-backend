@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.ptu.devCloud.constants.HttpCodeConstants;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.utils.JwtUtil;
+import com.ptu.devCloud.utils.RedisUtils;
 import com.ptu.devCloud.utils.SecurityUtils;
 import com.ptu.devCloud.utils.WebUtils;
 import io.jsonwebtoken.Claims;
@@ -12,6 +13,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,9 @@ import java.io.IOException;
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
+    @Resource
+    private RedisUtils redisUtils;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
@@ -39,18 +45,22 @@ public class TokenFilter extends OncePerRequestFilter {
             WebUtils.returnFalse(response, "登录认证过期, 请重新登录", HttpCodeConstants.NEED_LOGIN);
         }
         else {
-            // TODO 校验 token 是否在 redis 中存在
-            try{
-                Claims claims = JwtUtil.parse(token);
-                LoginUser loginUser = JSON.parseObject(claims.getSubject(), LoginUser.class);
-                UsernamePasswordAuthenticationToken authenticationToken = new
-                        UsernamePasswordAuthenticationToken(loginUser, null, null);
-                if(SecurityUtils.getAuthentication() == null){
-                    SecurityUtils.setAuthentication(authenticationToken);
-                }
-                filterChain.doFilter(request, response);
-            }catch (ExpiredJwtException e) {
+            // 在redis获取用户令牌信息
+            String userRedisToken = (String) redisUtils.get(token);
+            if(StrUtil.isEmpty(userRedisToken)){
                 WebUtils.returnFalse(response, "登录认证过期, 请重新登录", HttpCodeConstants.NEED_LOGIN);
+            } else {
+                try{
+                    Claims claims = JwtUtil.parse(userRedisToken);
+                    LoginUser loginUser = JSON.parseObject(claims.getSubject(), LoginUser.class);
+                    UsernamePasswordAuthenticationToken authenticationToken = new
+                            UsernamePasswordAuthenticationToken(loginUser, null, null);
+                    SecurityUtils.setAuthentication(authenticationToken);
+                    filterChain.doFilter(request, response);
+                }catch (ExpiredJwtException e) {
+                    redisUtils.del(token);
+                    WebUtils.returnFalse(response, "登录认证过期, 请重新登录", HttpCodeConstants.NEED_LOGIN);
+                }
             }
         }
     }

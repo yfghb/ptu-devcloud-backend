@@ -22,7 +22,7 @@ public interface UserService extends IService<User> {
      * @author Yang Fan
      * @since 2023/11/9 14:48
      * @param user user实体
-     * @return tokenId 令牌id
+     * @return redis中 token的key
      */
     String login(User user);
 
@@ -60,5 +60,13 @@ public interface UserService extends IService<User> {
      * @param statusVO StatusVO
      */
     void changeStatus(StatusVO statusVO);
+
+    /**
+     * 将当前key值的token续期超时时间
+     * @author Yang Fan
+     * @since 2024/1/18 16:22
+     * @param userRedisKey 用户的token
+     */
+    void alive(String userRedisKey);
 	
 }

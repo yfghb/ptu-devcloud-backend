@@ -27,4 +27,6 @@ public class CommonConstants {
     // 忽略权限
     public static final String IGNORE_PERMISSION = "ignorePermission";
 
+    public static final String DICT_REDIS_KEY_PREFIX = "dict:";
+
 }

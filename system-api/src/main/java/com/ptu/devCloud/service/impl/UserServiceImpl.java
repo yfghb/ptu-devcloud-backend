@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.SeqName;
+import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Role;
@@ -19,6 +20,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.RoleService;
 import com.ptu.devCloud.service.UserRoleService;
 import com.ptu.devCloud.utils.JwtUtil;
+import com.ptu.devCloud.utils.RedisUtils;
+import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,6 +59,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private RoleService roleService;
 
+    @Resource
+    private RedisUtils redisUtils;
+
     @Override
     @SeqName(value = TableSequenceConstants.User)
     public boolean save(User entity) {
@@ -78,7 +84,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(Objects.isNull(authentication)){
             throw new JobException("账号或密码不正确");
         }
-        return JwtUtil.generate(authentication.getPrincipal());
+        // 使用账号加密后的字符串作为redisKey，保证同一个用户只会生成一个登录token
+        String userRedisKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
+        String userRedisToken = JwtUtil.generate(authentication.getPrincipal());
+        // 在redis设置token，过期时间为两小时（此处配合心跳连接，如果两个小时客户端没有发送alive请求，则自动过期）
+        redisUtils.set(userRedisKey, userRedisToken, 60 * 60 * 2);
+        return userRedisKey;
     }
 
     @Override
@@ -130,6 +141,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<Long> list = new ArrayList<>();
         statusVO.getUserIds().forEach(id -> list.add(Long.valueOf(id)));
         userMapper.updateStatusByIdList(list, statusVO.getStatus());
+    }
+
+    @Override
+    public void alive(String userRedisKey) {
+        if(redisUtils.get(userRedisKey)!=null){
+            // 将它的过期时间重置成两个小时
+            redisUtils.expire(userRedisKey, 60 * 60 * 2);
+        }
     }
 
     @Override

@@ -60,6 +60,7 @@ public class DictController {
      * @author Yang Fan
      * @since 2024/1/11 10:23
      * @param dictCode dictCode
+     * @param enableFiltering 是否开启过滤(被禁用的数据字典)
      * @return CommonResult<DictVO>
      */
     @GetMapping("/getByDictCode")

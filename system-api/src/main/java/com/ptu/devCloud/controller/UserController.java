@@ -32,7 +32,7 @@ public class UserController {
      * @author Yang Fan
      * @since 2023/11/9 14:57
      * @param user user实体
-     * @return CommonResult<String> 令牌id
+     * @return CommonResult<String> redis中token的key
      */
     @PostMapping("/login")
     @EnableMethodLog(name = "用户登录")
@@ -103,6 +103,20 @@ public class UserController {
     public CommonResult<String> changeStatus(@RequestBody StatusVO statusVO) {
         userService.changeStatus(statusVO);
         return CommonResult.success(null);
+    }
+
+    /**
+     * 将当前key值的token续期超时时间
+     * @author Yang Fan
+     * @since 2024/1/18 16:22
+     * @param token 用户的token
+     * @return CommonResult<String> 提示信息
+     */
+    @GetMapping("/alive")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> alive(@RequestParam("token") String token){
+        userService.alive(token);
+        return CommonResult.successNoMsg("success");
     }
     
 }
