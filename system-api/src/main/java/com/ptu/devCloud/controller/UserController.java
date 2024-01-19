@@ -118,5 +118,19 @@ public class UserController {
         userService.alive(token);
         return CommonResult.successNoMsg("success");
     }
+
+    /**
+     * 用户登出
+     * @author Yang Fan
+     * @since 2024/1/19 11:25
+     * @param token 用户的token
+     * @return CommonResult<String> 提示信息
+     */
+    @GetMapping("/logout")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> logout(@RequestParam("token") String token){
+        userService.logout(token);
+        return CommonResult.successNoMsg("success");
+    }
     
 }

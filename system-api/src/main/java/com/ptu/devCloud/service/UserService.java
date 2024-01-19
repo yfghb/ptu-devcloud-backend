@@ -68,5 +68,12 @@ public interface UserService extends IService<User> {
      * @param userRedisKey 用户的token
      */
     void alive(String userRedisKey);
-	
+
+    /**
+     * 用户登出
+     * @author Yang Fan
+     * @since 2024/1/19 11:25
+     * @param userRedisKey 用户的token
+     */
+    void logout(String userRedisKey);
 }

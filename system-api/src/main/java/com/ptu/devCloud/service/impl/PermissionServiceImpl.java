@@ -13,10 +13,10 @@ import com.ptu.devCloud.mapper.PermissionMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.RolePermissionService;
 import com.ptu.devCloud.utils.SecurityUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.PermissionService;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +50,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
+    @Cacheable(cacheNames = "perm",
+            condition = "#parentId == null && #type == null && #roleId == null",
+            key = "'allMenu'",
+            sync = true)
     public List<Permission> getPermissions(Long parentId, String type, Long roleId) {
         List<Permission> list = permissionMapper.listAll();
         if(list == null || list.isEmpty()) return new ArrayList<>();
@@ -84,7 +88,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "perm", key = "'allMenu'")
     public void add(Permission permission) {
         if(permission == null)return;
         if(StrUtil.isNotEmpty(permission.getParent())){
@@ -98,12 +102,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
+    @CacheEvict(value = "perm", key = "'allMenu'")
     public void updatePermissionById(Permission permission) {
         if(permission == null || permission.getId() == null)return;
         permissionMapper.updateIgnoreNull(permission);
     }
 
     @Override
+    @CacheEvict(value = "perm", key = "'allMenu'")
     public void deletePermissionById(Long id) {
         if(Objects.nonNull(id)){
             permissionMapper.deleteById(id);

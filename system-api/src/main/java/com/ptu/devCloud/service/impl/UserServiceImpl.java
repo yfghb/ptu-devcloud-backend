@@ -152,6 +152,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public void logout(String userRedisKey) {
+        redisUtils.del(userRedisKey);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String LoginAccount) throws UsernameNotFoundException {
         // 查询当前账号的用户是否已存在
         User user = userMapper.selectByAccount(LoginAccount);

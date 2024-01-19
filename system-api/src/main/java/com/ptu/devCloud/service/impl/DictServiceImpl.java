@@ -2,6 +2,7 @@ package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -101,16 +102,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 if(CollUtil.isNotEmpty(insertDictItemList)){
                     dictItemService.saveBatch(insertDictItemList);
                 }
-                // 如果不是新增
-                if(!finalIsAdd){
-                    DictVO vo = new DictVO();
-                    vo.setDict(dict);
-                    vo.setItemList(insertDictItemList);
-                    // 把（过滤有禁用选项的数据字典）缓存删除
-                    redisUtils.del(generateDictRedisKey(dict.getDictCode(), true));
-                    // 更新（不需要过滤禁用的数据字典）缓存
-                    redisUtils.set(generateDictRedisKey(dict.getDictCode(), false), vo, -1);
-                }
+                // 如果不是新增, 把缓存删除
+                if(!finalIsAdd) redisUtils.del(generateDictRedisKey(dict.getDictCode()));
                 return true;
             }catch (DuplicateKeyException e){
                 action.setRollbackOnly();
@@ -137,11 +130,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         if(StrUtil.isEmpty(dictCode)){
             throw new JobException("dictCode不能为空");
         }
-        String key = generateDictRedisKey(dictCode, enableFiltering);
-        Object redisData = redisUtils.get(key);
-        // 如果存在缓存则之间返回
-        if(redisData!=null){
-            return (DictVO) redisData;
+        String dictRedisKey = generateDictRedisKey(dictCode);
+        if(enableFiltering){
+            Object redisData = redisUtils.get(dictRedisKey);
+            // 如果存在缓存则之间返回
+            if(redisData!=null){
+                return JSON.parseObject(JSON.toJSONString(redisData), DictVO.class);
+            }
         }
         DictVO vo = new DictVO();
         LambdaQueryWrapper<Dict> lqw = new LambdaQueryWrapper<>();
@@ -159,7 +154,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         vo.setDict(dict);
         vo.setItemList(itemList);
         // 设置永久缓存dict数据
-        redisUtils.set(key, vo, -1);
+        if(enableFiltering) redisUtils.set(dictRedisKey, vo, -1);
         return vo;
     }
 
@@ -173,8 +168,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             // 如果禁用则删除缓存
             if("0".equals(statusVO.getStatus())){
                 Dict dict = dictMapper.getById(id);
-                redisUtils.del(generateDictRedisKey(dict.getDictCode(), true),
-                        generateDictRedisKey(dict.getDictCode(), false));
+                redisUtils.del(generateDictRedisKey(dict.getDictCode()));
             }
         }
         dictMapper.updateStatusByIdList(list,statusVO.getStatus());
@@ -194,8 +188,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             List<DictItem> list = dictItemService.lambdaQuery().eq(DictItem::getDictId, dictId).list();
             list.forEach(obj -> itemIds.add(obj.getId()));
             // 收集待删除的redisKey
-            redisKeys.add(generateDictRedisKey(dict.getDictCode(), true));
-            redisKeys.add(generateDictRedisKey(dict.getDictCode(), false));
+            redisKeys.add(generateDictRedisKey(dict.getDictCode()));
         }
         transaction.execute(action -> {
             try {
@@ -215,7 +208,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         });
     }
 
-    private String generateDictRedisKey(String dictCode,Boolean enableFiltering){
-        return CommonConstants.DICT_REDIS_KEY_PREFIX + (dictCode + enableFiltering).hashCode();
+    private String generateDictRedisKey(String dictCode){
+        return CommonConstants.DICT_REDIS_KEY_PREFIX + dictCode.hashCode();
     }
 }
