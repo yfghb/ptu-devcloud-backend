@@ -58,7 +58,7 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint, AccessD
         if(authException instanceof BadCredentialsException){
             result = CommonResult.error("用户名或密码错误", HttpCodeConstants.NEED_LOGIN);
         }else if(authException instanceof InsufficientAuthenticationException){
-            result = CommonResult.error("拒绝访问, 原因: 权限不足, 或登录认证过期", HttpCodeConstants.ACCESS_DENIED);
+            result = CommonResult.error("拒绝访问, 原因: 无法信任的权限信息", HttpCodeConstants.ACCESS_DENIED);
         }
         WebUtils.render(response, HttpCodeConstants.SUCCESS, result);
     }

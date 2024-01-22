@@ -132,5 +132,17 @@ public class UserController {
         userService.logout(token);
         return CommonResult.successNoMsg("success");
     }
+
+    /**
+     * 获取幂等性校验的token（有效时间：5分钟）
+     * @author Yang Fan
+     * @since 2024/1/22 14:55
+     * @return token
+     */
+    @GetMapping("/getIdempotenceToken")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> getIdempotenceToken(){
+        return CommonResult.successNoMsg(userService.getIdempotenceToken());
+    }
     
 }

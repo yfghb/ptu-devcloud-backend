@@ -2,6 +2,7 @@ package com.ptu.devCloud.service.impl;
 
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -154,6 +155,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void logout(String userRedisKey) {
         redisUtils.del(userRedisKey);
+    }
+
+    @Override
+    public String getIdempotenceToken() {
+        String uuid = UUID.randomUUID().toString(true);
+        redisUtils.set(uuid, true, 300);
+        return uuid;
     }
 
     @Override

@@ -73,6 +73,22 @@ public class RedisUtils {
         }
     }
 
+    /**
+     * 删除缓存
+     * 当key只有一个并且为空时，会直接返回false
+     * @param key 可以传一个值 或多个
+     */
+    public Boolean delWithReturn(String... key){
+        if (key != null && key.length > 0) {
+            if (key.length == 1) {
+                return redisTemplate.delete(key[0]);
+            } else {
+                return redisTemplate.delete(CollectionUtils.arrayToList(key));
+            }
+        }
+        return false;
+    }
+
     /*                         String                           */
 
     /**

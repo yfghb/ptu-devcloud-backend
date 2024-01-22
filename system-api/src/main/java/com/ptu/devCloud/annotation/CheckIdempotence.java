@@ -6,12 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 标记需要记录日志的方法
+ * 标记需要幂等性校验的方法
  * @author Yang Fan
- * @since 2023/10/2 16:19
+ * @since 2024/1/22 13:14
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface EnableMethodLog {
-    String name() default "";
+public @interface CheckIdempotence {
 }

@@ -76,4 +76,12 @@ public interface UserService extends IService<User> {
      * @param userRedisKey 用户的token
      */
     void logout(String userRedisKey);
+
+    /**
+     * 获取幂等性校验的token（有效时间：5分钟）
+     * @author Yang Fan
+     * @since 2024/1/22 14:55
+     * @return token
+     */
+    String getIdempotenceToken();
 }
