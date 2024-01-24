@@ -3,13 +3,9 @@ package com.ptu.devCloud.aop;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.ptu.devCloud.annotation.EnableMethodLog;
-import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.entity.MethodLog;
-import com.ptu.devCloud.entity.thread.AsyncLogTask;
-import com.ptu.devCloud.entity.thread.ThreadTask;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.service.MethodLogService;
-import com.ptu.devCloud.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -21,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -77,11 +74,9 @@ public class MethodLogAspect {
             methodLog.setConsumeTime(String.format("%.2f", (double) (endTime - startTime) / 1000));
             // 方法出参
             methodLog.setResultJson(JSON.toJSONString(result, true));
-            // 注意，异步线程获取不到threadLocal保存的认证信息，在线程启动前先设置公共字段
-            methodLog.setCreateBy(SecurityUtils.getCurrentUserId());
-            // 提交异步日志任务
-            ThreadTask asyncLogTask = new AsyncLogTask(methodLog, methodLogService);
-            CommonConstants.COMMON_THREAD_POOL.submit(asyncLogTask);
+            methodLog.setCreateBy(0L);
+            // 异步新增日志
+            CompletableFuture.runAsync(()-> methodLogService.insertIgnoreNull(methodLog));
         }
 
         return result;
