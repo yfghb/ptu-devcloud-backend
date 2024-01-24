@@ -84,7 +84,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             list.forEach(obj -> deleteDictItemIds.add(obj.getId()));
         }
         for(DictItem item: dictVO.getItemList()){
+            // 由于不知道是更新还是新增，这里把公共字段赋值为null，交给公共字段切面处理
             item.setId(null);
+            item.setCreateBy(null);
+            item.setUpdateBy(null);
             item.setDictId(dict.getId());
             insertDictItemList.add(item);
         }

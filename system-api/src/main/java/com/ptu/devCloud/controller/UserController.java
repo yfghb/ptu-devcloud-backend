@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,7 +50,9 @@ public class UserController {
     @GetMapping("/getPermissions")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<List<String>> getPermissions(){
-        return CommonResult.successNoMsg(SecurityUtils.getLoginUser().getPermissions());
+        List<String> list = SecurityUtils.getLoginUser() == null ?
+                new ArrayList<>() : SecurityUtils.getLoginUser().getPermissions();
+        return CommonResult.successNoMsg(list);
     }
 
     /**

@@ -21,6 +21,7 @@ public class SecurityUtils
      * 获取用户
      **/
     public static LoginUser getLoginUser() {
+        if(getAuthentication() == null) return null;
         return (LoginUser) getAuthentication().getPrincipal();
     }
 
@@ -72,5 +73,8 @@ public class SecurityUtils
         return new AES(Mode.ECB, Padding.PKCS5Padding, key.getBytes());
     }
 
+    public static Long getCurrentUserId(){
+        return getLoginUser() == null ? null : getLoginUser().getUser().getId();
+    }
 
 }

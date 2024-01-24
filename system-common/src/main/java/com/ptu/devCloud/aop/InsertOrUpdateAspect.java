@@ -6,6 +6,7 @@ import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.entity.BaseEntity;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.service.TableSequenceService;
+import com.ptu.devCloud.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -84,9 +85,8 @@ public class InsertOrUpdateAspect {
             if(baseEntity.getId() == null){
                 baseEntity.setId(tableSequenceService.generateId(seqName));
             }
-            // todo 设置创建人
             if(baseEntity.getCreateBy() == null) {
-                baseEntity.setCreateBy(0L);
+                baseEntity.setCreateBy(SecurityUtils.getCurrentUserId());
             }
             baseEntity.setCreateDate(new Date());
         }
@@ -103,8 +103,7 @@ public class InsertOrUpdateAspect {
             if(obj instanceof BaseEntity){
                 BaseEntity baseEntity = (BaseEntity) obj;
                 if(baseEntity.getCreateBy() == null) {
-                    // todo 设置创建人
-                    baseEntity.setCreateBy(0L);
+                    baseEntity.setCreateBy(SecurityUtils.getCurrentUserId());
                 }
                 baseEntity.setCreateDate(new Date());
                 list.add(baseEntity);
@@ -121,10 +120,7 @@ public class InsertOrUpdateAspect {
             try{
                 BaseEntity baseEntity = (BaseEntity) obj;
                 baseEntity.setUpdateDate(new Date());
-                // todo 设置修改人
-                if (baseEntity.getUpdateBy() == null) {
-                    baseEntity.setUpdateBy(100L);
-                }
+                baseEntity.setUpdateBy(SecurityUtils.getCurrentUserId());
             }
             catch (Exception e) {
                 throw new JobException("InsertOrUpdateAspect: 更新公共字段异常！\n" + e.getMessage());

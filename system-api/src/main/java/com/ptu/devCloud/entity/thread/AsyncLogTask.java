@@ -1,10 +1,10 @@
 package com.ptu.devCloud.entity.thread;
 
+import cn.hutool.core.lang.UUID;
 import com.ptu.devCloud.entity.MethodLog;
 import com.ptu.devCloud.service.MethodLogService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,7 +15,7 @@ public class AsyncLogTask extends ThreadTask{
     private MethodLog methodLog;
 
     public AsyncLogTask(MethodLog methodLog, MethodLogService methodLogService){
-        super.id = UUID.randomUUID().toString();
+        super.id = UUID.randomUUID().toString(true);
         super.name = "AsyncLogTask";
         this.methodLogService = methodLogService;
         this.methodLog = methodLog;

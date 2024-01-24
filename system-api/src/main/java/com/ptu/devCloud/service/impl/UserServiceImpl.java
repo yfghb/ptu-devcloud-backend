@@ -85,6 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(Objects.isNull(authentication)){
             throw new JobException("账号或密码不正确");
         }
+        SecurityUtils.setAuthentication(authentication);
         // 使用账号加密后的字符串作为redisKey，保证同一个用户只会生成一个登录token
         String userRedisKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
         String userRedisToken = JwtUtil.generate(authentication.getPrincipal());
