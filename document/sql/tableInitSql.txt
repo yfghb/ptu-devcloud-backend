@@ -179,3 +179,33 @@ create unique index permission_path_uindex
 	on permission (path);
 
 alter table permission modify permission_type char not null comment '权限类型（M菜单 B按钮）';
+
+create table if not exists task(
+    id             bigint                   not null comment '主键id'
+        primary key,
+    task_name           varchar(128)            default null comment '任务名称',
+    task_type           varchar(16)             default null comment '任务类型',
+    task_status         varchar(16)             default null comment '任务状态',
+    remark              text                    default null comment '任务描述',
+    operation_log       text                    default null comment '操作记录',
+    serial_number       varchar(32)             not null unique key comment '任务编号',
+    current_operator    bigint                  not null comment '当前操作人',
+    participant         varchar(256)            default null comment '参与者',
+    correlation_ids     varchar(256)            default null comment '关联任务单id列表',
+    create_by           bigint                  default null comment '创建人',
+    create_date         datetime                default null comment '创建时间',
+    update_by           bigint                  default null comment '更新人',
+    update_date         datetime                default null comment '更新时间'
+);
+
+create table if not exists task_remark(
+    id             bigint                   not null comment '主键id'
+	primary key,
+	username       varchar(64)              default null comment '用户名称',
+    remark         text                     default null comment '备注内容',
+    task_id        bigint                   not null comment '任务id',
+    create_by      bigint                   default null comment '创建人',
+    create_date    datetime                 default null comment '创建时间',
+    update_by      bigint                   default null comment '更新人',
+    update_date    datetime                 default null comment '更新时间'
+);

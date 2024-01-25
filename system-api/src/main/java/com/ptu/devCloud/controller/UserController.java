@@ -3,6 +3,7 @@ package com.ptu.devCloud.controller;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
+import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
@@ -42,17 +43,15 @@ public class UserController {
     }
 
     /**
-     * 获取当前用户所拥有的权限
+     * 获取当前用户和所拥有的权限
      * @author Yang Fan
      * @since 2024/1/15 17:50
-     * @return CommonResult<List<String>>
+     * @return CommonResult<LoginUser>
      */
-    @GetMapping("/getPermissions")
+    @GetMapping("/profile")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<String>> getPermissions(){
-        List<String> list = SecurityUtils.getLoginUser() == null ?
-                new ArrayList<>() : SecurityUtils.getLoginUser().getPermissions();
-        return CommonResult.successNoMsg(list);
+    public CommonResult<LoginUser> profile(){
+        return CommonResult.successNoMsg(SecurityUtils.getLoginUser());
     }
 
     /**

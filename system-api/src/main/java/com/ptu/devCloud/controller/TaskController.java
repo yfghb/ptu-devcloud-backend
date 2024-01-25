@@ -1,21 +1,21 @@
 package com.ptu.devCloud.controller;
 
-import com.ptu.devCloud.service.DictItemService;
+import com.ptu.devCloud.service.TaskService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * DictItemController
+ * TaskController
  * @author yang fan
- * @since 2024-01-10 12:17:51
+ * @since 2024-01-25 09:27:01
  */
 @RestController
-@RequestMapping("/DictItemController")
-public class DictItemController {
+@RequestMapping("/TaskController")
+public class TaskController {
 
     @Resource
-    private DictItemService dictItemService;
+    private TaskService taskService;
 
 
     

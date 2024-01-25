@@ -83,6 +83,8 @@ INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_b
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (6, 'SEQ_ROLE_PERMISSION', 27, 1, 'a335486c66c147fea4a6525f2ae46e48', null, '2023-12-22 19:15:27', 100, '2024-01-17 14:43:39');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (7, 'SEQ_DICT', 3, 1, 'dd122a602f5e413ba788843f8b7bb3b8', null, '2024-01-10 12:15:10', 100, '2024-01-15 16:09:27');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (8, 'SEQ_DICT_ITEM', 5, 1, 'dc3fa00fa53b4dbba705613dd7dc0248', null, '2024-01-10 12:15:10', 100, '2024-01-17 14:25:34');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (9, 'SEQ_TASK', 1, 1, null, null, '2024-01-24 15:41:01', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (10, 'SEQ_TASK_REMARK', 1, 1, null, null, '2024-01-24 15:41:01', null, null);
 -- [init table_sequence end]
 
 

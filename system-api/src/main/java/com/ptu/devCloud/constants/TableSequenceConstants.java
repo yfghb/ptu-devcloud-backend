@@ -18,4 +18,7 @@ public class TableSequenceConstants {
 
     public static final String DictItem = "SEQ_DICT_ITEM";
 
+    public static final String Task = "SEQ_TASK";
+
+    public static final String TaskRemark = "SEQ_TASK_REMARK";
 }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.TaskRemarkMapper">
+	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.TaskRemark">
+        <result column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="remark" property="remark" />
+        <result column="task_id" property="taskId" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+	</resultMap>  
+    
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+		 t.id
+		, t.username
+		, t.remark
+		, t.task_id
+		, t.create_by
+		, t.create_date
+		, t.update_by
+		, t.update_date
+    </sql> 
+    
+ 
+ 	<!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM task_remark t
+		WHERE id = #{id}
+	</select>
+
+	<!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.TaskRemark"
+		keyProperty="id" keyColumn="id" >
+		INSERT INTO task_remark
+    	<trim prefix="(" suffix=")" suffixOverrides=",">	 
+    		id,
+    		username,
+    		remark,
+    		task_id,
+    		create_by,
+    		create_date,
+    		update_by,
+    		update_date,
+    	</trim>
+    	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+        	#{id},                   
+        	#{username},                   
+        	#{remark},                   
+        	#{taskId},                   
+        	#{createBy},                   
+        	#{createDate},                   
+        	#{updateBy},                   
+        	#{updateDate},                   
+    	</trim>
+	</insert>
+    
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.TaskRemark"
+        keyProperty="id" keyColumn="id" >
+        INSERT INTO task_remark    
+		<trim prefix="(" suffix=")" suffixOverrides=",">	 
+			<if test="id != null">
+				id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="taskId != null">
+				task_id,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateDate != null">
+				update_date,
+			</if>
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+			<if test="id != null" >
+				#{id},                    
+			</if>
+			<if test="username != null" >
+				#{username},                    
+			</if>
+			<if test="remark != null" >
+				#{remark},                    
+			</if>
+			<if test="taskId != null" >
+				#{taskId},                    
+			</if>
+			<if test="createBy != null" >
+				#{createBy},                    
+			</if>
+			<if test="createDate != null" >
+				#{createDate},                    
+			</if>
+			<if test="updateBy != null" >
+				#{updateBy},                    
+			</if>
+			<if test="updateDate != null" >
+				#{updateDate},                    
+			</if>
+		</trim>
+    </insert>
+
+	<!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.TaskRemark">
+    	UPDATE task_remark
+     	<set>		
+			username = #{username},        
+			remark = #{remark},        
+			task_id = #{taskId},        
+			create_by = #{createBy},        
+			create_date = #{createDate},        
+			update_by = #{updateBy},        
+			update_date = #{updateDate},        
+     	</set>	
+    	WHERE id = #{id}
+    </update>  
+    
+    
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.TaskRemark">
+    UPDATE task_remark
+    	<set>
+		<if test="username != null" >
+			username = #{username},                 
+		</if>
+		<if test="remark != null" >
+			remark = #{remark},                 
+		</if>
+		<if test="taskId != null" >
+			task_id = #{taskId},                 
+		</if>
+		<if test="createBy != null" >
+			create_by = #{createBy},                 
+		</if>
+		<if test="createDate != null" >
+			create_date = #{createDate},                 
+		</if>
+		<if test="updateBy != null" >
+			update_by = #{updateBy},                 
+		</if>
+		<if test="updateDate != null" >
+			update_date = #{updateDate},                 
+		</if>
+    </set>
+    WHERE id = #{id}
+    </update>
+
+
+
+</mapper>
