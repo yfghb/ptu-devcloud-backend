@@ -61,6 +61,14 @@ public interface TaskMapper extends BaseMapper<Task> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Task task);
+
+	/**
+	 * 查询今天最大的任务号（格式：YYYYMMDD1, YYYYMMDD2...）
+	 * @author Yang Fan
+	 * @since 2024/1/26 10:33
+	 * @return 任务号
+	 */
+	String selectTodayMaxSerialNumber();
 	
 	
 }

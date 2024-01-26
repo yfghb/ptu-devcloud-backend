@@ -44,8 +44,14 @@
 		FROM task t
 		WHERE id = #{id}
 	</select>
+    <select id="selectTodayMaxSerialNumber" resultType="java.lang.String">
+		SELECT
+			MAX(t.serial_number)
+		FROM task t
+		where TO_DAYS(t.create_date) = TO_DAYS(NOW())
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO task

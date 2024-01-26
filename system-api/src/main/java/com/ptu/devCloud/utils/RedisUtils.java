@@ -1,5 +1,7 @@
 package com.ptu.devCloud.utils;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,33 @@ public class RedisUtils {
     private RedisTemplate<Object, Object> redisTemplate;
 
 
+    /**
+     * 获取分布式锁
+     * @author Yang Fan
+     * @since 2024/1/26 14:50
+     * @param key key 为空则返回false
+     * @param uuid 唯一uuid
+     * @param expireSeconds 过期时间
+     * @return boolean
+     */
+    public boolean getLock(String key, String uuid, int expireSeconds){
+        if(StrUtil.isEmpty(key) || StrUtil.isEmpty(uuid))return false;
+        Boolean success = redisTemplate.opsForValue().setIfAbsent(key, uuid,expireSeconds, TimeUnit.SECONDS);
+        return success != null && success;
+    }
+
+    /**
+     * 删除分布式锁（使用了synchronized保证原子性，若想获得更好的性能，请替换成lua脚本）
+     * @author Yang Fan
+     * @since 2024/1/26 14:50
+     * @param key key 非空
+     * @param uuid 唯一uuid 非空
+     */
+    public synchronized void delLock(@NonNull String key,@NonNull String uuid) {
+        if(uuid.equals(redisTemplate.opsForValue().get(key))){
+            redisTemplate.delete(key);
+        }
+    }
     /**
      * 指定缓存失效时间
      *
