@@ -1,7 +1,9 @@
 package com.ptu.devCloud.service;
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.TaskPageVO;
 
 
 /**
@@ -18,5 +20,15 @@ public interface TaskService extends IService<Task> {
      * @param task Task
      */
     void addTask(Task task);
+
+
+    /**
+     * 分页查询
+     * @author Yang Fan
+     * @since 2024/1/27 16:05
+     * @param pageVO TaskPageVO
+     * @return PageInfo<Task>
+     */
+    PageInfo<Task> getPage(TaskPageVO pageVO);
 	
 }

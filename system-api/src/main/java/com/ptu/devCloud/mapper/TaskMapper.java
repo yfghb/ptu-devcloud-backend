@@ -1,11 +1,15 @@
 package com.ptu.devCloud.mapper;
 
 
+import com.ptu.devCloud.entity.vo.TaskPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Task;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * TaskMapper
@@ -69,6 +73,13 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @return 任务号
 	 */
 	String selectTodayMaxSerialNumber();
-	
-	
+
+	/**
+	 * 条件查询
+	 * @author Yang Fan
+	 * @since 2024/1/27 15:58
+	 * @param params TaskPageVO
+	 * @return List<Task>
+	 */
+	List<Task> selectListByQueryParams(@Param("params") TaskPageVO params);
 }

@@ -50,6 +50,39 @@
 		FROM task t
 		where TO_DAYS(t.create_date) = TO_DAYS(NOW())
 	</select>
+    <select id="selectListByQueryParams" resultMap="BaseResultMap">
+		SELECT
+			<include refid="baseColumns" />
+		FROM task t
+		<where>
+			<if test="params.createBy != null">
+				t.create_by = #{params.createBy}
+			</if>
+			<if test="params.startDate != null">
+				<![CDATA[
+					and t.create_date >= #{params.startDate}
+				]]>
+			</if>
+			<if test="params.endDate != null">
+				<![CDATA[
+					and t.create_date <= #{params.endDate}
+				]]>
+			</if>
+			<if test="params.taskStatus != null and params.taskStatus != ''">
+				and t.task_status = #{params.taskStatus}
+			</if>
+			<if test="params.taskType != null and params.taskType != ''">
+				and t.task_type = #{params.taskType}
+			</if>
+			<if test="params.taskName != null and params.taskName != ''">
+				and t.task_name like CONCAT(CONCAT('%', #{params.taskName}), '%')
+			</if>
+			<if test="params.serialNumber != null and params.serialNumber != ''">
+				and t.serial_number like CONCAT(CONCAT('%', #{params.serialNumber}), '%')
+			</if>
+		</where>
+		ORDER BY t.create_date DESC
+	</select>
 
     <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"

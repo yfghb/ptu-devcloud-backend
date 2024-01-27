@@ -2,7 +2,10 @@ package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Task;
+import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,6 +17,8 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.List;
+
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -85,6 +90,16 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
                 return true;
             });
         }
+    }
+
+    @Override
+    public PageInfo<Task> getPage(TaskPageVO pageVO) {
+        if(pageVO == null || pageVO.getCurrent() == null || pageVO.getPageSize() == null) {
+            return new PageInfo<>();
+        }
+        PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
+        List<Task> list = taskMapper.selectListByQueryParams(pageVO);
+        return new PageInfo<>(list);
     }
 
     private String generateSerialNumber(){
