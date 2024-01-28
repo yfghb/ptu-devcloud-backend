@@ -7,9 +7,11 @@ import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -54,6 +56,20 @@ public class TaskController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('task-view')")
     public CommonResult<PageInfo<Task>> page(@RequestBody TaskPageVO pageVO){
         return CommonResult.successNoMsg(taskService.getPage(pageVO));
+    }
+
+    /**
+     * 查询任务详细
+     * @author Yang Fan
+     * @since 2024/1/28 13:10
+     * @param serialNumber 任务编号
+     * @return CommonResult<Task>
+     */
+    @GetMapping("/detail")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<Task> detail(@RequestParam("serialNumber") String serialNumber){
+        Task task = taskService.lambdaQuery().eq(Task::getSerialNumber, serialNumber).one();
+        return CommonResult.successNoMsg(task);
     }
 
 }

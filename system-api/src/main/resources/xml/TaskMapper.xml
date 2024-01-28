@@ -52,7 +52,18 @@
 	</select>
     <select id="selectListByQueryParams" resultMap="BaseResultMap">
 		SELECT
-			<include refid="baseColumns" />
+		t.id
+		, t.task_name
+		, t.task_type
+		, t.task_status
+		, t.serial_number
+		, t.current_operator
+		, t.participant
+		, t.correlation_ids
+		, t.create_by
+		, t.create_date
+		, t.update_by
+		, t.update_date
 		FROM task t
 		<where>
 			<if test="params.createBy != null">
