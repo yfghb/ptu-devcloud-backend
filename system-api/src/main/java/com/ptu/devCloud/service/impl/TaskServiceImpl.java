@@ -4,12 +4,15 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Task;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.utils.RedisUtils;
+import com.ptu.devCloud.utils.SecurityUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.TaskService;
@@ -17,6 +20,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import com.ptu.devCloud.annotation.SeqName;
@@ -61,6 +65,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         boolean lockSuccess = false;
         String uuid = UUID.randomUUID().toString(true);
         long startTime = System.currentTimeMillis();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        String username = loginUser == null ? " " : loginUser.getUser().getUserName();
         // 只给3s的机会加锁
         while (System.currentTimeMillis() - startTime < 3000){
             if(redisUtils.getLock("lockAddTask", uuid, 5)){
@@ -72,8 +78,11 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             // 3s内都没加锁成功就返回系统繁忙
             throw new JobException("系统繁忙，请稍后再试");
         }else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String now = formatter.format(LocalDateTime.now()) + " ";
             transaction.execute(action -> {
                 task.setSerialNumber(generateSerialNumber());
+                task.setOperationLog(now + username + "创建了任务" + task.getTaskName() + ";;");
                 try{
                     taskMapper.insert(task);
                 }catch (DuplicateKeyException e){
@@ -100,6 +109,44 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         PageHelper.startPage(pageVO.getCurrent(), pageVO.getPageSize());
         List<Task> list = taskMapper.selectListByQueryParams(pageVO);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public void editById(Task task) {
+        // todo 校验用户是否有编辑该任务的权限
+        taskMapper.updateIgnoreNull(task);
+    }
+
+    @Override
+    public void changeStatus(String serialNumber, String taskStatus) {
+        transaction.execute(action -> {
+            try{
+                if("todo".equals(taskStatus) || "done".equals(taskStatus) || "close".equals(taskStatus)){
+                    taskMapper.updateTaskStatusBySerialNumber(serialNumber, taskStatus);
+                    taskMapper.updateOperationLogBySerialNumber(serialNumber, generateOperationLog(serialNumber, taskStatus));
+                }
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("失败！");
+            }
+        });
+    }
+
+    private String generateOperationLog(String serialNumber, String taskStatus){
+        if(StrUtil.isEmpty(serialNumber) || StrUtil.isEmpty(taskStatus))return "";
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        String currentUserName = loginUser == null ? "" : loginUser.getUser().getUserName();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String now = formatter.format(LocalDateTime.now()) + " ";
+        String status = "";
+        switch (taskStatus){
+            case "todo": status = "进行中";break;
+            case "done": status = "已完成";break;
+            case "close": status = "已关闭";break;
+            default:break;
+        }
+        return now + currentUserName + "任务状态更改为" + status + ";;";
     }
 
     private String generateSerialNumber(){

@@ -72,4 +72,35 @@ public class TaskController {
         return CommonResult.successNoMsg(task);
     }
 
+    /**
+     * 编辑任务
+     * @author Yang Fan
+     * @since 2024/1/30 13:59
+     * @param task Task
+     * @return CommonResult<String>
+     */
+    @PostMapping("/edit")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> edit(@RequestBody Task task){
+        taskService.editById(task);
+        return CommonResult.successWithMsg(null, "修改成功");
+    }
+
+    /**
+     * 改变任务状态
+     * @author Yang Fan
+     * @since 2024/1/30 14:16
+     * @param serialNumber 任务编号
+     * @param taskStatus 任务状态
+     * @return CommonResult<String>
+     */
+    @PostMapping("/changeStatus")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> start(@RequestParam String serialNumber,@RequestParam String taskStatus){
+        taskService.changeStatus(serialNumber, taskStatus);
+        return CommonResult.successNoMsg("成功");
+    }
+
+
+
 }

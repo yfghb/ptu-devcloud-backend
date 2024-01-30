@@ -296,6 +296,15 @@
     WHERE id = #{id}
     </update>
 
+	<update id="updateTaskStatusBySerialNumber">
+		UPDATE task t SET t.task_status = #{taskStatus}
+		WHERE t.serial_number = #{serialNumber}
+	</update>
+
+	<update id="updateOperationLogBySerialNumber">
+		UPDATE task t SET t.operation_log = t.operation_log + ';' + #{context}
+		WHERE t.serial_number = #{serialNumber}
+	</update>
 
 
 </mapper>

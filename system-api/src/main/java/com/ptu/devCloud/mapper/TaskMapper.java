@@ -82,4 +82,26 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @return List<Task>
 	 */
 	List<Task> selectListByQueryParams(@Param("params") TaskPageVO params);
+
+	/**
+	 * 以任务编号更新任务状态
+	 * @author Yang Fan
+	 * @since 2024/1/30 14:11
+	 * @param serialNumber 任务编号
+	 * @param taskStatus 任务状态
+	 * @return boolean
+	 */
+	 boolean updateTaskStatusBySerialNumber(@Param("serialNumber") String serialNumber,
+									   		@Param("taskStatus") String taskStatus);
+
+	/**
+	 * 添加操作日志到末尾
+	 * @author Yang Fan
+	 * @since 2024/1/30 16:16
+	 * @param serialNumber 任务编号
+	 * @param context 操作日志
+	 * @return boolean
+	 */
+	 boolean updateOperationLogBySerialNumber(@Param("serialNumber") String serialNumber,
+											  @Param("context") String context);
 }

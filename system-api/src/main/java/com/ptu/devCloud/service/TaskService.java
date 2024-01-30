@@ -30,5 +30,23 @@ public interface TaskService extends IService<Task> {
      * @return PageInfo<Task>
      */
     PageInfo<Task> getPage(TaskPageVO pageVO);
+
+    /**
+     * 编辑任务
+     * @author Yang Fan
+     * @since 2024/1/30 13:57
+     * @param task Task
+     */
+    void editById(Task task);
+
+    /**
+     * 改变任务状态
+     * @author Yang Fan
+     * @since 2024/1/30 14:16
+     * @param serialNumber 任务编号
+     * @param taskStatus 任务状态
+     */
+    void changeStatus(String serialNumber, String taskStatus);
+
 	
 }
