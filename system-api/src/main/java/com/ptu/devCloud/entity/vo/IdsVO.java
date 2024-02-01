@@ -24,4 +24,8 @@ public class IdsVO implements Serializable {
      * 数据字典id列表
      */
     private List<String> dictIds;
+    /**
+     * 任务id列表
+     */
+    private List<String> taskIds;
 }

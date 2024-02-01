@@ -3,6 +3,7 @@ package com.ptu.devCloud.controller;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Task;
+import com.ptu.devCloud.entity.vo.LinkTaskVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * TaskController
@@ -99,6 +101,33 @@ public class TaskController {
     public CommonResult<String> start(@RequestParam String serialNumber,@RequestParam String taskStatus){
         taskService.changeStatus(serialNumber, taskStatus);
         return CommonResult.successNoMsg("成功");
+    }
+
+    /**
+     * 关联任务
+     * @author Yang Fan
+     * @since 2024/2/1 13:43
+     * @param vo LinkTaskVO
+     * @return CommonResult<String>
+     */
+    @PostMapping("/link")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> link(@RequestBody LinkTaskVO vo){
+        taskService.linkTask(vo.getTaskIds(),vo.getSerialNumber());
+        return CommonResult.successWithMsg(null,"关联成功");
+    }
+
+    /**
+     * 以任务id列表查询任务列表，忽略任务描述字段
+     * @author Yang Fan
+     * @since 2024/2/1 14:13
+     * @param correlationIds 任务id列表
+     * @return CommonResult<List<Task>>
+     */
+    @GetMapping("/getLinkTaskList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<Task>> getLinkTaskList(String correlationIds){
+        return CommonResult.successNoMsg(taskService.getTaskListBySerialNumberList(correlationIds));
     }
 
 

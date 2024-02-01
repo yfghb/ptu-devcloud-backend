@@ -5,6 +5,8 @@ import com.ptu.devCloud.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 
+import java.util.List;
+
 
 /**
  * TaskService
@@ -47,6 +49,24 @@ public interface TaskService extends IService<Task> {
      * @param taskStatus 任务状态
      */
     void changeStatus(String serialNumber, String taskStatus);
+
+    /**
+     * 关联任务
+     * @author Yang Fan
+     * @since 2024/2/1 13:43
+     * @param taskIds List<String> 任务id列表
+     * @param serialNumber String 任务编号
+     */
+    void linkTask(List<String> taskIds,String serialNumber);
+
+    /**
+     * 以任务id列表查询任务列表，忽略任务描述字段
+     * @author Yang Fan
+     * @since 2024/2/1 14:13
+     * @param correlationIds 任务id列表
+     * @return List<Task>
+     */
+    List<Task> getTaskListBySerialNumberList(String correlationIds);
 
 	
 }

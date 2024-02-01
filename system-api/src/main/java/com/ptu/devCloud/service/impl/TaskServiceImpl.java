@@ -1,5 +1,6 @@
 package com.ptu.devCloud.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
@@ -19,9 +20,8 @@ import com.ptu.devCloud.service.TaskService;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
@@ -82,7 +82,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             String now = formatter.format(LocalDateTime.now()) + " ";
             transaction.execute(action -> {
                 task.setSerialNumber(generateSerialNumber());
-                task.setOperationLog(now + username + "创建了任务" + task.getTaskName() + ";;");
+                task.setOperationLog(now + username + " 创建了任务：" + task.getTaskName() + "##");
                 try{
                     taskMapper.insert(task);
                 }catch (DuplicateKeyException e){
@@ -128,9 +128,59 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
                 return true;
             }catch (Exception e){
                 action.setRollbackOnly();
-                throw new JobException("失败！");
+                throw new JobException(e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void linkTask(List<String> taskIds, String serialNumber) {
+        if(StrUtil.isEmpty(serialNumber)){
+            throw new JobException("输入的任务编号不能为空");
+        }
+        TaskServiceImpl proxy = (TaskServiceImpl) AopContext.currentProxy();
+        Task task = proxy.lambdaQuery().eq(Task::getSerialNumber, serialNumber).one();
+        if(task == null) {
+            throw new JobException("找不到当前输入的任务编号下的任务");
+        }
+        String correlationIds = task.getCorrelationIds();
+        List<String> originIds = StrUtil.isNotEmpty(correlationIds) ?
+                Arrays.asList(correlationIds.split(",")) : new ArrayList<>();
+        taskIds = taskIds.stream()
+                // 过滤掉已经关联的
+                .filter(id -> {
+                    if(CollUtil.isEmpty(originIds))return true;
+                    return !originIds.contains(id);
+                })
+                // 过滤掉自己
+                .filter(id -> !id.equals(task.getId().toString()))
+                .collect(Collectors.toList());
+        StringBuilder builder = new StringBuilder();
+        for(int i=0;i<taskIds.size();i++){
+            if(i != taskIds.size() - 1){
+                builder.append(taskIds.get(i)).append(",");
+            }else builder.append(taskIds.get(i));
+        }
+        List<String> finalTaskIds = taskIds;
+        transaction.execute(action -> {
+            try {
+                // 双向关联
+                if(CollUtil.isNotEmpty(finalTaskIds)){
+                    taskMapper.appendCorrelationIdsById(Collections.singletonList(task.getId().toString()), builder.toString());
+                    taskMapper.appendCorrelationIdsById(finalTaskIds, task.getId().toString());
+                }
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public List<Task> getTaskListBySerialNumberList(String correlationIds) {
+        if(StrUtil.isEmpty(correlationIds))return new ArrayList<>();
+        return taskMapper.selectByIdsIgnoreRemark(Arrays.asList(correlationIds.split(",")));
     }
 
     private String generateOperationLog(String serialNumber, String taskStatus){
@@ -146,7 +196,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             case "close": status = "已关闭";break;
             default:break;
         }
-        return now + currentUserName + "任务状态更改为" + status + ";;";
+        return now + currentUserName + " 将任务状态更改为 " + status + "##";
     }
 
     private String generateSerialNumber(){

@@ -104,4 +104,32 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 */
 	 boolean updateOperationLogBySerialNumber(@Param("serialNumber") String serialNumber,
 											  @Param("context") String context);
+
+	/**
+	 * 以任务编号修改，忽略null字段
+	 * @author Yang Fan
+	 * @since 2024/2/1 13:39
+	 * @param task Task
+	 * @return boolean
+	 */
+	 boolean updateBySerialNumberIgnoreNull(Task task);
+
+	/**
+	 * 以任务id列表查询任务列表，忽略任务描述字段
+	 * @author Yang Fan
+	 * @since 2024/2/1 14:11
+	 * @param ids 任务id列表
+	 * @return List<Task>
+	 */
+	 List<Task> selectByIdsIgnoreRemark(@Param("ids") List<String> ids);
+
+	/**
+	 * 添加CorrelationIds到末尾（注意！请先去重，sql不含去重逻辑）
+	 * @author Yang Fan
+	 * @since 2024/2/1 15:46
+	 * @param ids 任务id列表
+	 * @param context String (1,2,3...)
+	 * @return boolean
+	 */
+	boolean appendCorrelationIdsById(@Param("ids") List<String> ids, @Param("context") String context);
 }

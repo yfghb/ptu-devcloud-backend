@@ -94,8 +94,29 @@
 		</where>
 		ORDER BY t.create_date DESC
 	</select>
+	<select id="selectByIdsIgnoreRemark" resultMap="BaseResultMap">
+		SELECT
+			t.id
+			 , t.task_name
+			 , t.task_type
+			 , t.task_status
+			 , t.serial_number
+			 , t.current_operator
+			 , t.participant
+			 , t.correlation_ids
+			 , t.create_by
+			 , t.create_date
+			 , t.update_by
+			 , t.update_date
+		FROM task t
+		where t.id IN
+		<foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		ORDER BY t.create_date DESC
+	</select>
 
-    <!-- 插入全部字段 -->
+	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO task
@@ -301,9 +322,61 @@
 		WHERE t.serial_number = #{serialNumber}
 	</update>
 
-	<update id="updateOperationLogBySerialNumber">
-		UPDATE task t SET t.operation_log = t.operation_log + ';' + #{context}
+	<update id="updateOperationLogBySerialNumber" parameterType="string">
+		UPDATE task t SET t.operation_log = CONCAT(IF(t.operation_log is null, '', t.operation_log),#{context})
 		WHERE t.serial_number = #{serialNumber}
+	</update>
+	<update id="updateBySerialNumberIgnoreNull" parameterType="com.ptu.devCloud.entity.Task">
+		UPDATE task
+		<set>
+			<if test="taskName != null" >
+				task_name = #{taskName},
+			</if>
+			<if test="taskType != null" >
+				task_type = #{taskType},
+			</if>
+			<if test="taskStatus != null" >
+				task_status = #{taskStatus},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark},
+			</if>
+			<if test="operationLog != null" >
+				operation_log = #{operationLog},
+			</if>
+			<if test="serialNumber != null" >
+				serial_number = #{serialNumber},
+			</if>
+			<if test="currentOperator != null" >
+				current_operator = #{currentOperator},
+			</if>
+			<if test="participant != null" >
+				participant = #{participant},
+			</if>
+			<if test="correlationIds != null" >
+				correlation_ids = #{correlationIds},
+			</if>
+			<if test="createBy != null" >
+				create_by = #{createBy},
+			</if>
+			<if test="createDate != null" >
+				create_date = #{createDate},
+			</if>
+			<if test="updateBy != null" >
+				update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null" >
+				update_date = #{updateDate},
+			</if>
+		</set>
+		WHERE serial_number = #{serialNumber}
+	</update>
+	<update id="appendCorrelationIdsById">
+		UPDATE task t SET t.correlation_ids = CONCAT(IF(t.correlation_ids is null, '', CONCAT(t.correlation_ids, ',')),#{context})
+		WHERE t.id IN
+		<foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
 	</update>
 
 

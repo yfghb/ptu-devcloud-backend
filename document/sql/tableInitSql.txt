@@ -209,3 +209,5 @@ create table if not exists task_remark(
     update_by      bigint                   default null comment '更新人',
     update_date    datetime                 default null comment '更新时间'
 );
+
+alter table task alter column correlation_ids set default null;
