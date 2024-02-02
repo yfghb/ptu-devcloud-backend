@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "task_remark")
 public class TaskRemark extends BaseEntity implements Serializable {
+
 	/** 用户名称 */
 	@TableField(value = "username")
 	private String username;
@@ -21,7 +22,9 @@ public class TaskRemark extends BaseEntity implements Serializable {
 	/** 任务id */
 	@TableField(value = "task_id")
 	private Long taskId;
-    
 
+	/** 是否最新 */
+	@TableField(exist = false)
+	private Boolean newFlag;
 	
 }

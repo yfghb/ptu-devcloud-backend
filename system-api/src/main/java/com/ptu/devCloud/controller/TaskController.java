@@ -70,8 +70,7 @@ public class TaskController {
     @GetMapping("/detail")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<Task> detail(@RequestParam("serialNumber") String serialNumber){
-        Task task = taskService.lambdaQuery().eq(Task::getSerialNumber, serialNumber).one();
-        return CommonResult.successNoMsg(task);
+        return CommonResult.successNoMsg(taskService.getDetailBySerialNumber(serialNumber));
     }
 
     /**
@@ -130,6 +129,20 @@ public class TaskController {
         return CommonResult.successNoMsg(taskService.getTaskListBySerialNumberList(correlationIds));
     }
 
+    /**
+     * 取消关联
+     * @author Yang Fan
+     * @since 2024/2/2 14:14
+     * @param firId 任务id
+     * @param secId 任务id
+     * @return CommonResult<String>
+     */
+    @PostMapping("/unlink")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> unlink(@RequestParam("firId") Long firId,@RequestParam("secId") Long secId){
+        taskService.unlink(firId,secId);
+        return CommonResult.successWithMsg(null, "取消关联成功");
+    }
 
 
 }

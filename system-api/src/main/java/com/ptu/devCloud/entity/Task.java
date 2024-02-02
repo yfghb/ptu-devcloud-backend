@@ -45,7 +45,13 @@ public class Task extends BaseEntity implements Serializable {
 	/** 关联任务单id列表 */
 	@TableField(value = "correlation_ids")
 	private String correlationIds;
-    
 
+	/** 当前操作人-名称 */
+	@TableField(exist = false)
+	private String currentOperatorName;
+
+	/** 创建人-名称 */
+	@TableField(exist = false)
+	private String createUserName;
 	
 }

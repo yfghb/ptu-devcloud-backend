@@ -62,6 +62,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         if(task == null){
             throw new JobException("task对象为空");
         }
+        if(task.getTaskName().contains("##")){
+            throw new JobException("任务名称不能包含’##‘");
+        }
         boolean lockSuccess = false;
         String uuid = UUID.randomUUID().toString(true);
         long startTime = System.currentTimeMillis();
@@ -82,6 +85,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             String now = formatter.format(LocalDateTime.now()) + " ";
             transaction.execute(action -> {
                 task.setSerialNumber(generateSerialNumber());
+                task.setCurrentOperator(loginUser == null ? null : loginUser.getUser().getId());
                 task.setOperationLog(now + username + " 创建了任务：" + task.getTaskName() + "##");
                 try{
                     taskMapper.insert(task);
@@ -113,6 +117,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Override
     public void editById(Task task) {
+        if(task == null || task.getId() == null)return;
+        Task origin = taskMapper.selectById(task.getId());
+        if(!origin.getTaskStatus().equals(task.getTaskStatus())){
+            String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
+            task.setOperationLog(log + generateOperationLog(task.getSerialNumber(), task.getTaskStatus()));
+        }
         // todo 校验用户是否有编辑该任务的权限
         taskMapper.updateIgnoreNull(task);
     }
@@ -183,6 +193,46 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return taskMapper.selectByIdsIgnoreRemark(Arrays.asList(correlationIds.split(",")));
     }
 
+    @Override
+    public Task getDetailBySerialNumber(String serialNumber) {
+        return taskMapper.selectBySerialNumber(serialNumber);
+    }
+
+    @Override
+    public void unlink(Long id1, Long id2) {
+        if(id1 == null || id2 == null || id1.equals(id2)) return;
+        Task task1 = taskMapper.selectById(id1);
+        Task task2 = taskMapper.selectById(id2);
+        if(task1 == null || task2 == null)return;
+        if(StrUtil.isEmpty(task1.getCorrelationIds()) || StrUtil.isEmpty(task2.getCorrelationIds()))return;
+        StringBuilder builder1 = new StringBuilder("");
+        StringBuilder builder2 = new StringBuilder("");
+        for(String id:task1.getCorrelationIds().split(",")){
+            if(!(Long.valueOf(id)).equals(task2.getId())){
+                builder1.append(id).append(",");
+            }
+        }
+        for(String id:task2.getCorrelationIds().split(",")){
+            if(!(Long.valueOf(id)).equals(task1.getId())){
+                builder2.append(id).append(",");
+            }
+        }
+        if(builder1.length() > 0)builder1.deleteCharAt(builder1.length() - 1);
+        if(builder2.length() > 0)builder2.deleteCharAt(builder2.length() - 1);
+        task1.setCorrelationIds(builder1.length()==0?null:builder1.toString());
+        task2.setCorrelationIds(builder2.length()==0?null:builder2.toString());
+        transaction.execute(action -> {
+            try {
+                taskMapper.update(task1);
+                taskMapper.update(task2);
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException(e.getMessage());
+            }
+        });
+    }
+
     private String generateOperationLog(String serialNumber, String taskStatus){
         if(StrUtil.isEmpty(serialNumber) || StrUtil.isEmpty(taskStatus))return "";
         LoginUser loginUser = SecurityUtils.getLoginUser();
@@ -191,6 +241,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         String now = formatter.format(LocalDateTime.now()) + " ";
         String status = "";
         switch (taskStatus){
+            case "new": status = "新创建";break;
             case "todo": status = "进行中";break;
             case "done": status = "已完成";break;
             case "close": status = "已关闭";break;

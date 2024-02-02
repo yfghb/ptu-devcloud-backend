@@ -132,4 +132,13 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @return boolean
 	 */
 	boolean appendCorrelationIdsById(@Param("ids") List<String> ids, @Param("context") String context);
+
+	/**
+	 * 以任务编号查询
+	 * @author Yang Fan
+	 * @since 2024/2/2 10:20
+	 * @param serialNumber 任务编号
+	 * @return Task
+	 */
+	Task selectBySerialNumber(@Param("serialNumber") String serialNumber);
 }

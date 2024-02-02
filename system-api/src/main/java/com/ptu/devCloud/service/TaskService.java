@@ -68,5 +68,21 @@ public interface TaskService extends IService<Task> {
      */
     List<Task> getTaskListBySerialNumberList(String correlationIds);
 
-	
+    /**
+     * 以任务编号查询任务详细
+     * @author Yang Fan
+     * @since 2024/2/2 10:21
+     * @param serialNumber 任务编号
+     * @return Task
+     */
+    Task getDetailBySerialNumber(String serialNumber);
+
+    /**
+     * 取消关联
+     * @author Yang Fan
+     * @since 2024/2/2 14:17
+     * @param id1 任务id
+     * @param id2 任务id
+     */
+	void unlink(Long id1,Long id2);
 }

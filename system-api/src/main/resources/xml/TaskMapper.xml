@@ -64,7 +64,10 @@
 		, t.create_date
 		, t.update_by
 		, t.update_date
+		, u.user_name as "currentOperatorName"
+		, (SELECT sub.user_name FROM user sub where t.create_by = sub.id) as "createUserName"
 		FROM task t
+		left join user u on t.current_operator = u.id
 		<where>
 			<if test="params.createBy != null">
 				t.create_by = #{params.createBy}
@@ -114,6 +117,15 @@
 			#{item}
 		</foreach>
 		ORDER BY t.create_date DESC
+	</select>
+	<select id="selectBySerialNumber" resultMap="BaseResultMap">
+		SELECT
+		<include refid="baseColumns" />
+		, u.user_name as "currentOperatorName"
+		, (SELECT sub.user_name FROM user sub WHERE t.create_by = sub.id) as "createUserName"
+		FROM task t
+		LEFT JOIN user u ON t.current_operator = u.id
+		WHERE t.serial_number = #{serialNumber}
 	</select>
 
 	<!-- 插入全部字段 -->
