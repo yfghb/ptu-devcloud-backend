@@ -5,15 +5,19 @@ import com.ptu.devCloud.annotation.EnableMethodLog;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.service.UserService;
 import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -145,6 +149,19 @@ public class UserController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<String> getIdempotenceToken(){
         return CommonResult.successNoMsg(userService.getIdempotenceToken());
+    }
+
+    /**
+     * 查询用户名称列表
+     * @author Yang Fan
+     * @since 2024/2/4 15:50
+     * @param vo IdsVO
+     * @return CommonResult<List<String>>
+     */
+    @PostMapping("/nameList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<String>> nameList(@RequestBody IdsVO vo){
+        return CommonResult.successNoMsg(userService.getUserNameByIds(vo.getUserIds()));
     }
     
 }

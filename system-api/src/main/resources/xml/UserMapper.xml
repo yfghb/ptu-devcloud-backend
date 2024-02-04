@@ -97,8 +97,17 @@
 		left join user_role ur on r.id = ur.role_id
 		where ur.user_id = #{userId} and p.permission is not null and p.permission != ''
 	</select>
+    <select id="selectUsernameByIds" resultType="java.lang.String">
+		select
+		u.user_name
+		from user u
+		where u.id in
+		<foreach item="item" collection="userIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.User"
 		keyProperty="id" keyColumn="id" >
 	INSERT INTO user

@@ -3,8 +3,8 @@ package com.ptu.devCloud.service;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
-
 import java.util.List;
 
 
@@ -85,4 +85,30 @@ public interface TaskService extends IService<Task> {
      * @param id2 任务id
      */
 	void unlink(Long id1,Long id2);
+
+    /**
+     * 批量删除（注意！任务状态必须全为‘已关闭’）
+     * @author Yang Fan
+     * @since 2024/2/4 13:28
+     * @param vo IdsVO
+     */
+    void deleteBatch(IdsVO vo);
+
+    /**
+     * 批量修改任务状态为’已关闭‘
+     * @author Yang Fan
+     * @since 2024/2/4 13:39
+     * @param vo IdsVO
+     */
+    void closeBatch(IdsVO vo);
+
+    /**
+     * 转派任务
+     * @author Yang Fan
+     * @since 2024/2/4 15:09
+     * @param currentUserId 当前任务操作人
+     * @param changeToUserId 转派人
+     * @param taskId 任务id
+     */
+    void changeCurrentOperator(Long currentUserId, Long changeToUserId, Long taskId);
 }

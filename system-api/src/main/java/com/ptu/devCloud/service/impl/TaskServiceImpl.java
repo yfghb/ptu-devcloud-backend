@@ -7,10 +7,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Task;
+import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ptu.devCloud.service.UserService;
 import com.ptu.devCloud.utils.RedisUtils;
 import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.aop.framework.AopContext;
@@ -40,6 +43,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Resource
     private RedisUtils redisUtils;
+
+    @Resource
+    private UserService userService;
 
     @Resource
     private TransactionTemplate transaction;
@@ -86,6 +92,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             transaction.execute(action -> {
                 task.setSerialNumber(generateSerialNumber());
                 task.setCurrentOperator(loginUser == null ? null : loginUser.getUser().getId());
+                task.setParticipant(loginUser == null ? null : loginUser.getUser().getId().toString());
                 task.setOperationLog(now + username + " 创建了任务：" + task.getTaskName() + "##");
                 try{
                     taskMapper.insert(task);
@@ -119,9 +126,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     public void editById(Task task) {
         if(task == null || task.getId() == null)return;
         Task origin = taskMapper.selectById(task.getId());
+        if(origin == null)throw new JobException("当前任务已经被删除！");
         if(!origin.getTaskStatus().equals(task.getTaskStatus())){
             String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
-            task.setOperationLog(log + generateOperationLog(task.getSerialNumber(), task.getTaskStatus()));
+            task.setOperationLog(log + generateOperationLog(task.getTaskStatus()));
         }
         // todo 校验用户是否有编辑该任务的权限
         taskMapper.updateIgnoreNull(task);
@@ -133,7 +141,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             try{
                 if("todo".equals(taskStatus) || "done".equals(taskStatus) || "close".equals(taskStatus)){
                     taskMapper.updateTaskStatusBySerialNumber(serialNumber, taskStatus);
-                    taskMapper.updateOperationLogBySerialNumber(serialNumber, generateOperationLog(serialNumber, taskStatus));
+                    taskMapper.updateOperationLogBySerialNumber(serialNumber, generateOperationLog(taskStatus));
                 }
                 return true;
             }catch (Exception e){
@@ -151,7 +159,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         TaskServiceImpl proxy = (TaskServiceImpl) AopContext.currentProxy();
         Task task = proxy.lambdaQuery().eq(Task::getSerialNumber, serialNumber).one();
         if(task == null) {
-            throw new JobException("找不到当前输入的任务编号下的任务");
+            throw new JobException("找不到当前输入的任务编号下的任务，无法关联");
         }
         String correlationIds = task.getCorrelationIds();
         List<String> originIds = StrUtil.isNotEmpty(correlationIds) ?
@@ -205,8 +213,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         Task task2 = taskMapper.selectById(id2);
         if(task1 == null || task2 == null)return;
         if(StrUtil.isEmpty(task1.getCorrelationIds()) || StrUtil.isEmpty(task2.getCorrelationIds()))return;
-        StringBuilder builder1 = new StringBuilder("");
-        StringBuilder builder2 = new StringBuilder("");
+        StringBuilder builder1 = new StringBuilder();
+        StringBuilder builder2 = new StringBuilder();
         for(String id:task1.getCorrelationIds().split(",")){
             if(!(Long.valueOf(id)).equals(task2.getId())){
                 builder1.append(id).append(",");
@@ -233,8 +241,75 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         });
     }
 
-    private String generateOperationLog(String serialNumber, String taskStatus){
-        if(StrUtil.isEmpty(serialNumber) || StrUtil.isEmpty(taskStatus))return "";
+    @Override
+    public void deleteBatch(IdsVO vo) {
+        if(vo == null || CollUtil.isEmpty(vo.getTaskIds()))return;
+        List<String> list = taskMapper.selectTaskStatusByIds(vo.getTaskIds());
+        boolean errFlag = false;
+        for (String status : list) {
+            if (!status.equals("close")) {
+                errFlag = true;
+                break;
+            }
+        }
+        if(errFlag) throw new JobException("批量删除失败！任务状态必须全为'已关闭'才可删除！");
+        TaskServiceImpl proxy = (TaskServiceImpl) AopContext.currentProxy();
+        proxy.removeByIds(vo.getTaskIds());
+    }
+
+    @Override
+    public void closeBatch(IdsVO vo) {
+        if(vo == null || CollUtil.isEmpty(vo.getTaskIds()))return;
+        transaction.execute(action -> {
+            try {
+                // 先添加任务关闭的日志
+                taskMapper.updateOperationLogAppendCloseByIds(vo.getTaskIds(), generateOperationLog("close"));
+                // 再修改任务状态为‘已关闭’
+                taskMapper.updateTaskStatusByIds(vo.getTaskIds(), "close");
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("失败！");
+            }
+        });
+    }
+
+    @Override
+    public void changeCurrentOperator(Long currentUserId, Long changeToUserId, Long taskId) {
+        Task task = taskMapper.selectById(taskId);
+        User curUser = userService.getById(currentUserId);
+        User changeToUser = userService.getById(changeToUserId);
+        if(task == null)throw new JobException("当前任务已被删除！");
+        if("close".equals(task.getTaskStatus()))throw new JobException("当前任务已关闭，不能转派！");
+        if(curUser == null || changeToUser == null) throw new JobException("找不到用户，不能转派");
+        // todo 校验用户与转派用户是否属于同一团队同一项目里
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String now = formatter.format(LocalDateTime.now()) + " ";
+        String log = task.getOperationLog() == null ? "" : task.getOperationLog();
+        task.setCurrentOperator(changeToUser.getId());
+        if(!Objects.equals(currentUserId, changeToUserId)){
+            task.setOperationLog(log + now + curUser.getUserName() + " 将任务转派给 " + changeToUser.getUserName() + "##");
+        }
+        String participant = task.getParticipant();
+        Set<String> set = new HashSet<>();
+        StringBuilder builder = new StringBuilder();
+        if(StrUtil.isNotEmpty(participant)){
+            for(String id:participant.split(",")){
+                if(set.add(id))builder.append(id).append(",");
+            }
+        }else {
+            if(set.add(currentUserId.toString()))builder.append(currentUserId).append(",");
+        }
+        if(set.add(changeToUserId.toString()))builder.append(changeToUserId).append(",");
+        if(builder.length() > 0 && builder.toString().charAt(builder.length()-1) == ','){
+            builder.deleteCharAt(builder.length()-1);
+        }
+        task.setParticipant(builder.toString());
+        taskMapper.updateIgnoreNull(task);
+    }
+
+    private String generateOperationLog(String taskStatus){
+        if(StrUtil.isEmpty(taskStatus))return "";
         LoginUser loginUser = SecurityUtils.getLoginUser();
         String currentUserName = loginUser == null ? "" : loginUser.getUser().getUserName();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

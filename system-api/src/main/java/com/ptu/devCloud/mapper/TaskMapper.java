@@ -141,4 +141,33 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @return Task
 	 */
 	Task selectBySerialNumber(@Param("serialNumber") String serialNumber);
+
+	/**
+	 * 以任务id列表查询任务状态列表
+	 * @author Yang Fan
+	 * @since 2024/2/4 13:20
+	 * @param ids 任务id列表
+	 * @return List<String> 任务状态列表
+	 */
+	List<String> selectTaskStatusByIds(@Param("ids") List<String> ids);
+
+	/**
+	 * 以任务id列表更新任务状态
+	 * @author Yang Fan
+	 * @since 2024/2/4 13:43
+	 * @param ids 任务id列表
+	 * @param status 任务状态
+	 * @return boolean
+	 */
+	boolean updateTaskStatusByIds(@Param("ids") List<String> ids, @Param("status") String status);
+
+	/**
+	 * 给未关闭的任务添加关闭日志
+	 * @author Yang Fan
+	 * @since 2024/2/4 13:48
+	 * @param ids 任务id列表
+	 * @param context 关闭日志
+	 * @return boolean
+	 */
+	boolean updateOperationLogAppendCloseByIds(@Param("ids") List<String> ids, @Param("context") String context);
 }

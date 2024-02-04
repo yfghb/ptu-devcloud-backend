@@ -84,4 +84,13 @@ public interface UserService extends IService<User> {
      * @return token
      */
     String getIdempotenceToken();
+
+    /**
+     * 以id列表查询用户名列表
+     * @author Yang Fan
+     * @since 2024/2/4 15:48
+     * @param userIds id列表
+     * @return List<String> 用户名列表
+     */
+    List<String> getUserNameByIds(List<String> userIds);
 }

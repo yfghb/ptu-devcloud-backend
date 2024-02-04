@@ -127,8 +127,17 @@
 		LEFT JOIN user u ON t.current_operator = u.id
 		WHERE t.serial_number = #{serialNumber}
 	</select>
+    <select id="selectTaskStatusByIds" resultType="java.lang.String">
+		SELECT
+		t.task_status
+		FROM task t
+		WHERE t.id IN
+		<foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO task
@@ -389,6 +398,21 @@
 		<foreach item="item" collection="ids" open="(" separator="," close=")">
 			#{item}
 		</foreach>
+	</update>
+	<update id="updateTaskStatusByIds">
+		UPDATE task t SET t.task_status = #{status}
+		WHERE t.id IN
+		<foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	<update id="updateOperationLogAppendCloseByIds">
+		UPDATE task t SET t.operation_log = CONCAT(IF(t.operation_log is null, '', t.operation_log),#{context})
+		WHERE t.id IN
+		<foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.task_status != 'close'
 	</update>
 
 

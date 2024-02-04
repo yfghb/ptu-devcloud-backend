@@ -111,5 +111,13 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @return List<String> 权限表达式列表
 	 */
 	List<String> selectPermissionStrByUserId(@Param("userId") Long userId);
-	
+
+	/**
+	 * 以id列表查询用户名列表
+	 * @author Yang Fan
+	 * @since 2024/2/4 15:48
+	 * @param userIds id列表
+	 * @return List<String> 用户名列表
+	 */
+	List<String> selectUsernameByIds(@Param("userIds") List<String> userIds);
 }

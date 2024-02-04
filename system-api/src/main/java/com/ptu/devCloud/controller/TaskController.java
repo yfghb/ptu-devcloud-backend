@@ -3,6 +3,7 @@ package com.ptu.devCloud.controller;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Task;
+import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.LinkTaskVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.service.TaskService;
@@ -142,6 +143,52 @@ public class TaskController {
     public CommonResult<String> unlink(@RequestParam("firId") Long firId,@RequestParam("secId") Long secId){
         taskService.unlink(firId,secId);
         return CommonResult.successWithMsg(null, "取消关联成功");
+    }
+
+    /**
+     * 批量删除
+     * @author Yang Fan
+     * @since 2024/2/4 13:28
+     * @param vo IdsVO
+     * @return CommonResult<String>
+     */
+    @PostMapping("/deleteBatch")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> deleteBatch(@RequestBody IdsVO vo){
+        taskService.deleteBatch(vo);
+        return CommonResult.success("成功");
+    }
+
+    /**
+     * 批量修改任务状态为’已关闭‘
+     * @author Yang Fan
+     * @since 2024/2/4 13:40
+     * @param vo IdsVO
+     * @return CommonResult<String>
+     */
+    @PostMapping("/closeBatch")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> closeBatch(@RequestBody IdsVO vo){
+        taskService.closeBatch(vo);
+        return CommonResult.success("成功");
+    }
+
+    /**
+     * 转派任务
+     * @author Yang Fan
+     * @since 2024/2/4 15:09
+     * @param currentUserId 当前任务操作人
+     * @param changeToUserId 转派人
+     * @param taskId 任务id
+     * @return CommonResult<String>
+     */
+    @PostMapping("/changeCurrentOperator")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> changeCurrentOperator(@RequestParam("currentUserId") Long currentUserId,
+                                                      @RequestParam("changeToUserId") Long changeToUserId,
+                                                      @RequestParam("taskId") Long taskId){
+        taskService.changeCurrentOperator(currentUserId,changeToUserId,taskId);
+        return CommonResult.success("成功");
     }
 
 
