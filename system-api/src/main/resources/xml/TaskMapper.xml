@@ -82,17 +82,29 @@
 					and t.create_date <= #{params.endDate}
 				]]>
 			</if>
-			<if test="params.taskStatus != null and params.taskStatus != ''">
-				and t.task_status = #{params.taskStatus}
+			<if test="params.taskStatusList != null and params.taskStatusList.size() > 0">
+				and t.task_status in
+				<foreach item="item" collection="params.taskStatusList" open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
-			<if test="params.taskType != null and params.taskType != ''">
-				and t.task_type = #{params.taskType}
+			<if test="params.taskTypeList != null and params.taskTypeList.size() > 0">
+				and t.task_type in
+				<foreach item="item" collection="params.taskTypeList" open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
 			<if test="params.taskName != null and params.taskName != ''">
 				and t.task_name like CONCAT(CONCAT('%', #{params.taskName}), '%')
 			</if>
 			<if test="params.serialNumber != null and params.serialNumber != ''">
 				and t.serial_number like CONCAT(CONCAT('%', #{params.serialNumber}), '%')
+			</if>
+			<if test="params.currentOperator != null">
+				and t.current_operator = #{params.currentOperator}
+			</if>
+			<if test="params.participant != null and params.participant != ''">
+				and FIND_IN_SET(#{params.participant}, t.participant) > 0
 			</if>
 		</where>
 		ORDER BY t.create_date DESC
