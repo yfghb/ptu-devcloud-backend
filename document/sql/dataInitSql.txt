@@ -85,6 +85,11 @@ INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_b
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (8, 'SEQ_DICT_ITEM', 5, 1, 'dc3fa00fa53b4dbba705613dd7dc0248', null, '2024-01-10 12:15:10', 100, '2024-01-17 14:25:34');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (9, 'SEQ_TASK', 1, 1, null, null, '2024-01-24 15:41:01', null, null);
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (10, 'SEQ_TASK_REMARK', 1, 1, null, null, '2024-01-24 15:41:01', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (11, 'SEQ_PROJECT', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (12, 'SEQ_PROJECT_REPOSITORY', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (13, 'SEQ_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (14, 'SEQ_USER_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (15, 'SEQ_PROJECT_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
 -- [init table_sequence end]
 
 

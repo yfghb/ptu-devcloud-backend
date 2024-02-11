@@ -211,3 +211,70 @@ create table if not exists task_remark(
 );
 
 alter table task alter column correlation_ids set default null;
+
+create table project
+(
+    id              bigint        not null comment '主键id'
+        primary key,
+    project_name    varchar(64)   not null comment '项目名称',
+    project_remark  text          null comment '项目备注/描述',
+    current_version varchar(1024) null comment '项目当前版本',
+    gitea_account   varchar(64)   null comment 'gitea账号',
+    gitea_password  varchar(512)  null comment 'gitea密码',
+    gitea_username  varchar(64)   null comment 'gitea用户名',
+    create_by       bigint        null comment '创建人',
+    create_date     datetime      null comment '创建时间',
+    update_by       bigint        null comment '更新人',
+    update_date     datetime      null comment '更新时间',
+    history_member  varchar(2048) null comment '历史成员',
+    constraint project_project_name_uindex
+        unique (project_name)
+);
+
+create table project_repository
+(
+    id          bigint                      not null comment '主键id'
+        primary key,
+    project_id  bigint                      not null comment '项目id',
+    repo_name   varchar(128)                not null comment '仓库名称',
+    repo_remark text                        null comment '仓库备注',
+    repo_type   varchar(16) default 'gitea' null comment '仓库链接的类型',
+    repo_url    varchar(1024)               not null comment '仓库地址',
+    create_by   bigint                      null comment '创建人',
+    create_date datetime                    null comment '创建时间',
+    update_by   bigint                      null comment '更新人',
+    update_date datetime                    null comment '更新时间'
+);
+
+create table project_team
+(
+    id         bigint not null comment '主键id'
+        primary key,
+    project_id bigint not null comment '项目id',
+    team_id    bigint not null comment '团队id'
+);
+
+create table team
+(
+    id          bigint                            not null comment '主键id'
+        primary key,
+    team_name   varchar(64)                       not null comment '团队名称',
+    create_by   bigint                            null comment '创建人',
+    create_date datetime                          null comment '创建时间',
+    update_by   bigint                            null comment '更新人',
+    update_date datetime                          null comment '更新时间',
+    join_type   varchar(32) default 'invite-only' null comment '加入方式',
+    admin_ids   varchar(1024)                     null comment '管理员id列表，用逗号隔开',
+    super_admin int                               null comment '超级管理员',
+    constraint team_name
+        unique (team_name)
+);
+
+
+create table user_team
+(
+    id      bigint not null comment '主键id'
+        primary key,
+    user_id bigint not null comment '用户id',
+    team_id bigint not null comment '团队id'
+);

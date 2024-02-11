@@ -21,4 +21,8 @@ public class TableSequenceConstants {
     public static final String Task = "SEQ_TASK";
 
     public static final String TaskRemark = "SEQ_TASK_REMARK";
+
+    public static final String Team = "SEQ_TEAM";
+
+    public static final String UserTeam = "SEQ_USER_TEAM";
 }
