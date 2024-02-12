@@ -14,7 +14,8 @@
 	        <result column="phone_number" property="phoneNumber" />
 	        <result column="user_name" property="userName" />
 	        <result column="avatar" property="avatar" />
-		</resultMap>  
+	        <result column="current_team_id" property="currentTeamId" />
+		</resultMap>
     
     <!-- 表字段 -->
     <sql id="baseColumns">
@@ -30,6 +31,7 @@
         , t.phone_number
         , t.user_name
         , t.avatar
+		, t.current_team_id
         </sql>
     
     <!-- 查询全部 -->
@@ -107,38 +109,50 @@
 		</foreach>
 	</select>
 
-    <!-- 插入全部字段 -->
+	<select id="selectUserListByIds" resultMap="BaseResultMap">
+		select
+			<include refid="baseColumns" />
+		from user t
+		where t.id in
+		<foreach item="item" collection="userIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.User"
 		keyProperty="id" keyColumn="id" >
-	INSERT INTO user
+		INSERT INTO user
     	<trim prefix="(" suffix=")" suffixOverrides=",">	 
-    	    	    	id,
-    	    	    	    	create_by,
-    	    	    	    	create_date,
-    	    	    	    	update_by,
-    	    	    	    	update_date,
-    	    	    	    	status,
-    	    	    	    	login_account,
-    	    	    	    	login_password,
-    	    	    	    	email,
-    	    	    	    	phone_number,
-    	    	    	    	user_name,
-    	    	    	    	avatar,
-    	    	    	</trim>
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			status,
+			login_account,
+			login_password,
+			email,
+			phone_number,
+			user_name,
+			avatar,
+			current_team_id
+		</trim>
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
-    	    	        #{id},                   
-    			    	        #{createBy},                   
-    			    	        #{createDate},                   
-    			    	        #{updateBy},                   
-    			    	        #{updateDate},                   
-    			    	        #{status},                   
-    			    	        #{loginAccount},                   
-    			    	        #{loginPassword},                   
-    			    	        #{email},                   
-    			    	        #{phoneNumber},                   
-    			    	        #{userName},                   
-    			    	        #{avatar},                   
-    			    	</trim>
+			#{id},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate},
+			#{status},
+			#{loginAccount},
+			#{loginPassword},
+			#{email},
+			#{phoneNumber},
+			#{userName},
+			#{avatar},
+		    #{currentTeamId}
+		</trim>
 	</insert>
     
     <!-- 插入不为NULL的字段 -->
@@ -182,6 +196,9 @@
                 		        <if test="avatar != null">
 			avatar,
 		</if>
+								<if test="currentTeamId != null">
+			current_team_id,
+		</if>
                         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
                         <if test="id != null" >
@@ -220,26 +237,30 @@
                                 <if test="avatar != null" >
 			#{avatar},                    
         </if>
+								<if test="currentTeamId != null" >
+			#{currentTeamId},
+		</if>
                         </trim>
     </insert>
 
 	<!-- 更新,更新全部字段 -->
     <update id="update" parameterType="com.ptu.devCloud.entity.User">
-    UPDATE user
-     <set>		
-                    		create_by=#{createBy},        
-               		create_date=#{createDate},        
-               		update_by=#{updateBy},        
-               		update_date=#{updateDate},        
-               		status=#{status},        
-               		login_account=#{loginAccount},        
-               		login_password=#{loginPassword},        
-               		email=#{email},        
-               		phone_number=#{phoneNumber},        
-               		user_name=#{userName},        
-               		avatar=#{avatar},        
-               </set>	
-    WHERE id = #{id}
+		UPDATE user
+		<set>
+			create_by=#{createBy},
+			create_date=#{createDate},
+			update_by=#{updateBy},
+			update_date=#{updateDate},
+			status=#{status},
+			login_account=#{loginAccount},
+			login_password=#{loginPassword},
+			email=#{email},
+			phone_number=#{phoneNumber},
+			user_name=#{userName},
+			avatar=#{avatar},
+			current_team_id=#{currentTeamId}
+		</set>
+		WHERE id = #{id}
     </update>  
     
     
@@ -279,6 +300,9 @@
 	</if>
 	    		<if test="avatar != null" >
 		avatar=#{avatar},                 
+	</if>
+				<if test="currentTeamId != null" >
+		current_team_id=#{currentTeamId}
 	</if>
 	        </set>
     WHERE id = #{id}

@@ -120,4 +120,13 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @return List<String> 用户名列表
 	 */
 	List<String> selectUsernameByIds(@Param("userIds") List<String> userIds);
+
+	/**
+	 * 查询用户列表
+	 * @author Yang Fan
+	 * @since 2024/2/12 14:51
+	 * @param userIds id列表
+	 * @return List<User>
+	 */
+	List<User> selectUserListByIds(@Param("userIds") List<Long> userIds);
 }

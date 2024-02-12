@@ -24,12 +24,7 @@ public class TaskRemarkServiceImpl extends ServiceImpl<TaskRemarkMapper, TaskRem
 
     @Resource
     private TaskRemarkMapper taskRemarkMapper;
-    
-    @Override
-    @SeqName(value = TableSequenceConstants.TaskRemark)
-    public boolean save(TaskRemark entity) {
-        return super.save(entity);
-    }
+
 
     @Override
     @SeqName(value = TableSequenceConstants.TaskRemark)

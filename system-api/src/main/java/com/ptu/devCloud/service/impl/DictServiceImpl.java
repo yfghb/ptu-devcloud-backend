@@ -54,11 +54,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Resource
     private RedisUtils redisUtils;
 
-    @Override
-    @SeqName(value = TableSequenceConstants.Dict)
-    public boolean save(Dict entity) {
-        return super.save(entity);
-    }
+
 
     @Override
     @SeqName(value = TableSequenceConstants.Dict)

@@ -43,7 +43,8 @@ public class User extends BaseEntity implements Serializable {
 	/** 头像 */
 	@TableField(value = "avatar")
 	private String avatar;
-    
 
-	
+	/** 当前所在团队 */
+	@TableField(value = "current_team_id")
+	private Long currentTeamId;
 }

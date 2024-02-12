@@ -32,11 +32,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Resource
     private TransactionTemplate transaction;
 
-    @Override
-    @SeqName(value = TableSequenceConstants.UserRole)
-    public boolean save(UserRole entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.UserRole)

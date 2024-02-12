@@ -93,4 +93,13 @@ public interface UserService extends IService<User> {
      * @return List<String> 用户名列表
      */
     List<String> getUserNameByIds(List<String> userIds);
+
+    /**
+     * 查询用户列表
+     * @author Yang Fan
+     * @since 2024/2/12 14:51
+     * @param userIds id列表
+     * @return List<User>
+     */
+    List<User> getUserListByIds(List<Long> userIds);
 }

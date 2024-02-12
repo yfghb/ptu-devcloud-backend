@@ -5,6 +5,8 @@ import lombok.Data;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.EqualsAndHashCode;
 
 @Data
@@ -25,8 +27,13 @@ public class Team extends BaseEntity implements Serializable {
     
 	/** 超级管理员 */
 	@TableField(value = "super_admin")
-	private Integer superAdmin;
-    
+	private Long superAdmin;
 
-	
+	/** 是否切换团队 */
+	@TableField(exist = false)
+	private Boolean changeTeam;
+
+	/** 团队成员 */
+	@TableField(exist = false)
+	private List<User> userList;
 }

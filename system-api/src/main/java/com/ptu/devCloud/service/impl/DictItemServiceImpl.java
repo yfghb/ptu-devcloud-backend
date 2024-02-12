@@ -21,11 +21,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
     @Resource
     private DictItemMapper dictItemMapper;
     
-    @Override
-    @SeqName(value = TableSequenceConstants.DictItem)
-    public boolean save(DictItem entity) {
-        return super.save(entity);
-    }
+
 
     @Override
     @SeqName(value = TableSequenceConstants.DictItem)

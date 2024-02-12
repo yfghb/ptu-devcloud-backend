@@ -47,11 +47,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Resource
     private TableSequenceService tableSequenceService;
 
-    @Override
-    @SeqName(value = TableSequenceConstants.Role)
-    public boolean save(Role entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.Role)

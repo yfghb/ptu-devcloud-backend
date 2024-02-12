@@ -20,11 +20,6 @@ import java.util.Collection;
 @Service
 public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission> implements RolePermissionService{
 
-    @Override
-    @SeqName(value = TableSequenceConstants.RolePermission)
-    public boolean save(RolePermission entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.RolePermission)

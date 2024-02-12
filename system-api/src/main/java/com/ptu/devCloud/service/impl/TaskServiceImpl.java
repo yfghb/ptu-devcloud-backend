@@ -49,12 +49,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Resource
     private TransactionTemplate transaction;
-    
-    @Override
-    @SeqName(value = TableSequenceConstants.Task)
-    public boolean save(Task entity) {
-        return super.save(entity);
-    }
+
 
     @Override
     @SeqName(value = TableSequenceConstants.Task)

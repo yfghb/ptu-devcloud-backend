@@ -27,11 +27,6 @@ public class MethodLogServiceImpl extends ServiceImpl<MethodLogMapper, MethodLog
     @Resource
     private MethodLogMapper methodLogMapper;
 
-    @Override
-    @SeqName(value = TableSequenceConstants.MethodLog)
-    public boolean save(MethodLog entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.MethodLog)

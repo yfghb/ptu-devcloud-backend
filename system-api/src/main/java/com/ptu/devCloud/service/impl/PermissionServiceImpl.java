@@ -37,11 +37,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private RolePermissionService rolePermissionService;
 
 
-    @Override
-    @SeqName(value = TableSequenceConstants.Permission)
-    public boolean save(Permission entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.Permission)

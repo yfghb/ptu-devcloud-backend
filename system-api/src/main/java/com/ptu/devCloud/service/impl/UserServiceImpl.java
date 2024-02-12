@@ -9,10 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.CommonConstants;
 import com.ptu.devCloud.constants.TableSequenceConstants;
-import com.ptu.devCloud.entity.LoginUser;
-import com.ptu.devCloud.entity.Role;
-import com.ptu.devCloud.entity.User;
-import com.ptu.devCloud.entity.UserRole;
+import com.ptu.devCloud.entity.*;
 import com.ptu.devCloud.entity.vo.StatusVO;
 import com.ptu.devCloud.entity.vo.UserPageVO;
 import com.ptu.devCloud.exception.JobException;
@@ -20,6 +17,7 @@ import com.ptu.devCloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.RoleService;
 import com.ptu.devCloud.service.UserRoleService;
+import com.ptu.devCloud.service.UserTeamService;
 import com.ptu.devCloud.utils.JwtUtil;
 import com.ptu.devCloud.utils.RedisUtils;
 import com.ptu.devCloud.utils.SecurityUtils;
@@ -61,13 +59,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleService roleService;
 
     @Resource
+    private UserTeamService userTeamService;
+
+    @Resource
     private RedisUtils redisUtils;
 
-    @Override
-    @SeqName(value = TableSequenceConstants.User)
-    public boolean save(User entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.User)
@@ -172,6 +168,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public List<User> getUserListByIds(List<Long> userIds) {
+        if(CollUtil.isEmpty(userIds))return new ArrayList<>();
+        return userMapper.selectUserListByIds(userIds);
+    }
+
+
+    @Override
     public UserDetails loadUserByUsername(String LoginAccount) throws UsernameNotFoundException {
         // 查询当前账号的用户是否已存在
         User user = userMapper.selectByAccount(LoginAccount);
@@ -195,6 +198,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 map.putIfAbsent(builder + "view", true);
             }
         }
-        return new LoginUser(user, new ArrayList<>(map.keySet()));
+        // 获取团队信息
+        List<UserTeam> userTeamList = userTeamService.lambdaQuery().eq(UserTeam::getUserId, user.getId()).list();
+        List<Long> userTeamIds = null;
+        if(CollUtil.isNotEmpty(userTeamList)){
+            Set<Long> teamIds = new HashSet<>();
+            userTeamList.forEach(obj -> {
+                if(obj.getTeamId() != null)teamIds.add(obj.getTeamId());
+            });
+            userTeamIds = new ArrayList<>(teamIds);
+        }
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUser(user);
+        loginUser.setPermissions(new ArrayList<>(map.keySet()));
+        loginUser.setTeamIds(userTeamIds);
+        return loginUser;
     }
 }

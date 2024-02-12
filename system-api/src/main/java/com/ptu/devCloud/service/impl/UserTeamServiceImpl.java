@@ -20,12 +20,6 @@ public class UserTeamServiceImpl extends ServiceImpl<UserTeamMapper, UserTeam> i
 
     @Resource
     private UserTeamMapper userTeamMapper;
-    
-    @Override
-    @SeqName(value = TableSequenceConstants.UserTeam)
-    public boolean save(UserTeam entity) {
-        return super.save(entity);
-    }
 
     @Override
     @SeqName(value = TableSequenceConstants.UserTeam)
