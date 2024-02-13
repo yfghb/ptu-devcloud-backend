@@ -2,22 +2,23 @@
 <!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ptu.devCloud.mapper.NotificationMapper">
 	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.Notification">
-        <result column="id" property="id" />
-        <result column="create_name" property="createName" />
-        <result column="message" property="message" />
-        <result column="receive_user" property="receiveUser" />
-        <result column="receive_username" property="receiveUsername" />
-        <result column="unread" property="unread" />
-        <result column="notify_only" property="notifyOnly" />
-        <result column="create_by" property="createBy" />
-        <result column="create_date" property="createDate" />
-        <result column="update_by" property="updateBy" />
-        <result column="update_date" property="updateDate" />
-	</resultMap>  
-    
-    <!-- 表字段 -->
-    <sql id="baseColumns">
-		 t.id
+		<result column="id" property="id" />
+		<result column="create_name" property="createName" />
+		<result column="message" property="message" />
+		<result column="receive_user" property="receiveUser" />
+		<result column="receive_username" property="receiveUsername" />
+		<result column="unread" property="unread" />
+		<result column="notify_only" property="notifyOnly" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+		<result column="params_json" property="paramsJson" />
+	</resultMap>
+
+	<!-- 表字段 -->
+	<sql id="baseColumns">
+		t.id
 		, t.create_name
 		, t.message
 		, t.receive_user
@@ -28,54 +29,57 @@
 		, t.create_date
 		, t.update_by
 		, t.update_date
-    </sql> 
-    
- 
- 	<!-- 根据主键获取单条记录 -->
-    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
-		SELECT         
-        	<include refid="baseColumns" />
+		, t.params_json
+	</sql>
+
+
+	<!-- 根据主键获取单条记录 -->
+	<select id="getById" resultMap="BaseResultMap" parameterType="Long">
+		SELECT
+		<include refid="baseColumns" />
 		FROM notification t
 		WHERE id = #{id}
 	</select>
 
 	<!-- 插入全部字段 -->
-    <insert id="insert" parameterType="com.ptu.devCloud.entity.Notification"
-		keyProperty="id" keyColumn="id" >
+	<insert id="insert" parameterType="com.ptu.devCloud.entity.Notification"
+			keyProperty="id" keyColumn="id" >
 		INSERT INTO notification
-    	<trim prefix="(" suffix=")" suffixOverrides=",">	 
-    		id,
-    		create_name,
-    		message,
-    		receive_user,
-    		receive_username,
-    		unread,
-    		notify_only,
-    		create_by,
-    		create_date,
-    		update_by,
-    		update_date,
-    	</trim>
-    	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
-        	#{id},                   
-        	#{createName},                   
-        	#{message},                   
-        	#{receiveUser},                   
-        	#{receiveUsername},                   
-        	#{unread},                   
-        	#{notifyOnly},                   
-        	#{createBy},                   
-        	#{createDate},                   
-        	#{updateBy},                   
-        	#{updateDate},                   
-    	</trim>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_name,
+			message,
+			receive_user,
+			receive_username,
+			unread,
+			notify_only,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			params_json,
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			#{id},
+			#{createName},
+			#{message},
+			#{receiveUser},
+			#{receiveUsername},
+			#{unread},
+			#{notifyOnly},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate},
+			#{paramsJson},
+		</trim>
 	</insert>
-    
-    <!-- 插入不为NULL的字段 -->
-    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.Notification"
-        keyProperty="id" keyColumn="id" >
-        INSERT INTO notification    
-		<trim prefix="(" suffix=")" suffixOverrides=",">	 
+
+	<!-- 插入不为NULL的字段 -->
+	<insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.Notification"
+			keyProperty="id" keyColumn="id" >
+		INSERT INTO notification
+		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
 			</if>
@@ -109,100 +113,110 @@
 			<if test="updateDate != null">
 				update_date,
 			</if>
+			<if test="paramsJson != null">
+				params_json,
+			</if>
 		</trim>
-		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
 			<if test="id != null" >
-				#{id},                    
+				#{id},
 			</if>
 			<if test="createName != null" >
-				#{createName},                    
+				#{createName},
 			</if>
 			<if test="message != null" >
-				#{message},                    
+				#{message},
 			</if>
 			<if test="receiveUser != null" >
-				#{receiveUser},                    
+				#{receiveUser},
 			</if>
 			<if test="receiveUsername != null" >
-				#{receiveUsername},                    
+				#{receiveUsername},
 			</if>
 			<if test="unread != null" >
-				#{unread},                    
+				#{unread},
 			</if>
 			<if test="notifyOnly != null" >
-				#{notifyOnly},                    
+				#{notifyOnly},
 			</if>
 			<if test="createBy != null" >
-				#{createBy},                    
+				#{createBy},
 			</if>
 			<if test="createDate != null" >
-				#{createDate},                    
+				#{createDate},
 			</if>
 			<if test="updateBy != null" >
-				#{updateBy},                    
+				#{updateBy},
 			</if>
 			<if test="updateDate != null" >
-				#{updateDate},                    
+				#{updateDate},
+			</if>
+			<if test="paramsJson != null" >
+				#{paramsJson},
 			</if>
 		</trim>
-    </insert>
+	</insert>
 
 	<!-- 更新,更新全部字段 -->
-    <update id="update" parameterType="com.ptu.devCloud.entity.Notification">
-    	UPDATE notification
-     	<set>		
-			create_name = #{createName},        
-			message = #{message},        
-			receive_user = #{receiveUser},        
-			receive_username = #{receiveUsername},        
-			unread = #{unread},        
-			notify_only = #{notifyOnly},        
-			create_by = #{createBy},        
-			create_date = #{createDate},        
-			update_by = #{updateBy},        
-			update_date = #{updateDate},        
-     	</set>	
-    	WHERE id = #{id}
-    </update>  
-    
-    
-    <!-- 更新不为NULL的字段 -->
-    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.Notification">
-    UPDATE notification
-    	<set>
-		<if test="createName != null" >
-			create_name = #{createName},                 
-		</if>
-		<if test="message != null" >
-			message = #{message},                 
-		</if>
-		<if test="receiveUser != null" >
-			receive_user = #{receiveUser},                 
-		</if>
-		<if test="receiveUsername != null" >
-			receive_username = #{receiveUsername},                 
-		</if>
-		<if test="unread != null" >
-			unread = #{unread},                 
-		</if>
-		<if test="notifyOnly != null" >
-			notify_only = #{notifyOnly},                 
-		</if>
-		<if test="createBy != null" >
-			create_by = #{createBy},                 
-		</if>
-		<if test="createDate != null" >
-			create_date = #{createDate},                 
-		</if>
-		<if test="updateBy != null" >
-			update_by = #{updateBy},                 
-		</if>
-		<if test="updateDate != null" >
-			update_date = #{updateDate},                 
-		</if>
-    </set>
-    WHERE id = #{id}
-    </update>
+	<update id="update" parameterType="com.ptu.devCloud.entity.Notification">
+		UPDATE notification
+		<set>
+			create_name = #{createName},
+			message = #{message},
+			receive_user = #{receiveUser},
+			receive_username = #{receiveUsername},
+			unread = #{unread},
+			notify_only = #{notifyOnly},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			params_json = #{paramsJson},
+		</set>
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.Notification">
+		UPDATE notification
+		<set>
+			<if test="createName != null" >
+				create_name = #{createName},
+			</if>
+			<if test="message != null" >
+				message = #{message},
+			</if>
+			<if test="receiveUser != null" >
+				receive_user = #{receiveUser},
+			</if>
+			<if test="receiveUsername != null" >
+				receive_username = #{receiveUsername},
+			</if>
+			<if test="unread != null" >
+				unread = #{unread},
+			</if>
+			<if test="notifyOnly != null" >
+				notify_only = #{notifyOnly},
+			</if>
+			<if test="createBy != null" >
+				create_by = #{createBy},
+			</if>
+			<if test="createDate != null" >
+				create_date = #{createDate},
+			</if>
+			<if test="updateBy != null" >
+				update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null" >
+				update_date = #{updateDate},
+			</if>
+			<if test="paramsJson != null" >
+				params_json = #{paramsJson},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
 
 
 

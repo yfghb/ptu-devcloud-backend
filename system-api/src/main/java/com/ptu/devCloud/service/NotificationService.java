@@ -11,5 +11,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface NotificationService extends IService<Notification> {
 
-	
+	/**
+	 * 添加通知
+	 * @author Yang Fan
+	 * @since 2024/2/13 15:55
+	 * @param notification Notification
+	 */
+	void addNotification(Notification notification);
 }

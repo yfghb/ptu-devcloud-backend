@@ -28,5 +28,10 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
     }
 
 
-	
+    @Override
+    public void addNotification(Notification notification) {
+        if(notification != null){
+            notificationMapper.insertIgnoreNull(notification);
+        }
+    }
 }
