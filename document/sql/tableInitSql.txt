@@ -298,3 +298,18 @@ alter table user_team
 alter table user_team
 	add update_date datetime default null null comment '更新时间';
 
+create table if not exists notification(
+    id                  bigint                      not null comment '主键id'
+	primary key,
+    create_name         varchar(32)                 default '系统' comment '创建人名称',
+    message             varchar(1024)               default null comment '消息内容',
+    receive_user        bigint                      not null comment '接收人id',
+    receive_username    varchar(32)                 default null comment '接收人名称',
+    unread              tinyint                     default true comment '是否未读',
+    notify_only         tinyint                     default true comment '是否仅通知(无需触发回调)',
+    create_by           bigint                      default null comment '创建人',
+    create_date         datetime                    default null comment '创建时间',
+    update_by           bigint                      default null comment '更新人',
+    update_date         datetime                    default null comment '更新时间'
+);
+

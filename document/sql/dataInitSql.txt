@@ -90,6 +90,7 @@ INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_b
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (13, 'SEQ_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (14, 'SEQ_USER_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (15, 'SEQ_PROJECT_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
+insert into table_sequence (sequence_name, create_date) value ('SEQ_NOTIFICATION', now());
 -- [init table_sequence end]
 
 
