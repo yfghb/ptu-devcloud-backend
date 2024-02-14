@@ -102,4 +102,13 @@ public interface UserService extends IService<User> {
      * @return List<User>
      */
     List<User> getUserListByIds(List<Long> userIds);
+
+    /**
+     * 以账号查询用户
+     * @author Yang Fan
+     * @since 2024/2/14 13:29
+     * @param account 账号
+     * @return User
+     */
+    User getByAccount(String account);
 }

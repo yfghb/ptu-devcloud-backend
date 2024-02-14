@@ -1,7 +1,9 @@
 package com.ptu.devCloud.service;
 
+import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Notification;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.vo.NotificationPageVO;
 
 
 /**
@@ -18,4 +20,13 @@ public interface NotificationService extends IService<Notification> {
 	 * @param notification Notification
 	 */
 	void addNotification(Notification notification);
+
+	/**
+	 * 分页查询
+	 * @author Yang Fan
+	 * @since 2024/2/14 14:46
+	 * @param pageVO NotificationPageVO
+	 * @return PageInfo<Notification>
+	 */
+	PageInfo<Notification> page(NotificationPageVO pageVO);
 }

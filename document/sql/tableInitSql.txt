@@ -316,4 +316,11 @@ create table if not exists notification(
 alter table notification
 	add params_json varchar(2048) default null null comment '回调参数';
 
+alter table notification
+	add interface_url varchar(512) default null null comment '回调接口的url';
 
+alter table notification
+	add request_method varchar(16) default null null comment '请求类型（GET/POST/...）';
+
+alter table notification
+	add action_success tinyint default false null comment '回调是否执行成功';

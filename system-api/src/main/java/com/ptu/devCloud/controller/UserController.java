@@ -163,5 +163,18 @@ public class UserController {
     public CommonResult<List<String>> nameList(@RequestBody IdsVO vo){
         return CommonResult.successNoMsg(userService.getUserNameByIds(vo.getUserIds()));
     }
+
+    /**
+     * 以账号查询用户
+     * @author Yang Fan
+     * @since 2024/2/14 13:29
+     * @param account 账号
+     * @return CommonResult<User>
+     */
+    @GetMapping("/getByAccount")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<User> getByAccount(String account){
+        return CommonResult.successNoMsg(userService.getByAccount(account));
+    }
     
 }

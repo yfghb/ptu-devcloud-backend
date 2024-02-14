@@ -11,5 +11,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserTeamService extends IService<UserTeam> {
 
-	
+	/**
+	 * 添加用户-团队关系
+	 * @author Yang Fan
+	 * @since 2024/2/14 15:52
+	 * @param userTeam UserTeam
+	 */
+	void addUserTeam(UserTeam userTeam);
 }

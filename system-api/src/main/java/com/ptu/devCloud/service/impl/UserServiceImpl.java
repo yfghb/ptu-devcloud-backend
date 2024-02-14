@@ -173,6 +173,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectUserListByIds(userIds);
     }
 
+    @Override
+    public User getByAccount(String account) {
+        if(StrUtil.isEmpty(account))return null;
+        return userMapper.selectByAccount(account);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String LoginAccount) throws UsernameNotFoundException {

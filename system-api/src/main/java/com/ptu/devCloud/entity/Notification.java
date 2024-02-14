@@ -39,5 +39,15 @@ public class Notification extends BaseEntity implements Serializable {
 	@TableField(value = "params_json")
 	private String paramsJson;
 
+	/** 回调接口的url */
+	@TableField(value = "interface_url")
+	private String interfaceUrl;
 
+	/** 请求类型（GET/POST/...） */
+	@TableField(value = "request_method")
+	private String requestMethod;
+
+	/** 回调是否执行成功 */
+	@TableField(value = "action_success")
+	private Boolean actionSuccess;
 }

@@ -1,11 +1,15 @@
 package com.ptu.devCloud.mapper;
 
 
+import com.ptu.devCloud.entity.vo.NotificationPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Notification;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * NotificationMapper
@@ -61,6 +65,14 @@ public interface NotificationMapper extends BaseMapper<Notification> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Notification notification);
-	
+
+	/**
+	 * 条件查询
+	 * @author Yang Fan
+	 * @since 2024/2/14 14:45
+	 * @param params NotificationPageVO
+	 * @return List<Notification>
+	 */
+	List<Notification> selectListByQueryParams(@Param("params") NotificationPageVO params);
 	
 }

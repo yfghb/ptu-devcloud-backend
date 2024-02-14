@@ -14,6 +14,9 @@
 		<result column="update_by" property="updateBy" />
 		<result column="update_date" property="updateDate" />
 		<result column="params_json" property="paramsJson" />
+		<result column="interface_url" property="interfaceUrl" />
+		<result column="request_method" property="requestMethod" />
+		<result column="action_success" property="actionSuccess" />
 	</resultMap>
 
 	<!-- 表字段 -->
@@ -30,6 +33,9 @@
 		, t.update_by
 		, t.update_date
 		, t.params_json
+		, t.interface_url
+		, t.request_method
+		, t.action_success
 	</sql>
 
 
@@ -40,8 +46,40 @@
 		FROM notification t
 		WHERE id = #{id}
 	</select>
+    <select id="selectListByQueryParams" resultMap="BaseResultMap">
+		SELECT
+		<include refid="baseColumns" />
+		FROM notification t
+		<where>
+			<if test="params.searchType != null and params.searchType != '' and params.currentUserId != null">
+				<if test="params.searchType.equals('receive')">
+					t.receive_user = #{params.currentUserId}
+				</if>
+				<if test="params.searchType.equals('send')">
+					t.create_by = #{params.currentUserId}
+				</if>
+				<if test="params.searchType.equals('all')">
+					t.receive_user = #{params.currentUserId} or t.create_by = #{params.currentUserId}
+				</if>
+			</if>
+			<if test="params.unread != null">
+				and t.unread = #{params.unread}
+			</if>
+			<if test="params.startDate != null">
+				<![CDATA[
+					and t.create_date >= #{params.startDate}
+				]]>
+			</if>
+			<if test="params.endDate != null">
+				<![CDATA[
+					and t.create_date <= #{params.endDate}
+				]]>
+			</if>
+		</where>
+		ORDER BY t.create_date DESC
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
 	<insert id="insert" parameterType="com.ptu.devCloud.entity.Notification"
 			keyProperty="id" keyColumn="id" >
 		INSERT INTO notification
@@ -58,6 +96,9 @@
 			update_by,
 			update_date,
 			params_json,
+			interface_url,
+			request_method,
+			action_success,
 		</trim>
 		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
 			#{id},
@@ -72,6 +113,9 @@
 			#{updateBy},
 			#{updateDate},
 			#{paramsJson},
+			#{interfaceUrl},
+			#{requestMethod},
+			#{actionSuccess},
 		</trim>
 	</insert>
 
@@ -116,6 +160,15 @@
 			<if test="paramsJson != null">
 				params_json,
 			</if>
+			<if test="interfaceUrl != null">
+				interface_url,
+			</if>
+			<if test="requestMethod != null">
+				request_method,
+			</if>
+			<if test="actionSuccess != null">
+				action_success,
+			</if>
 		</trim>
 		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
 			<if test="id != null" >
@@ -154,6 +207,15 @@
 			<if test="paramsJson != null" >
 				#{paramsJson},
 			</if>
+			<if test="interfaceUrl != null" >
+				#{interfaceUrl},
+			</if>
+			<if test="requestMethod != null" >
+				#{requestMethod},
+			</if>
+			<if test="actionSuccess != null" >
+				#{actionSuccess},
+			</if>
 		</trim>
 	</insert>
 
@@ -172,6 +234,9 @@
 			update_by = #{updateBy},
 			update_date = #{updateDate},
 			params_json = #{paramsJson},
+			interface_url = #{interfaceUrl},
+			request_method = #{requestMethod},
+			action_success = #{actionSuccess},
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -213,6 +278,15 @@
 			</if>
 			<if test="paramsJson != null" >
 				params_json = #{paramsJson},
+			</if>
+			<if test="interfaceUrl != null" >
+				interface_url = #{interfaceUrl},
+			</if>
+			<if test="requestMethod != null" >
+				request_method = #{requestMethod},
+			</if>
+			<if test="actionSuccess != null" >
+				action_success = #{actionSuccess},
 			</if>
 		</set>
 		WHERE id = #{id}
