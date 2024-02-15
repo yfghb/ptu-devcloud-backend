@@ -1,10 +1,8 @@
 package com.ptu.devCloud.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.constants.CommonConstants;
-import com.ptu.devCloud.entity.LoginUser;
-import com.ptu.devCloud.entity.Team;
-import com.ptu.devCloud.entity.User;
-import com.ptu.devCloud.entity.UserTeam;
+import com.ptu.devCloud.entity.*;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TeamMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -123,5 +121,42 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team> implements Te
         userTeamList.forEach(obj -> userIds.add(obj.getUserId()));
         team.setUserList(userService.getUserListByIds(userIds));
         return team;
+    }
+
+    @Override
+    public void updateTeam(Team team) {
+        if(team == null || team.getId() == null || StrUtil.isEmpty(team.getTeamName())){
+            throw new JobException("参数错误");
+        }
+        teamMapper.updateIgnoreNull(team);
+    }
+
+    @Override
+    public List<DictItem> getTeamList(Long userId) {
+        if(userId == null)return new ArrayList<>();
+        return teamMapper.selectTeamListByUserId(userId);
+    }
+
+    @Override
+    public void changeTeam(Long teamId) {
+        if(teamId == null) throw new JobException("参数不能为空");
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(loginUser == null) throw new JobException("登录认证异常，请重新登录");
+        User user = loginUser.getUser();
+        Team team = teamMapper.selectById(teamId);
+        if(team == null) throw new JobException("团队不存在或已被删除");
+        user.setCurrentTeamId(teamId);
+        String userRedisKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
+        String userRedisToken = JwtUtil.generate(loginUser);
+        transaction.execute(action -> {
+            try {
+                userService.updateById(user);
+                redisUtils.set(userRedisKey, userRedisToken, 60 * 60 * 2);
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("切换团队失败，系统繁忙");
+            }
+        });
     }
 }

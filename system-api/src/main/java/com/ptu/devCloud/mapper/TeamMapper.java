@@ -1,11 +1,15 @@
 package com.ptu.devCloud.mapper;
 
 
+import com.ptu.devCloud.entity.DictItem;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Team;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * TeamMapper
@@ -61,6 +65,14 @@ public interface TeamMapper extends BaseMapper<Team> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Team team);
-	
+
+	/**
+	 * 团队列表下拉框
+	 * @author Yang Fan
+	 * @since 2024/2/15 15:09
+	 * @param userId 用户id
+	 * @return List<DictItem>
+	 */
+	List<DictItem> selectTeamListByUserId(@Param("userId") Long userId);
 	
 }

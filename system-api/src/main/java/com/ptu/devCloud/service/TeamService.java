@@ -1,7 +1,10 @@
 package com.ptu.devCloud.service;
 
+import com.ptu.devCloud.entity.DictItem;
 import com.ptu.devCloud.entity.Team;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 
 /**
@@ -27,4 +30,29 @@ public interface TeamService extends IService<Team> {
      * @return Team
      */
 	Team getTeamByUserId(Long userId);
+
+    /**
+     * 修改团队
+     * @author Yang Fan
+     * @since 2024/2/15 14:31
+     * @param team Team
+     */
+    void updateTeam(Team team);
+
+    /**
+     * 团队列表下拉框查询
+     * @author Yang Fan
+     * @since 2024/2/15 15:10
+     * @param userId Long 用户id
+     * @return List<DictItem>
+     */
+    List<DictItem> getTeamList(Long userId);
+
+    /**
+     * 切换团队
+     * @author Yang Fan
+     * @since 2024/2/15 15:53
+     * @param teamId Long 团队id
+     */
+    void changeTeam(Long teamId);
 }

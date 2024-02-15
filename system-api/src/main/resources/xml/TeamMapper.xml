@@ -34,8 +34,17 @@
 		FROM team t
 		WHERE id = #{id}
 	</select>
+    <select id="selectTeamListByUserId" resultType="com.ptu.devCloud.entity.DictItem">
+		SELECT
+		t.id AS "itemValue",
+		t.team_name AS "itemName"
+		FROM team t
+		left join user_team ut on t.id = ut.team_id
+		where ut.user_id = #{userId}
+		ORDER BY t.create_date DESC
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Team"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO team
