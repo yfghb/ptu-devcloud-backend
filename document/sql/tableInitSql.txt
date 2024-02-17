@@ -324,3 +324,16 @@ alter table notification
 
 alter table notification
 	add action_success tinyint default false null comment '回调是否执行成功';
+
+alter table project_team
+	add create_by bigint default null null comment '创建人';
+
+alter table project_team
+	add create_date datetime default null null comment '创建时间';
+
+alter table project_team
+	add update_by bigint default null null comment '更新人';
+
+alter table project_team
+	add update_date datetime default null null comment '更新时间';
+

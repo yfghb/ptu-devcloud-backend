@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptu.devCloud.mapper.ProjectMapper">
+	<resultMap id="BaseResultMap" type="com.ptu.devCloud.entity.Project">
+        <result column="id" property="id" />
+        <result column="project_name" property="projectName" />
+        <result column="project_remark" property="projectRemark" />
+        <result column="current_version" property="currentVersion" />
+        <result column="gitea_account" property="giteaAccount" />
+        <result column="gitea_password" property="giteaPassword" />
+        <result column="gitea_username" property="giteaUsername" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+        <result column="history_member" property="historyMember" />
+	</resultMap>  
+    
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+		 t.id
+		, t.project_name
+		, t.project_remark
+		, t.current_version
+		, t.gitea_account
+		, t.gitea_password
+		, t.gitea_username
+		, t.create_by
+		, t.create_date
+		, t.update_by
+		, t.update_date
+		, t.history_member
+    </sql> 
+    
+ 
+ 	<!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+		SELECT         
+        	<include refid="baseColumns" />
+		FROM project t
+		WHERE id = #{id}
+	</select>
+
+	<!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.ptu.devCloud.entity.Project"
+		keyProperty="id" keyColumn="id" >
+		INSERT INTO project
+    	<trim prefix="(" suffix=")" suffixOverrides=",">	 
+    		id,
+    		project_name,
+    		project_remark,
+    		current_version,
+    		gitea_account,
+    		gitea_password,
+    		gitea_username,
+    		create_by,
+    		create_date,
+    		update_by,
+    		update_date,
+    		history_member,
+    	</trim>
+    	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+        	#{id},                   
+        	#{projectName},                   
+        	#{projectRemark},                   
+        	#{currentVersion},                   
+        	#{giteaAccount},                   
+        	#{giteaPassword},                   
+        	#{giteaUsername},                   
+        	#{createBy},                   
+        	#{createDate},                   
+        	#{updateBy},                   
+        	#{updateDate},                   
+        	#{historyMember},                   
+    	</trim>
+	</insert>
+    
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.ptu.devCloud.entity.Project"
+        keyProperty="id" keyColumn="id" >
+        INSERT INTO project    
+		<trim prefix="(" suffix=")" suffixOverrides=",">	 
+			<if test="id != null">
+				id,
+			</if>
+			<if test="projectName != null">
+				project_name,
+			</if>
+			<if test="projectRemark != null">
+				project_remark,
+			</if>
+			<if test="currentVersion != null">
+				current_version,
+			</if>
+			<if test="giteaAccount != null">
+				gitea_account,
+			</if>
+			<if test="giteaPassword != null">
+				gitea_password,
+			</if>
+			<if test="giteaUsername != null">
+				gitea_username,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateDate != null">
+				update_date,
+			</if>
+			<if test="historyMember != null">
+				history_member,
+			</if>
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+			<if test="id != null" >
+				#{id},                    
+			</if>
+			<if test="projectName != null" >
+				#{projectName},                    
+			</if>
+			<if test="projectRemark != null" >
+				#{projectRemark},                    
+			</if>
+			<if test="currentVersion != null" >
+				#{currentVersion},                    
+			</if>
+			<if test="giteaAccount != null" >
+				#{giteaAccount},                    
+			</if>
+			<if test="giteaPassword != null" >
+				#{giteaPassword},                    
+			</if>
+			<if test="giteaUsername != null" >
+				#{giteaUsername},                    
+			</if>
+			<if test="createBy != null" >
+				#{createBy},                    
+			</if>
+			<if test="createDate != null" >
+				#{createDate},                    
+			</if>
+			<if test="updateBy != null" >
+				#{updateBy},                    
+			</if>
+			<if test="updateDate != null" >
+				#{updateDate},                    
+			</if>
+			<if test="historyMember != null" >
+				#{historyMember},                    
+			</if>
+		</trim>
+    </insert>
+
+	<!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.ptu.devCloud.entity.Project">
+    	UPDATE project
+     	<set>		
+			project_name = #{projectName},        
+			project_remark = #{projectRemark},        
+			current_version = #{currentVersion},        
+			gitea_account = #{giteaAccount},        
+			gitea_password = #{giteaPassword},        
+			gitea_username = #{giteaUsername},        
+			create_by = #{createBy},        
+			create_date = #{createDate},        
+			update_by = #{updateBy},        
+			update_date = #{updateDate},        
+			history_member = #{historyMember},        
+     	</set>	
+    	WHERE id = #{id}
+    </update>  
+    
+    
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.ptu.devCloud.entity.Project">
+    UPDATE project
+    	<set>
+		<if test="projectName != null" >
+			project_name = #{projectName},                 
+		</if>
+		<if test="projectRemark != null" >
+			project_remark = #{projectRemark},                 
+		</if>
+		<if test="currentVersion != null" >
+			current_version = #{currentVersion},                 
+		</if>
+		<if test="giteaAccount != null" >
+			gitea_account = #{giteaAccount},                 
+		</if>
+		<if test="giteaPassword != null" >
+			gitea_password = #{giteaPassword},                 
+		</if>
+		<if test="giteaUsername != null" >
+			gitea_username = #{giteaUsername},                 
+		</if>
+		<if test="createBy != null" >
+			create_by = #{createBy},                 
+		</if>
+		<if test="createDate != null" >
+			create_date = #{createDate},                 
+		</if>
+		<if test="updateBy != null" >
+			update_by = #{updateBy},                 
+		</if>
+		<if test="updateDate != null" >
+			update_date = #{updateDate},                 
+		</if>
+		<if test="historyMember != null" >
+			history_member = #{historyMember},                 
+		</if>
+    </set>
+    WHERE id = #{id}
+    </update>
+
+
+
+</mapper>

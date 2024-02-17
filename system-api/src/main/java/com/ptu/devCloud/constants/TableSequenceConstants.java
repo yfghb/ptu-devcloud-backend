@@ -27,4 +27,10 @@ public class TableSequenceConstants {
     public static final String UserTeam = "SEQ_USER_TEAM";
 
     public static final String Notification = "SEQ_NOTIFICATION";
+
+    public static final String Project = "SEQ_PROJECT";
+
+    public static final String ProjectRepository = "SEQ_PROJECT_REPOSITORY";
+
+    public static final String ProjectTeam = "SEQ_PROJECT_TEAM";
 }
