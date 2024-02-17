@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Project;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * ProjectMapper
@@ -61,6 +62,13 @@ public interface ProjectMapper extends BaseMapper<Project> {
      * @return 返回影响行数
      */
 	int updateIgnoreNull(Project project);
-	
-	
+
+	/**
+	 * 查询所属团队的项目列表
+	 * @author Yang Fan
+	 * @since 2024/2/17 17:18
+	 * @param teamId Long
+	 * @return List<Project>
+	 */
+	List<Project> selectProjectListByTeamId(@Param("teamId") Long teamId);
 }

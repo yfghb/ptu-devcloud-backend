@@ -40,8 +40,16 @@
 		FROM project t
 		WHERE id = #{id}
 	</select>
+    <select id="selectProjectListByTeamId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="baseColumns" />
+		FROM project t
+		LEFT JOIN project_team pt ON t.id = pt.project_id
+		WHERE pt.team_id = #{teamId}
+		ORDER BY t.create_date
+	</select>
 
-	<!-- 插入全部字段 -->
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Project"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO project

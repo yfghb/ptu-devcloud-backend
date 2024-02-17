@@ -12,7 +12,10 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.ProjectService;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -63,5 +66,11 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
                 throw new JobException("新增项目失败！系统繁忙");
             }
         });
+    }
+
+    @Override
+    public List<Project> getListByTeamId(Long teamId) {
+        if(teamId == null)return new ArrayList<>();
+        return projectMapper.selectProjectListByTeamId(teamId);
     }
 }
