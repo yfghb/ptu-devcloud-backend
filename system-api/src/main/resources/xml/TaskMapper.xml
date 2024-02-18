@@ -16,6 +16,8 @@
         <result column="create_date" property="createDate" />
         <result column="update_by" property="updateBy" />
         <result column="update_date" property="updateDate" />
+		<result column="team_id" property="teamId" />
+		<result column="project_id" property="projectId" />
 	</resultMap>  
     
     <!-- 表字段 -->
@@ -34,6 +36,8 @@
 		, t.create_date
 		, t.update_by
 		, t.update_date
+		, t.team_id
+		, t.project_id
     </sql> 
     
  
@@ -64,6 +68,8 @@
 		, t.create_date
 		, t.update_by
 		, t.update_date
+		, t.team_id
+		, t.project_id
 		, u.user_name as "currentOperatorName"
 		, (SELECT sub.user_name FROM user sub where t.create_by = sub.id) as "createUserName"
 		FROM task t
@@ -106,23 +112,46 @@
 			<if test="params.participant != null and params.participant != ''">
 				and FIND_IN_SET(#{params.participant}, t.participant) > 0
 			</if>
+			<if test="params.createUsers != null and params.createUsers.size() > 0">
+				and t.create_by in
+				<foreach item="item" collection="params.createUsers" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="params.currentOperators != null and params.currentOperators.size() > 0">
+				and t.current_operator in
+				<foreach item="item" collection="params.currentOperators" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="params.teamId != null">
+				and t.team_id = #{params.teamId}
+			</if>
+			<if test="params.projectIds != null and params.projectIds.size() > 0">
+				and t.project_id in
+				<foreach item="item" collection="params.projectIds" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 		</where>
 		ORDER BY t.create_date DESC
 	</select>
 	<select id="selectByIdsIgnoreRemark" resultMap="BaseResultMap">
 		SELECT
 			t.id
-			 , t.task_name
-			 , t.task_type
-			 , t.task_status
-			 , t.serial_number
-			 , t.current_operator
-			 , t.participant
-			 , t.correlation_ids
-			 , t.create_by
-			 , t.create_date
-			 , t.update_by
-			 , t.update_date
+			, t.task_name
+			, t.task_type
+			, t.task_status
+			, t.serial_number
+			, t.current_operator
+			, t.participant
+			, t.correlation_ids
+			, t.create_by
+			, t.create_date
+			, t.update_by
+			, t.update_date
+			, t.team_id
+			, t.project_id
 		FROM task t
 		where t.id IN
 		<foreach item="item" collection="ids" open="(" separator="," close=")">
@@ -168,6 +197,8 @@
     		create_date,
     		update_by,
     		update_date,
+			team_id,
+			project_id,
     	</trim>
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
         	#{id},                   
@@ -183,7 +214,9 @@
         	#{createBy},                   
         	#{createDate},                   
         	#{updateBy},                   
-        	#{updateDate},                   
+        	#{updateDate},
+			#{teamId},
+			#{projectId},
     	</trim>
 	</insert>
     
@@ -234,6 +267,12 @@
 			<if test="updateDate != null">
 				update_date,
 			</if>
+			<if test="teamId != null">
+				team_id,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
 		</trim>
 		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
 			<if test="id != null" >
@@ -278,6 +317,12 @@
 			<if test="updateDate != null" >
 				#{updateDate},                    
 			</if>
+			<if test="teamId != null" >
+				#{teamId},
+			</if>
+			<if test="projectId != null" >
+				#{projectId},
+			</if>
 		</trim>
     </insert>
 
@@ -297,8 +342,10 @@
 			create_by = #{createBy},        
 			create_date = #{createDate},        
 			update_by = #{updateBy},        
-			update_date = #{updateDate},        
-     	</set>	
+			update_date = #{updateDate},
+			team_id = #{teamId},
+			project_id = #{projectId},
+		</set>
     	WHERE id = #{id}
     </update>  
     
@@ -345,6 +392,12 @@
 		</if>
 		<if test="updateDate != null" >
 			update_date = #{updateDate},                 
+		</if>
+		<if test="teamId != null" >
+			team_id = #{teamId},
+		</if>
+		<if test="projectId != null" >
+			project_id = #{projectId},
 		</if>
     </set>
     WHERE id = #{id}
@@ -400,6 +453,12 @@
 			</if>
 			<if test="updateDate != null" >
 				update_date = #{updateDate},
+			</if>
+			<if test="teamId != null" >
+				team_id = #{teamId},
+			</if>
+			<if test="projectId != null" >
+				project_id = #{projectId},
 			</if>
 		</set>
 		WHERE serial_number = #{serialNumber}

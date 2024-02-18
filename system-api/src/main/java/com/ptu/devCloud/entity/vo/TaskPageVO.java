@@ -24,12 +24,27 @@ public class TaskPageVO extends PageVO implements Serializable {
     /** 任务编号 */
     private String serialNumber;
 
-    /** 当前操作人 */
+    /** 当前操作人（单个用户） */
     private Long currentOperator;
 
     /** 参与者（单个用户） */
     private String participant;
 
-    /** 创建人 */
+    /** 创建人（单个用户） */
     private Long createBy;
+
+    /** 创建人（多选） */
+    private List<String> createUsers;
+
+    /** 当前操作人（多选） */
+    private List<String> currentOperators;
+
+    /** 所属团队（单个） */
+    private Long teamId;
+
+    /** 所属项目（多选） */
+    private List<String> projectIds;
+
+
+
 }

@@ -159,4 +159,10 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team> implements Te
             }
         });
     }
+
+    @Override
+    public List<DictItem> getUserOptions(Long teamId) {
+        if(teamId == null)return new ArrayList<>();
+        return teamMapper.selectTeamMemberListOptions(teamId);
+    }
 }

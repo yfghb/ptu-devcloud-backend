@@ -55,4 +55,13 @@ public interface TeamService extends IService<Team> {
      * @param teamId Long 团队id
      */
     void changeTeam(Long teamId);
+
+    /**
+     * 查询团队成员列表下拉框
+     * @author Yang Fan
+     * @since 2024/2/18 16:16
+     * @param teamId 团队id
+     * @return List<DictItem>
+     */
+    List<DictItem> getUserOptions(Long teamId);
 }

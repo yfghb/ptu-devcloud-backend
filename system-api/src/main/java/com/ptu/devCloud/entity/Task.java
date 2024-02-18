@@ -46,6 +46,14 @@ public class Task extends BaseEntity implements Serializable {
 	@TableField(value = "correlation_ids")
 	private String correlationIds;
 
+	/** 所属团队 */
+	@TableField(value = "team_id")
+	private Long teamId;
+
+	/** 所属项目 */
+	@TableField(value = "project_id")
+	private Long projectId;
+
 	/** 当前操作人-名称 */
 	@TableField(exist = false)
 	private String currentOperatorName;
@@ -53,5 +61,5 @@ public class Task extends BaseEntity implements Serializable {
 	/** 创建人-名称 */
 	@TableField(exist = false)
 	private String createUserName;
-	
+
 }

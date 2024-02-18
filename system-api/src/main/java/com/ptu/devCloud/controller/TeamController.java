@@ -88,5 +88,18 @@ public class TeamController {
         teamService.changeTeam(teamId);
         return CommonResult.success("成功");
     }
+
+    /**
+     * 查询团队成员列表下拉框
+     * @author Yang Fan
+     * @since 2024/2/18 16:16
+     * @param teamId 团队id
+     * @return CommonResult<List<DictItem>>
+     */
+    @GetMapping("/getUserOptions")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<DictItem>> getUserOptions(Long teamId){
+        return CommonResult.successNoMsg(teamService.getUserOptions(teamId));
+    }
     
 }

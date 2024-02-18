@@ -36,12 +36,21 @@
 	</select>
     <select id="selectTeamListByUserId" resultType="com.ptu.devCloud.entity.DictItem">
 		SELECT
-		t.id AS "itemValue",
-		t.team_name AS "itemName"
+			t.id AS "itemValue",
+			t.team_name AS "itemName"
 		FROM team t
-		left join user_team ut on t.id = ut.team_id
-		where ut.user_id = #{userId}
+		LEFT JOIN user_team ut ON t.id = ut.team_id
+		WHERE ut.user_id = #{userId}
 		ORDER BY t.create_date DESC
+	</select>
+    <select id="selectTeamMemberListOptions" resultType="com.ptu.devCloud.entity.DictItem">
+		SELECT
+			t.id AS "itemValue",
+			t.user_name AS "itemName"
+		FROM user t
+		LEFT JOIN user_team ut ON t.id = ut.user_id
+		WHERE ut.team_id = #{teamId}
+		ORDER BY ut.create_date DESC
 	</select>
 
     <!-- 插入全部字段 -->

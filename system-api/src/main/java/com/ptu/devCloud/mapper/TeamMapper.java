@@ -74,5 +74,14 @@ public interface TeamMapper extends BaseMapper<Team> {
 	 * @return List<DictItem>
 	 */
 	List<DictItem> selectTeamListByUserId(@Param("userId") Long userId);
+
+	/**
+	 * 团队成员列表下拉框
+	 * @author Yang Fan
+	 * @since 2024/2/18 16:15
+	 * @param teamId 团队id
+	 * @return List<DictItem>
+	 */
+	List<DictItem> selectTeamMemberListOptions(@Param("teamId") Long teamId);
 	
 }
