@@ -71,7 +71,7 @@
 		, t.team_id
 		, t.project_id
 		, u.user_name as "currentOperatorName"
-		, (SELECT sub.user_name FROM user sub where t.create_by = sub.id) as "createUserName"
+		, (SELECT sub_u.user_name FROM user sub_u where t.create_by = sub_u.id) as "createUserName"
 		FROM task t
 		left join user u on t.current_operator = u.id
 		<where>
@@ -163,7 +163,9 @@
 		SELECT
 		<include refid="baseColumns" />
 		, u.user_name as "currentOperatorName"
-		, (SELECT sub.user_name FROM user sub WHERE t.create_by = sub.id) as "createUserName"
+		, (SELECT sub_u.user_name FROM user sub_u WHERE t.create_by = sub_u.id) as "createUserName"
+		, (SELECT sub_t.team_name FROM team sub_t WHERE t.team_id = sub_t.id) as "teamName"
+		, (SELECT sub_p.project_name FROM project sub_p WHERE t.project_id = sub_p.id) as "projectName"
 		FROM task t
 		LEFT JOIN user u ON t.current_operator = u.id
 		WHERE t.serial_number = #{serialNumber}

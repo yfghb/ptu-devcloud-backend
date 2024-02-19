@@ -62,4 +62,12 @@ public class Task extends BaseEntity implements Serializable {
 	@TableField(exist = false)
 	private String createUserName;
 
+	/** 所著团队-名称 */
+	@TableField(exist = false)
+	private String teamName;
+
+	/** 所属项目-名称 */
+	@TableField(exist = false)
+	private String projectName;
+
 }

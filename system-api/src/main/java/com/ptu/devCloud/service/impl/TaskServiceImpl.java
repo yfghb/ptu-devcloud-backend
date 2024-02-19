@@ -126,6 +126,34 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
             task.setOperationLog(log + generateOperationLog(task.getTaskStatus()));
         }
+        if(!Objects.equals(origin.getCurrentOperator(), task.getCurrentOperator())){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String now = formatter.format(LocalDateTime.now()) + " ";
+            String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
+            User beforeOperator = userService.getById(origin.getCurrentOperator());
+            String taskUserName = "";
+            String beforeOperatorName = beforeOperator == null ? "未知用户" : beforeOperator.getUserName();
+            if(task.getCurrentOperator() != null){
+                User user = userService.getById(task.getCurrentOperator());
+                taskUserName = user == null ? "未知用户" : user.getUserName();
+            }
+            String newLog = now + beforeOperatorName + " 将任务转派给 " + taskUserName + "##";
+            task.setOperationLog(log + newLog);
+            // 更新参与者
+            String participant = task.getParticipant();
+            Set<String> set = new HashSet<>();
+            StringBuilder builder = new StringBuilder();
+            if(StrUtil.isNotEmpty(participant)){
+                for(String id:participant.split(",")){
+                    if(set.add(id))builder.append(id).append(",");
+                }
+            }
+            if(set.add(task.getCurrentOperator().toString()))builder.append(task.getCurrentOperator()).append(",");
+            if(builder.length() > 0 && builder.toString().charAt(builder.length()-1) == ','){
+                builder.deleteCharAt(builder.length()-1);
+            }
+            task.setParticipant(builder.toString());
+        }
         // todo 校验用户是否有编辑该任务的权限
         taskMapper.updateIgnoreNull(task);
     }
