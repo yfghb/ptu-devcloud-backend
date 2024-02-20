@@ -5,15 +5,15 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ptu.devCloud.entity.LoginUser;
-import com.ptu.devCloud.entity.Task;
-import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.*;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ptu.devCloud.service.ProjectTeamService;
 import com.ptu.devCloud.service.UserService;
+import com.ptu.devCloud.service.UserTeamService;
 import com.ptu.devCloud.utils.RedisUtils;
 import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.aop.framework.AopContext;
@@ -46,6 +46,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private UserTeamService userTeamService;
+
+    @Resource
+    private ProjectTeamService projectTeamService;
 
     @Resource
     private TransactionTemplate transaction;
@@ -122,6 +128,18 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         if(task == null || task.getId() == null)return;
         Task origin = taskMapper.selectById(task.getId());
         if(origin == null)throw new JobException("当前任务已经被删除！");
+        // 校验用户是否有编辑该任务的权限
+        checkTeamAndProject(task);
+        if(!origin.getTeamId().equals(task.getTeamId()) || !origin.getProjectId().equals(task.getProjectId())){
+            // 校验团队-项目关系是否存在
+            List<ProjectTeam> list = projectTeamService.lambdaQuery()
+                    .eq(ProjectTeam::getTeamId, task.getTeamId())
+                    .eq(ProjectTeam::getProjectId, task.getProjectId())
+                    .list();
+            if(list == null || list.size() != 1){
+                throw new JobException("操作被拒绝，原因：错误的团队-项目关系。请检查该团队是否存在所属项目信息");
+            }
+        }
         if(!origin.getTaskStatus().equals(task.getTaskStatus())){
             String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
             task.setOperationLog(log + generateOperationLog(task.getTaskStatus()));
@@ -154,12 +172,33 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             }
             task.setParticipant(builder.toString());
         }
-        // todo 校验用户是否有编辑该任务的权限
         taskMapper.updateIgnoreNull(task);
+    }
+
+    private void checkTeamAndProject(Task task){
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        boolean success = false;
+        if(loginUser == null){
+            throw new JobException("登录认证异常，清重新登录");
+        }
+        if(task == null)return;
+        User user = loginUser.getUser();
+        List<UserTeam> list = userTeamService.lambdaQuery().eq(UserTeam::getUserId, user.getId()).list();
+        for(UserTeam userTeam:list){
+            if (userTeam.getTeamId().equals(task.getTeamId())) {
+                success = true;
+                break;
+            }
+        }
+        if(!success){
+            throw new JobException("无法编辑当前任务！原因：您不在所属团队中。");
+        }
     }
 
     @Override
     public void changeStatus(String serialNumber, String taskStatus) {
+        Task task = taskMapper.selectBySerialNumber(serialNumber);
+        checkTeamAndProject(task);
         transaction.execute(action -> {
             try{
                 if("todo".equals(taskStatus) || "done".equals(taskStatus) || "close".equals(taskStatus)){
@@ -305,7 +344,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         if(task == null)throw new JobException("当前任务已被删除！");
         if("close".equals(task.getTaskStatus()))throw new JobException("当前任务已关闭，不能转派！");
         if(curUser == null || changeToUser == null) throw new JobException("找不到用户，不能转派");
-        // todo 校验用户与转派用户是否属于同一团队同一项目里
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String now = formatter.format(LocalDateTime.now()) + " ";
         String log = task.getOperationLog() == null ? "" : task.getOperationLog();
