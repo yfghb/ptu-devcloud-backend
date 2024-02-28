@@ -75,6 +75,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Override
     public boolean hasPermission(String permissionName) {
         if(CommonConstants.IGNORE_PERMISSION.equals(permissionName))return true;
+        if(SecurityUtils.getLoginUser() == null)return false;
         List<String> permissions = SecurityUtils.getLoginUser().getPermissions();
         if(permissions == null){
             return false;

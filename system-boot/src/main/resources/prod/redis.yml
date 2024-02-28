@@ -1,0 +1,22 @@
+spring:
+  redis:
+    host: myredis
+    port: 6379
+    # 指定客户端为jedis
+    client-type: jedis
+    jedis:
+      pool:
+        # 是否开启连接池
+        enabled: true
+        # max-active和max-idle这两个值最好设置得比较接近一些，不然maxidle设置得太小，单方面把maxactive调得很高，这样会导致频繁的连接销毁和新建，这跟连接池的理念就相悖了。
+        # 最主要参数，配置连接池同时能维持的最大连接数，如果客户端理论上需要100个连接，则这个值设为100。
+        max-active: 20
+        # 如果客户端一段时间内不需要使用连接，又一直把所有连接池中的所有连接都维持在活动状态是很浪费资源的，所以maxIdle这个选项告诉连接池，如果客户端没有需求，那么最多维持maxIdle个空闲连接。
+        max-idle: 20
+        # 和maxIdle类似，maxIdle告诉连接池最多维持多少个空闲连接，minIdle告诉tomcat即使客户端没有需求，也要至少维持多少个空闲连接，以应对客户端的突发需求。
+        min-idle: 3
+        # 连接池出借连接的最长期限，单位是毫秒
+        max-wait: 5s
+        # 空闲对象逐出器线程的运行间隔时间。当为正值时，空闲对象逐出器线程启动，否则不执行空闲对象逐出。
+        time-between-eviction-runs: 1s
+    connect-timeout: 2000
