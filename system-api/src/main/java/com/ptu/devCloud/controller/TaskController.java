@@ -5,6 +5,7 @@ import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Task;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.LinkTaskVO;
+import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
@@ -189,6 +190,19 @@ public class TaskController {
                                                       @RequestParam("taskId") Long taskId){
         taskService.changeCurrentOperator(currentUserId,changeToUserId,taskId);
         return CommonResult.success("成功");
+    }
+
+    /**
+     * 条件查询 任务看板中的卡片
+     * @author Yang Fan
+     * @since 2024/3/9 18:58
+     * @param params TaskPageVO
+     * @return CommonResult<List<TaskCardVO>
+     */
+    @PostMapping("/getTaskCardList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<TaskCardVO>> getTaskCardList(@RequestBody TaskPageVO params){
+        return CommonResult.successNoMsg(taskService.getTaskCardList(params));
     }
 
 

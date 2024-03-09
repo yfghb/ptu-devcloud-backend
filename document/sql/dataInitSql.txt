@@ -3,8 +3,8 @@ use ptu_dev_cloud;
 
 
 -- [init user start]
-INSERT INTO user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar) VALUES (1, 0, '2023-11-25 10:52:43', null, null, '1', 'admin', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '', '', '用户admin', null);
-INSERT INTO user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar) VALUES (2, 0, '2023-11-25 10:52:43', null, null, '1', 'test', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '', '', '用户test', null);
+INSERT user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar, current_team_id) VALUES (1, 0, '2023-11-25 10:52:43', 1, '2024-02-17 17:38:35', '1', 'admin', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '279303278@qq.com', '15859182373', '用户admin', null, 12);
+INSERT user (id, create_by, create_date, update_by, update_date, status, login_account, login_password, email, phone_number, user_name, avatar, current_team_id) VALUES (2, 0, '2023-11-25 10:52:43', 2, '2024-02-14 17:02:50', '1', 'test', '$2a$10$sOloiDz8RJ.w4Bh1.1EuOOfLixsrRvou1GijgLUwnxhsFIqFM.cBO', '123456789@163.com', '15260252817', '用户test', null, 12);
 -- [init user start]
 
 
@@ -16,7 +16,7 @@ INSERT INTO role (id, create_by, create_date, update_by, update_date, role_name,
 
 -- [init permission start]
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (10, null, null, null, null, 'workplace', 0, 10, '/workplace', '@/pages/workplace', 'M', 1, 1, null, 'DashboardOutlined', '', '_self', '工作台', null);
-INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (20, null, null, null, null, 'table', 0, 20, '/table', '@/pages/table', 'M', 1, 1, null, 'TableOutlined', '', '_self', '表格', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (20, null, null, 100, '2024-01-19 10:37:14', 'table', 0, 20, '/table', '@/pages/table', 'M', 1, 1, null, 'TableOutlined', '', '_self', '表格', null);
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (30, null, null, 100, '2023-11-29 18:01:19', 'personal', 0, 30, '/personal', '@/pages/personal', 'M', 1, 1, null, 'UserOutlined', '', '_self', '个人中心', null);
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (40, null, null, 100, '2024-01-15 09:33:17', 'system', 0, 40, '/system', '@/components/layout/BlankView.vue', 'M', 1, 1, 'system-view', 'SettingOutlined', '', '_self', '系统管理', null);
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (50, null, null, 100, '2024-01-15 09:34:30', 'menu', 40, 10, '/system/menu', '@/pages/system/menu', 'M', 1, 1, 'system-menu-view', null, '', '_self', '菜单管理', 'system');
@@ -35,36 +35,53 @@ INSERT INTO permission (id, create_by, create_date, update_by, update_date, name
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (119, 0, '2024-01-15 09:49:25', 100, '2024-01-17 09:26:25', 'role_add_btn', 103, 1, '/role_add_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-role-add', null, '', '_self', 'role_add_btn', 'role');
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (120, 0, '2024-01-15 09:50:08', 100, '2024-01-17 09:26:30', 'role_edit_btn', 103, 2, '/role_edit_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-role-edit', null, '', '_self', 'role_edit_btn', 'role');
 INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (121, 0, '2024-01-15 09:50:41', 100, '2024-01-17 09:26:35', 'role_delete_btn', 103, 3, '/role_delete_btn', '@/pages/Exp404.vue', 'B', 0, 1, 'system-role-delete', null, '', '_self', 'role_delete_btn', 'role');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (122, 0, '2024-01-24 09:35:51', 100, '2024-01-24 09:38:24', 'develop', 0, 50, '/develop', '@/components/layout/BlankView.vue', 'M', 1, 1, 'develop-view', 'BranchesOutlined', '', '_self', '研发管理', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (123, 1, '2024-01-24 15:47:16', null, null, 'project', 0, 45, '/project', '@/components/layout/BlankView.vue', 'M', 1, 1, 'project-view', 'FolderOpenOutlined', '', '_self', '项目管理', null);
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (124, 1, '2024-01-25 09:58:51', 1, '2024-02-05 13:39:07', 'task', 122, 2, '/develop/task', '@/pages/develop/task', 'M', 1, 1, 'task-view', null, '', '_self', '任务列表', 'develop');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (125, 1, '2024-01-28 12:42:16', 1, '2024-01-28 14:01:10', 'taskDetail', 122, 2, '/develop/taskDetail/:serialNumber', '@/pages/develop/task/module/TaskDetail.vue', 'M', 0, 1, null, null, '', '_self', '任务详细', 'develop');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (126, 1, '2024-02-05 13:38:48', null, null, 'myTask', 122, 1, '/develop/myTask', '@/pages/develop/myTask', 'M', 1, 1, null, null, '', '_self', '我的任务', 'develop');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (127, 1, '2024-02-08 13:20:38', null, null, 'projectCenter', 123, 1, '/project/projectCenter', '@/pages/project/projectCenter', 'M', 1, 1, null, null, '', '_self', '项目中心', 'project');
+INSERT INTO permission (id, create_by, create_date, update_by, update_date, name, parent_id, order_num, path, component, permission_type, render_menu, status, permission, icon, remark, target, title, parent) VALUES (128, 1, '2024-02-11 13:10:20', null, null, 'teamManage', 123, 2, '/project/teamManage', '@/pages/project/teamManage', 'M', 1, 1, null, null, '', '_self', '团队管理', 'project');
 -- [init permission end]
 
 
 -- [init role_permission start]
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (1, 0, '2024-01-15 10:13:41', null, null, 1, 10);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (2, 0, '2024-01-15 10:13:41', null, null, 1, 20);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (3, 0, '2024-01-15 10:13:41', null, null, 1, 30);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (4, 0, '2024-01-15 10:13:41', null, null, 1, 102);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (5, 0, '2024-01-15 10:13:41', null, null, 1, 106);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (6, 0, '2024-01-15 10:13:41', null, null, 1, 111);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (7, 0, '2024-01-15 10:13:41', null, null, 1, 112);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (8, 0, '2024-01-15 10:13:41', null, null, 1, 113);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (9, 0, '2024-01-15 10:13:41', null, null, 1, 40);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (10, 0, '2024-01-15 10:13:41', null, null, 1, 50);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (11, 0, '2024-01-15 10:13:41', null, null, 1, 60);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (12, 0, '2024-01-15 10:13:41', null, null, 1, 103);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (13, 0, '2024-01-15 10:13:41', null, null, 1, 114);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (14, 0, '2024-01-15 10:13:41', null, null, 1, 115);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (15, 0, '2024-01-15 10:13:41', null, null, 1, 116);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (16, 0, '2024-01-15 10:13:41', null, null, 1, 117);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (17, 0, '2024-01-15 10:13:41', null, null, 1, 118);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (18, 0, '2024-01-15 10:13:41', null, null, 1, 119);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (19, 0, '2024-01-15 10:13:41', null, null, 1, 120);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (20, 0, '2024-01-15 10:13:41', null, null, 1, 121);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (21, 0, '2024-01-17 14:43:39', null, null, 2, 30);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (22, 0, '2024-01-17 14:43:39', null, null, 2, 20);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (23, 0, '2024-01-17 14:43:39', null, null, 2, 10);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (24, 0, '2024-01-17 14:43:39', null, null, 2, 114);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (25, 0, '2024-01-17 14:43:39', null, null, 2, 102);
-INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (26, 0, '2024-01-17 14:43:39', null, null, 2, 111);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (91, 1, '2024-01-25 10:03:19', null, null, 1, 10);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (92, 1, '2024-01-25 10:03:19', null, null, 1, 20);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (93, 1, '2024-01-25 10:03:19', null, null, 1, 30);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (94, 1, '2024-01-25 10:03:19', null, null, 1, 102);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (95, 1, '2024-01-25 10:03:19', null, null, 1, 106);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (96, 1, '2024-01-25 10:03:19', null, null, 1, 111);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (97, 1, '2024-01-25 10:03:19', null, null, 1, 112);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (98, 1, '2024-01-25 10:03:19', null, null, 1, 113);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (99, 1, '2024-01-25 10:03:19', null, null, 1, 40);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (100, 1, '2024-01-25 10:03:19', null, null, 1, 50);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (101, 1, '2024-01-25 10:03:19', null, null, 1, 60);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (102, 1, '2024-01-25 10:03:19', null, null, 1, 103);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (103, 1, '2024-01-25 10:03:19', null, null, 1, 114);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (104, 1, '2024-01-25 10:03:19', null, null, 1, 115);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (105, 1, '2024-01-25 10:03:19', null, null, 1, 116);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (106, 1, '2024-01-25 10:03:19', null, null, 1, 117);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (107, 1, '2024-01-25 10:03:19', null, null, 1, 118);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (108, 1, '2024-01-25 10:03:19', null, null, 1, 119);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (109, 1, '2024-01-25 10:03:19', null, null, 1, 120);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (110, 1, '2024-01-25 10:03:19', null, null, 1, 121);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (111, 1, '2024-01-25 10:03:19', null, null, 1, 123);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (112, 1, '2024-01-25 10:03:19', null, null, 1, 124);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (113, 1, '2024-01-25 10:03:19', null, null, 1, 122);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (132, 1, '2024-02-12 16:19:56', null, null, 2, 30);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (133, 1, '2024-02-12 16:19:56', null, null, 2, 20);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (134, 1, '2024-02-12 16:19:56', null, null, 2, 10);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (135, 1, '2024-02-12 16:19:56', null, null, 2, 114);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (136, 1, '2024-02-12 16:19:56', null, null, 2, 102);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (137, 1, '2024-02-12 16:19:56', null, null, 2, 111);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (138, 1, '2024-02-12 16:19:56', null, null, 2, 128);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (139, 1, '2024-02-12 16:19:56', null, null, 2, 122);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (140, 1, '2024-02-12 16:19:56', null, null, 2, 126);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (141, 1, '2024-02-12 16:19:56', null, null, 2, 124);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (142, 1, '2024-02-12 16:19:56', null, null, 2, 125);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (143, 1, '2024-02-12 16:19:56', null, null, 2, 123);
+INSERT INTO role_permission (id, create_by, create_date, update_by, update_date, role_id, permission_id) VALUES (144, 1, '2024-02-12 16:19:56', null, null, 2, 127);
 -- [init role_permission end]
 
 
@@ -75,35 +92,49 @@ INSERT INTO user_role (id, create_by, create_date, update_by, update_date, user_
 
 
 -- [init table_sequence start]
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (1, 'SEQ_METHOD_LOG', 1, 1, '14ebafd8c6f24bd7ad52ee04856ad908', null, '2023-12-22 19:15:27', 100, '2024-01-17 14:43:40');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (1, 'SEQ_METHOD_LOG', 152, 1, '7d6406ac81b44323a7f7e23d7bc827ed', null, '2023-12-22 19:15:27', null, '2024-02-27 16:31:46');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (2, 'SEQ_USER', 3, 1, null, null, '2023-12-22 19:15:27', null, null);
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (3, 'SEQ_PERMISSION', 122, 1, 'd37af2c3d66f4fe881ac27e9e0b09427', null, '2023-12-22 19:15:27', 100, '2024-01-15 15:30:23');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (3, 'SEQ_PERMISSION', 129, 1, 'f96c5ca55a994176a815d281b2ceb731', null, '2023-12-22 19:15:27', 1, '2024-02-11 13:10:20');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (4, 'SEQ_ROLE', 3, 1, 'e1e40f9eea474defbc4d0aa5823c38a6', null, '2023-12-22 19:15:27', 100, '2024-01-15 17:08:04');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (5, 'SEQ_USER_ROLE', 3, 1, '83ac7086f75947878af08be0cd90fbc2', null, '2023-12-22 19:15:27', 100, '2024-01-15 17:08:44');
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (6, 'SEQ_ROLE_PERMISSION', 27, 1, 'a335486c66c147fea4a6525f2ae46e48', null, '2023-12-22 19:15:27', 100, '2024-01-17 14:43:39');
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (7, 'SEQ_DICT', 3, 1, 'dd122a602f5e413ba788843f8b7bb3b8', null, '2024-01-10 12:15:10', 100, '2024-01-15 16:09:27');
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (8, 'SEQ_DICT_ITEM', 5, 1, 'dc3fa00fa53b4dbba705613dd7dc0248', null, '2024-01-10 12:15:10', 100, '2024-01-17 14:25:34');
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (9, 'SEQ_TASK', 1, 1, null, null, '2024-01-24 15:41:01', null, null);
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (10, 'SEQ_TASK_REMARK', 1, 1, null, null, '2024-01-24 15:41:01', null, null);
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (11, 'SEQ_PROJECT', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (6, 'SEQ_ROLE_PERMISSION', 145, 1, '35049a0255ee4336865133e4b336b973', null, '2023-12-22 19:15:27', 1, '2024-02-12 16:19:56');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (7, 'SEQ_DICT', 11, 1, 'bacdc5cc35194c76827bff4e95610aeb', null, '2024-01-10 12:15:10', 1, '2024-02-12 13:07:11');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (8, 'SEQ_DICT_ITEM', 18, 1, '923655f692aa42fc9cfab7a701f24e64', null, '2024-01-10 12:15:10', 1, '2024-02-12 13:07:11');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (9, 'SEQ_TASK', 27, 1, 'a648b7862c8f423c8074b0b9e3a388e1', null, '2024-01-24 15:41:01', 1, '2024-02-04 15:34:08');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (10, 'SEQ_TASK_REMARK', 3, 1, '5e5b872aa26a41ff873c05ef1b8eff40', null, '2024-01-24 15:41:01', 1, '2024-02-02 12:47:15');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (11, 'SEQ_PROJECT', 6, 1, '16280b1c6210436192ead79449d2fd3c', null, '2024-02-08 14:21:43', 1, '2024-02-18 13:59:36');
 INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (12, 'SEQ_PROJECT_REPOSITORY', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (13, 'SEQ_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (14, 'SEQ_USER_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
-INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (15, 'SEQ_PROJECT_TEAM', 1, 1, null, null, '2024-02-08 14:21:43', null, null);
-insert into table_sequence (sequence_name, create_date) value ('SEQ_NOTIFICATION', now());
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (13, 'SEQ_TEAM', 14, 1, '06f22cc7bf4d470e8b8a07bb06920ce1', null, '2024-02-08 14:21:43', 1, '2024-02-15 15:27:56');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (14, 'SEQ_USER_TEAM', 13, 1, '7a13e71cf74b4afc9acac33d8c6372b2', null, '2024-02-08 14:21:43', 1, '2024-02-15 15:27:56');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (15, 'SEQ_PROJECT_TEAM', 4, 1, 'b388cf5d18604490bfa23ecc7f63ed28', null, '2024-02-08 14:21:43', 1, '2024-02-18 13:59:36');
+INSERT INTO table_sequence (id, sequence_name, table_id, step, version, create_by, create_date, update_by, update_date) VALUES (16, 'SEQ_NOTIFICATION', 5, 1, '4ffc565fae2e4542ba8b5b61b0c284be', null, '2024-02-13 15:25:16', 1, '2024-02-14 17:00:36');
 -- [init table_sequence end]
 
 
 -- [init dict start]
-INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (1, '通用状态', 'status', 0, '2024-01-11 10:48:07', 100, '2024-01-12 14:08:28', '1');
-INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (2, '接口请求状态', 'request_status', 0, '2024-01-11 17:17:07', 100, '2024-01-17 14:25:34', '1');
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (1, '通用状态', 'status', 0, '2024-01-11 10:48:07', 100, '2024-01-19 09:38:46', '1');
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (2, '接口请求状态', 'request_status', 0, '2024-01-11 17:17:07', 100, '2024-01-22 15:17:03', '1');
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (3, '任务类型', 'task_type', 1, '2024-01-24 09:45:01', 1, '2024-01-24 12:03:27', '1');
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (9, '任务状态', 'task_status', 1, '2024-01-25 10:12:05', null, null, '1');
+INSERT INTO dict (id, dict_name, dict_code, create_by, create_date, update_by, update_date, status) VALUES (10, '团队的加入方式', 'team_join', 1, '2024-02-12 13:07:11', null, null, '1');
 -- [init dict end]
 
 
 -- [init dict_item start]
-INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (1, 1, '启用', '1', 0, '2024-01-12 14:08:28', 100, '2024-01-12 13:46:59', '1', 1);
-INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (2, 1, '禁用', '0', 0, '2024-01-12 14:08:28', 100, '2024-01-12 13:46:59', '1', 2);
-INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (3, 2, '正常', '1', 0, '2024-01-17 14:25:34', 100, '2024-01-12 13:34:17', '1', 1);
-INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (4, 2, '异常', '0', 0, '2024-01-17 14:25:34', 100, '2024-01-12 13:34:17', '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (1, 1, '启用', '1', 0, '2024-01-19 09:38:46', 100, '2024-01-12 13:46:59', '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (2, 1, '禁用', '0', 0, '2024-01-19 09:38:46', 100, '2024-01-12 13:46:59', '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (3, 2, '正常', '1', 0, '2024-01-22 15:17:03', 100, '2024-01-12 13:34:17', '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (4, 2, '异常', '0', 0, '2024-01-22 15:17:03', 100, '2024-01-12 13:34:17', '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (5, 3, '需求单', 'req', 1, '2024-01-24 12:03:27', null, null, '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (6, 3, '研发单', 'dev', 1, '2024-01-24 12:03:27', null, null, '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (7, 3, '测试单', 'test', 1, '2024-01-24 12:03:27', null, null, '1', 3);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (8, 3, '缺陷单', 'bug', 1, '2024-01-24 12:03:27', null, null, '1', 4);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (11, 9, '新创建', 'new', 1, '2024-01-25 10:12:05', null, null, '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (12, 9, '进行中', 'todo', 1, '2024-01-25 10:12:05', null, null, '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (13, 9, '已完成', 'done', 1, '2024-01-25 10:12:05', null, null, '1', 3);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (14, 9, '已关闭', 'close', 1, '2024-01-25 10:12:05', null, null, '1', 4);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (15, 10, '仅内部邀请', 'invite-only', 1, '2024-02-12 13:07:11', null, null, '1', 1);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (16, 10, '审核后加入', 'check-join', 1, '2024-02-12 13:07:11', null, null, '1', 2);
+INSERT INTO dict_item (id, dict_id, item_name, item_value, create_by, create_date, update_by, update_date, status, order_num) VALUES (17, 10, '自由加入', 'free-join', 1, '2024-02-12 13:07:11', null, null, '1', 3);
 -- [init dict_item end]
 

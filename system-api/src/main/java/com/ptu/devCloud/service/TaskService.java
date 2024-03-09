@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import java.util.List;
 
@@ -111,4 +112,14 @@ public interface TaskService extends IService<Task> {
      * @param taskId 任务id
      */
     void changeCurrentOperator(Long currentUserId, Long changeToUserId, Long taskId);
+
+
+    /**
+     * 条件查询 任务看板中的卡片
+     * @author Yang Fan
+     * @since 2024/3/9 18:58
+     * @param params TaskPageVO
+     * @return List<TaskCardVO>
+     */
+    List<TaskCardVO> getTaskCardList(TaskPageVO params);
 }

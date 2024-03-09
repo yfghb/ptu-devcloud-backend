@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.*;
 import com.ptu.devCloud.entity.vo.IdsVO;
+import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
@@ -367,6 +368,36 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         }
         task.setParticipant(builder.toString());
         taskMapper.updateIgnoreNull(task);
+    }
+
+    @Override
+    public List<TaskCardVO> getTaskCardList(TaskPageVO params) {
+        List<Task> tasks = taskMapper.selectListByQueryParams(params);
+        TaskCardVO newCard = new TaskCardVO();
+        TaskCardVO todoCard = new TaskCardVO();
+        TaskCardVO doneCard = new TaskCardVO();
+        TaskCardVO closeCard = new TaskCardVO();
+        List<Task> newTaskList = new ArrayList<>();
+        List<Task> todoTaskList = new ArrayList<>();
+        List<Task> doneTaskList = new ArrayList<>();
+        List<Task> closeTaskList = new ArrayList<>();
+        newCard.setTitle("新创建 New");
+        newCard.setTasks(newTaskList);
+        todoCard.setTitle("进行中 Todo");
+        todoCard.setTasks(todoTaskList);
+        doneCard.setTitle("已完成 Done");
+        doneCard.setTasks(doneTaskList);
+        closeCard.setTitle("已关闭 Close");
+        closeCard.setTasks(closeTaskList);
+        tasks.forEach((task -> {
+            switch (task.getTaskStatus()) {
+                case "new":newTaskList.add(task);break;
+                case "todo":todoTaskList.add(task);break;
+                case "done":doneTaskList.add(task);break;
+                case "close":closeTaskList.add(task);break;
+            }
+        }));
+        return Arrays.asList(newCard, todoCard, doneCard, closeCard);
     }
 
     private String generateOperationLog(String taskStatus){
