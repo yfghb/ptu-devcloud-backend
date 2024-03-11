@@ -343,3 +343,4 @@ alter table task
 alter table task
 	add project_id bigint not null comment '所属项目';
 
+alter table project alter column current_version set default 'V1.0.0';

@@ -43,13 +43,33 @@
     <select id="selectProjectListByTeamId" resultMap="BaseResultMap">
 		SELECT
 			<include refid="baseColumns" />
+			, u.user_name AS "createName"
 		FROM project t
 		LEFT JOIN project_team pt ON t.id = pt.project_id
+		LEFT JOIN user u ON t.create_by = u.id
 		WHERE pt.team_id = #{teamId}
 		ORDER BY t.create_date
 	</select>
+	<select id="selectMemberCountByProjectId" resultType="java.lang.Integer">
+		select
+		count(distinct u.id)
+		from project p
+		left join project_team pt on p.id = pt.project_id
+		left join user_team ut on ut.team_id = pt.team_id
+		left join user u on ut.user_id = u.id
+		where p.id = #{projectId}
+		order by ut.create_date
+	</select>
+	<select id="selectTeamNameByProjectId" resultType="java.lang.String">
+		select
+		t.team_name
+		from team t
+		left join project_team pt on t.id = pt.team_id
+		where pt.project_id = #{projectId}
+		order by pt.create_date
+	</select>
 
-    <!-- 插入全部字段 -->
+	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Project"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO project

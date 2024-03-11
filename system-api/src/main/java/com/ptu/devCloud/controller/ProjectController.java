@@ -47,4 +47,31 @@ public class ProjectController {
     public CommonResult<List<Project>> getListByTeamId(Long teamId){
         return CommonResult.successNoMsg(projectService.getListByTeamId(teamId));
     }
+
+    /**
+     * 计算参与项目的人数
+     * @author Yang Fan
+     * @since 2024/3/11 14:29
+     * @param projectId 项目id
+     * @return CommonResult<Integer> 参与项目的人数
+     */
+    @GetMapping("/getMemberCount")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<Integer> getMemberCount(Long projectId){
+        return CommonResult.successNoMsg(projectService.getMemberCount(projectId));
+    }
+
+    /**
+     * 获取团队名称列表
+     * @author Yang Fan
+     * @since 2024/3/11 14:49
+     * @param projectId 项目id
+     * @return CommonResult<List<String>> 团队名称列表
+     */
+    @GetMapping("/getTeamName")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<String>> getTeamName(Long projectId){
+        return CommonResult.successNoMsg(projectService.getTeamName(projectId));
+    }
+
 }

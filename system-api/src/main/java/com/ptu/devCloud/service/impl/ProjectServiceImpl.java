@@ -73,4 +73,16 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if(teamId == null)return new ArrayList<>();
         return projectMapper.selectProjectListByTeamId(teamId);
     }
+
+    @Override
+    public Integer getMemberCount(Long projectId) {
+        if(projectId==null)return null;
+        return projectMapper.selectMemberCountByProjectId(projectId);
+    }
+
+    @Override
+    public List<String> getTeamName(Long projectId) {
+        if(projectId==null)return new ArrayList<>();
+        return projectMapper.selectTeamNameByProjectId(projectId);
+    }
 }

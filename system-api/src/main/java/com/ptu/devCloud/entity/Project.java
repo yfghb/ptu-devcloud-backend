@@ -39,8 +39,12 @@ public class Project extends BaseEntity implements Serializable {
 	@TableField(value = "history_member")
 	private String historyMember;
 
-	/** 团队id */
+	/** 新建项目时的团队id */
 	@TableField(exist = false)
 	private Long teamId;
+
+	/** 创建人（名称） */
+	@TableField(exist = false)
+	private String createName;
 	
 }

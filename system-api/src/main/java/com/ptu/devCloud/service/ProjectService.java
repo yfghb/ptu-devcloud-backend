@@ -29,4 +29,22 @@ public interface ProjectService extends IService<Project> {
 	 * @return List<Project>
 	 */
 	List<Project> getListByTeamId(Long teamId);
+
+	/**
+	 * 计算参与项目的人数
+	 * @author Yang Fan
+	 * @since 2024/3/11 14:29
+	 * @param projectId 项目id
+	 * @return Integer 参与项目的人数
+	 */
+	Integer getMemberCount(Long projectId);
+
+	/**
+	 * 获取团队名称列表
+	 * @author Yang Fan
+	 * @since 2024/3/11 14:49
+	 * @param projectId 项目id
+	 * @return 团队名称列表
+	 */
+	List<String> getTeamName(Long projectId);
 }
