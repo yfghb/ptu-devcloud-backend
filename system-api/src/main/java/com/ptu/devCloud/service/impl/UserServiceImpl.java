@@ -81,12 +81,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(Objects.isNull(authentication)){
             throw new JobException("账号或密码不正确");
         }
+        // 账号加密后的字符串作为aliveKey，value是userRedisKey，校验同一个用户只会生成一个登录token
+        // 注意！这个key对相同的账号生成的token是一样的，不能将此返回给前端
+        String aliveKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
+        String oldToken = (String) redisUtils.get(aliveKey);
+        // 说明用户已经登录，新的登录请求将删除老的token
+        if(StrUtil.isNotEmpty(oldToken)) redisUtils.del(oldToken);
         SecurityUtils.setAuthentication(authentication);
-        // 使用账号加密后的字符串作为redisKey，保证同一个用户只会生成一个登录token
-        String userRedisKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
+        String userRedisKey = UUID.randomUUID().toString(true);
         String userRedisToken = JwtUtil.generate(authentication.getPrincipal());
         // 在redis设置token，过期时间为两小时（此处配合心跳连接，如果两个小时客户端没有发送alive请求，则自动过期）
         redisUtils.set(userRedisKey, userRedisToken, 60 * 60 * 2);
+        redisUtils.set(aliveKey, userRedisKey, 60 * 60 * 2);
         return userRedisKey;
     }
 
@@ -143,8 +149,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void alive(String userRedisKey) {
+        // 将它的过期时间重置成两个小时
         if(redisUtils.get(userRedisKey)!=null){
-            // 将它的过期时间重置成两个小时
+            LoginUser loginUser = SecurityUtils.getLoginUser();
+            String loginAccount = loginUser == null ? null : loginUser.getUser().getLoginAccount();
+            if(loginAccount != null){
+                String aliveKey = SecurityUtils.aesEncrypt(loginAccount, CommonConstants.SECRET_KEY_16);
+                redisUtils.expire(aliveKey,60 * 60 * 2);
+            }
             redisUtils.expire(userRedisKey, 60 * 60 * 2);
         }
     }
