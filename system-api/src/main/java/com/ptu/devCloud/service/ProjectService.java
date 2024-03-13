@@ -2,7 +2,9 @@ package com.ptu.devCloud.service;
 
 import com.ptu.devCloud.entity.Project;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.TaskOperationLog;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,4 +49,24 @@ public interface ProjectService extends IService<Project> {
 	 * @return 团队名称列表
 	 */
 	List<String> getTeamName(Long projectId);
+
+	/**
+	 * 获取指定项目id的所有任务状态数量
+	 * @author Yang Fan
+	 * @since 2024/3/12 14:07
+	 * @param projectId 项目id
+	 * @return Project
+	 */
+	Project getTaskStatusCnt(Long projectId);
+
+	/**
+	 * 获取任务的操作日志
+	 * @author Yang Fan
+	 * @since 2024/3/12 16:41
+	 * @param projectId 项目id
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @return List<TaskOperationLog>
+	 */
+	List<TaskOperationLog> getTaskLog(Long projectId, String startDate, String endDate);
 }

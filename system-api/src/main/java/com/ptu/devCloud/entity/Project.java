@@ -46,5 +46,24 @@ public class Project extends BaseEntity implements Serializable {
 	/** 创建人（名称） */
 	@TableField(exist = false)
 	private String createName;
-	
+
+	/** 新创建任务的数量 */
+	@TableField(exist = false)
+	private Integer newTaskCnt;
+
+	/** 进行中任务的数量 */
+	@TableField(exist = false)
+	private Integer todoTaskCnt;
+
+	/** 已完成任务的数量 */
+	@TableField(exist = false)
+	private Integer doneTaskCnt;
+
+	/** 已关闭任务的数量 */
+	@TableField(exist = false)
+	private Integer closeTaskCnt;
+
+	/** 本周新增任务的数量 */
+	@TableField(exist = false)
+	private Integer addTaskCnt;
 }

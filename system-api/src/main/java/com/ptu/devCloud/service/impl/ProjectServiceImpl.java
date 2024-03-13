@@ -3,18 +3,19 @@ package com.ptu.devCloud.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.ptu.devCloud.entity.Project;
 import com.ptu.devCloud.entity.ProjectTeam;
+import com.ptu.devCloud.entity.TaskOperationLog;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.ProjectMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.ProjectTeamService;
 import com.ptu.devCloud.service.TableSequenceService;
+import com.ptu.devCloud.service.TaskOperationLogService;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.ProjectService;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
@@ -36,6 +37,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     private ProjectTeamService projectTeamService;
     @Resource
     private TableSequenceService tableSequenceService;
+    @Resource
+    private TaskOperationLogService taskOperationLogService;
 
     @Override
     @SeqName(value = TableSequenceConstants.Project)
@@ -84,5 +87,17 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     public List<String> getTeamName(Long projectId) {
         if(projectId==null)return new ArrayList<>();
         return projectMapper.selectTeamNameByProjectId(projectId);
+    }
+
+    @Override
+    public Project getTaskStatusCnt(Long projectId) {
+        if(projectId==null)return null;
+        return projectMapper.selectTaskStatusCntByProjectId(projectId);
+    }
+
+    @Override
+    public List<TaskOperationLog> getTaskLog(Long projectId, String startDate, String endDate) {
+        if(projectId==null)return new ArrayList<>();
+        return taskOperationLogService.getTaskOperationLogListByProjectId(projectId,startDate,endDate);
     }
 }

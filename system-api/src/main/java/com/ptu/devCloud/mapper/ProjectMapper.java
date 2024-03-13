@@ -1,5 +1,6 @@
 package com.ptu.devCloud.mapper;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -89,4 +90,15 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	 * @return 团队名称列表
 	 */
 	List<String> selectTeamNameByProjectId(@Param("projectId") Long projectId);
+
+	/**
+	 * 查询指定项目id的所有任务状态数量
+	 * @author Yang Fan
+	 * @since 2024/3/12 14:05
+	 * @param projectId 项目id
+	 * @return Project
+	 */
+	Project selectTaskStatusCntByProjectId(@Param("projectId") Long projectId);
+
+
 }

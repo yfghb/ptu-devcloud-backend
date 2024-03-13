@@ -33,4 +33,6 @@ public class TableSequenceConstants {
     public static final String ProjectRepository = "SEQ_PROJECT_REPOSITORY";
 
     public static final String ProjectTeam = "SEQ_PROJECT_TEAM";
+
+    public static final String TaskOperationLog = "SEQ_TASK_OPERATION_LOG";
 }

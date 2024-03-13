@@ -26,10 +26,6 @@ public class Task extends BaseEntity implements Serializable {
 	@TableField(value = "remark")
 	private String remark;
     
-	/** 操作记录 */
-	@TableField(value = "operation_log")
-	private String operationLog;
-    
 	/** 任务编号 */
 	@TableField(value = "serial_number")
 	private String serialNumber;

@@ -7,7 +7,6 @@
         <result column="task_type" property="taskType" />
         <result column="task_status" property="taskStatus" />
         <result column="remark" property="remark" />
-        <result column="operation_log" property="operationLog" />
         <result column="serial_number" property="serialNumber" />
         <result column="current_operator" property="currentOperator" />
         <result column="participant" property="participant" />
@@ -27,7 +26,6 @@
 		, t.task_type
 		, t.task_status
 		, t.remark
-		, t.operation_log
 		, t.serial_number
 		, t.current_operator
 		, t.participant
@@ -190,7 +188,6 @@
     		task_type,
     		task_status,
     		remark,
-    		operation_log,
     		serial_number,
     		current_operator,
     		participant,
@@ -207,8 +204,7 @@
         	#{taskName},                   
         	#{taskType},                   
         	#{taskStatus},                   
-        	#{remark},                   
-        	#{operationLog},                   
+        	#{remark},
         	#{serialNumber},                   
         	#{currentOperator},                   
         	#{participant},                   
@@ -241,9 +237,6 @@
 			</if>
 			<if test="remark != null">
 				remark,
-			</if>
-			<if test="operationLog != null">
-				operation_log,
 			</if>
 			<if test="serialNumber != null">
 				serial_number,
@@ -292,9 +285,6 @@
 			<if test="remark != null" >
 				#{remark},                    
 			</if>
-			<if test="operationLog != null" >
-				#{operationLog},                    
-			</if>
 			<if test="serialNumber != null" >
 				#{serialNumber},                    
 			</if>
@@ -335,8 +325,7 @@
 			task_name = #{taskName},        
 			task_type = #{taskType},        
 			task_status = #{taskStatus},        
-			remark = #{remark},        
-			operation_log = #{operationLog},        
+			remark = #{remark},
 			serial_number = #{serialNumber},        
 			current_operator = #{currentOperator},        
 			participant = #{participant},        
@@ -367,9 +356,6 @@
 		</if>
 		<if test="remark != null" >
 			remark = #{remark},                 
-		</if>
-		<if test="operationLog != null" >
-			operation_log = #{operationLog},                 
 		</if>
 		<if test="serialNumber != null" >
 			serial_number = #{serialNumber},                 
@@ -410,10 +396,7 @@
 		WHERE t.serial_number = #{serialNumber}
 	</update>
 
-	<update id="updateOperationLogBySerialNumber" parameterType="string">
-		UPDATE task t SET t.operation_log = CONCAT(IF(t.operation_log is null, '', t.operation_log),#{context})
-		WHERE t.serial_number = #{serialNumber}
-	</update>
+
 	<update id="updateBySerialNumberIgnoreNull" parameterType="com.ptu.devCloud.entity.Task">
 		UPDATE task
 		<set>
@@ -428,9 +411,6 @@
 			</if>
 			<if test="remark != null" >
 				remark = #{remark},
-			</if>
-			<if test="operationLog != null" >
-				operation_log = #{operationLog},
 			</if>
 			<if test="serialNumber != null" >
 				serial_number = #{serialNumber},
@@ -479,14 +459,7 @@
 			#{item}
 		</foreach>
 	</update>
-	<update id="updateOperationLogAppendCloseByIds">
-		UPDATE task t SET t.operation_log = CONCAT(IF(t.operation_log is null, '', t.operation_log),#{context})
-		WHERE t.id IN
-		<foreach item="item" collection="ids" open="(" separator="," close=")">
-			#{item}
-		</foreach>
-		AND t.task_status != 'close'
-	</update>
+
 
 
 </mapper>

@@ -94,16 +94,6 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 boolean updateTaskStatusBySerialNumber(@Param("serialNumber") String serialNumber,
 									   		@Param("taskStatus") String taskStatus);
 
-	/**
-	 * 添加操作日志到末尾
-	 * @author Yang Fan
-	 * @since 2024/1/30 16:16
-	 * @param serialNumber 任务编号
-	 * @param context 操作日志
-	 * @return boolean
-	 */
-	 boolean updateOperationLogBySerialNumber(@Param("serialNumber") String serialNumber,
-											  @Param("context") String context);
 
 	/**
 	 * 以任务编号修改，忽略null字段
@@ -161,13 +151,4 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 */
 	boolean updateTaskStatusByIds(@Param("ids") List<String> ids, @Param("status") String status);
 
-	/**
-	 * 给未关闭的任务添加关闭日志
-	 * @author Yang Fan
-	 * @since 2024/2/4 13:48
-	 * @param ids 任务id列表
-	 * @param context 关闭日志
-	 * @return boolean
-	 */
-	boolean updateOperationLogAppendCloseByIds(@Param("ids") List<String> ids, @Param("context") String context);
 }

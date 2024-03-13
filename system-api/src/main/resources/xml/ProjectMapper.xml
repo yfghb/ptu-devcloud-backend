@@ -68,6 +68,34 @@
 		where pt.project_id = #{projectId}
 		order by pt.create_date
 	</select>
+	<select id="selectTaskStatusCntByProjectId" resultType="com.ptu.devCloud.entity.Project">
+		select
+			(select count(t.id) from task t where t.task_status = 'new' and t.project_id = #{projectId}) as "newTaskCnt"
+			,(select count(t.id) from task t where t.task_status = 'todo' and t.project_id = #{projectId}) as "todoTaskCnt"
+			,(select count(t.id) from task t where t.task_status = 'done' and t.project_id = #{projectId}) as "doneTaskCnt"
+			,(select count(t.id) from task t where t.task_status = 'close' and t.project_id = #{projectId}) as "closeTaskCnt"
+			,(select count(t.id)
+			from task t
+			where YEARWEEK(DATE_FORMAT(t.create_date,'%Y-%m-%d')) = YEARWEEK(NOW())
+			  and t.project_id = #{projectId}) as "addTaskCnt"
+	</select>
+	<select id="selectTaskOperationLogByParams" resultType="java.lang.String">
+		select
+		t.operation_log
+		from task t
+		<where>
+			t.project_id = #{projectId}
+			<if test="startDate != null and startDate != '' and startDate != 'null'">
+			  and t.create_date >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != '' and endDate != 'null'">
+				<![CDATA[
+				and t.create_date <= #{endDate}
+				]]>
+			</if>
+		</where>
+		order by t.create_date desc
+	</select>
 
 	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Project"

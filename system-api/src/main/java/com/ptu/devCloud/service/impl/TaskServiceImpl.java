@@ -12,15 +12,13 @@ import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ptu.devCloud.service.ProjectTeamService;
-import com.ptu.devCloud.service.UserService;
-import com.ptu.devCloud.service.UserTeamService;
+import com.ptu.devCloud.service.*;
 import com.ptu.devCloud.utils.RedisUtils;
 import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import com.ptu.devCloud.service.TaskService;
+
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,6 +55,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Resource
     private TransactionTemplate transaction;
 
+    @Resource
+    private TaskOperationLogService taskOperationLogService;
+
+    @Resource
+    private TableSequenceService tableSequenceService;
+
 
     @Override
     @SeqName(value = TableSequenceConstants.Task)
@@ -89,15 +93,19 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             // 3s内都没加锁成功就返回系统繁忙
             throw new JobException("系统繁忙，请稍后再试");
         }else {
+            task.setId(tableSequenceService.generateId(TableSequenceConstants.Task));
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String now = formatter.format(LocalDateTime.now()) + " ";
+            TaskOperationLog taskOperationLog = new TaskOperationLog();
+            taskOperationLog.setTaskId(task.getId());
+            taskOperationLog.setOperationLog(now + username + " 创建了任务：" + task.getTaskName());
+            task.setCurrentOperator(loginUser == null ? null : loginUser.getUser().getId());
+            task.setParticipant(loginUser == null ? null : loginUser.getUser().getId().toString());
             transaction.execute(action -> {
                 task.setSerialNumber(generateSerialNumber());
-                task.setCurrentOperator(loginUser == null ? null : loginUser.getUser().getId());
-                task.setParticipant(loginUser == null ? null : loginUser.getUser().getId().toString());
-                task.setOperationLog(now + username + " 创建了任务：" + task.getTaskName() + "##");
                 try{
                     taskMapper.insert(task);
+                    taskOperationLogService.save(taskOperationLog);
                 }catch (DuplicateKeyException e){
                     action.setRollbackOnly();
                     throw new JobException("系统繁忙，请稍后再试");
@@ -141,14 +149,17 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
                 throw new JobException("操作被拒绝，原因：错误的团队-项目关系。请检查该团队是否存在所属项目信息");
             }
         }
+        List<TaskOperationLog> operationLogs = new ArrayList<>();
         if(!origin.getTaskStatus().equals(task.getTaskStatus())){
-            String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
-            task.setOperationLog(log + generateOperationLog(task.getTaskStatus()));
+            TaskOperationLog statusChangeLog = new TaskOperationLog();
+            // 新增任务状态变更的日志
+            statusChangeLog.setTaskId(task.getId());
+            statusChangeLog.setOperationLog(generateStatusOperationLog(task.getTaskStatus(), task.getTaskName()));
+            operationLogs.add(statusChangeLog);
         }
         if(!Objects.equals(origin.getCurrentOperator(), task.getCurrentOperator())){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String now = formatter.format(LocalDateTime.now()) + " ";
-            String log = StrUtil.isEmpty(task.getOperationLog()) ? "" : task.getOperationLog();
             User beforeOperator = userService.getById(origin.getCurrentOperator());
             String taskUserName = "";
             String beforeOperatorName = beforeOperator == null ? "未知用户" : beforeOperator.getUserName();
@@ -156,8 +167,11 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
                 User user = userService.getById(task.getCurrentOperator());
                 taskUserName = user == null ? "未知用户" : user.getUserName();
             }
-            String newLog = now + beforeOperatorName + " 将任务转派给 " + taskUserName + "##";
-            task.setOperationLog(log + newLog);
+            TaskOperationLog userChangeLog = new TaskOperationLog();
+            userChangeLog.setTaskId(task.getId());
+            userChangeLog.setOperationLog(now + beforeOperatorName + " 将任务: " + task.getTaskName() + " 转派给 " + taskUserName);
+            // 新增任务转派日志
+            operationLogs.add(userChangeLog);
             // 更新参与者
             String participant = task.getParticipant();
             Set<String> set = new HashSet<>();
@@ -173,7 +187,18 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             }
             task.setParticipant(builder.toString());
         }
-        taskMapper.updateIgnoreNull(task);
+        transaction.execute(action -> {
+            try {
+                taskMapper.updateIgnoreNull(task);
+                if(!operationLogs.isEmpty()){
+                    taskOperationLogService.saveBatch(operationLogs);
+                }
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("操作失败，可能是系统繁忙");
+            }
+        });
     }
 
     private void checkTeamAndProject(Task task){
@@ -200,12 +225,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     public void changeStatus(String serialNumber, String taskStatus) {
         Task task = taskMapper.selectBySerialNumber(serialNumber);
         checkTeamAndProject(task);
+        TaskOperationLog statusChangeLog = new TaskOperationLog();
+        statusChangeLog.setTaskId(task.getId());
+        statusChangeLog.setOperationLog(generateStatusOperationLog(taskStatus, task.getTaskName()));
         transaction.execute(action -> {
             try{
-                if("todo".equals(taskStatus) || "done".equals(taskStatus) || "close".equals(taskStatus)){
-                    taskMapper.updateTaskStatusBySerialNumber(serialNumber, taskStatus);
-                    taskMapper.updateOperationLogBySerialNumber(serialNumber, generateOperationLog(taskStatus));
-                }
+                taskMapper.updateTaskStatusBySerialNumber(serialNumber, taskStatus);
+                taskOperationLogService.save(statusChangeLog);
                 return true;
             }catch (Exception e){
                 action.setRollbackOnly();
@@ -323,11 +349,23 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public void closeBatch(IdsVO vo) {
         if(vo == null || CollUtil.isEmpty(vo.getTaskIds()))return;
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        String username = loginUser == null ? "未知用户" : loginUser.getUser().getUserName();
+        List<Task> tasks = taskMapper.selectByIdsIgnoreRemark(vo.getTaskIds());
+        List<TaskOperationLog> logList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String now = formatter.format(LocalDateTime.now()) + " ";
+        for(Task task:tasks){
+            TaskOperationLog taskOperationLog = new TaskOperationLog();
+            String logStr = now + username + " 将任务: " + task.getTaskName() + " 的状态改为 已关闭";
+            taskOperationLog.setTaskId(task.getId());
+            taskOperationLog.setOperationLog(logStr);
+            logList.add(taskOperationLog);
+        }
         transaction.execute(action -> {
             try {
-                // 先添加任务关闭的日志
-                taskMapper.updateOperationLogAppendCloseByIds(vo.getTaskIds(), generateOperationLog("close"));
-                // 再修改任务状态为‘已关闭’
+                taskOperationLogService.saveBatch(logList);
+                // 修改任务状态为‘已关闭’
                 taskMapper.updateTaskStatusByIds(vo.getTaskIds(), "close");
                 return true;
             }catch (Exception e){
@@ -347,10 +385,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         if(curUser == null || changeToUser == null) throw new JobException("找不到用户，不能转派");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String now = formatter.format(LocalDateTime.now()) + " ";
-        String log = task.getOperationLog() == null ? "" : task.getOperationLog();
         task.setCurrentOperator(changeToUser.getId());
+        TaskOperationLog userChangeLog = null;
         if(!Objects.equals(currentUserId, changeToUserId)){
-            task.setOperationLog(log + now + curUser.getUserName() + " 将任务转派给 " + changeToUser.getUserName() + "##");
+            userChangeLog = new TaskOperationLog();
+            userChangeLog.setTaskId(task.getId());
+            userChangeLog.setOperationLog(now + curUser.getUserName() + " 将任务转派给 " + changeToUser.getUserName());
         }
         String participant = task.getParticipant();
         Set<String> set = new HashSet<>();
@@ -367,7 +407,17 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             builder.deleteCharAt(builder.length()-1);
         }
         task.setParticipant(builder.toString());
-        taskMapper.updateIgnoreNull(task);
+        TaskOperationLog finalUserChangeLog = userChangeLog;
+        transaction.execute(action -> {
+            try {
+                taskMapper.updateIgnoreNull(task);
+                if(finalUserChangeLog != null)taskOperationLogService.save(finalUserChangeLog);
+                return true;
+            }catch (Exception e){
+                action.setRollbackOnly();
+                throw new JobException("操作失败，系统繁忙");
+            }
+        });
     }
 
     @Override
@@ -400,7 +450,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return Arrays.asList(newCard, todoCard, doneCard, closeCard);
     }
 
-    private String generateOperationLog(String taskStatus){
+    private String generateStatusOperationLog(String taskStatus, String taskName){
         if(StrUtil.isEmpty(taskStatus))return "";
         LoginUser loginUser = SecurityUtils.getLoginUser();
         String currentUserName = loginUser == null ? "" : loginUser.getUser().getUserName();
@@ -414,7 +464,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             case "close": status = "已关闭";break;
             default:break;
         }
-        return now + currentUserName + " 将任务状态更改为 " + status + "##";
+        return now + currentUserName + " 将任务: "+ taskName +" 的状态更改为 " + status;
     }
 
     private String generateSerialNumber(){
