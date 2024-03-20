@@ -3,8 +3,6 @@ package com.ptu.devCloud.service;
 import com.ptu.devCloud.entity.Project;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.TaskOperationLog;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -96,4 +94,13 @@ public interface ProjectService extends IService<Project> {
 	 * @return List<Object>
 	 */
 	List<Object> getCodeRepoList(Long giteaId);
+
+	/**
+	 * 查询项目成员名称列表
+	 * @author Yang Fan
+	 * @since 2024/3/20 15:02
+	 * @param projectId 项目id
+	 * @return List<String>
+	 */
+	List<String> getMemberNameListById(Long projectId);
 }

@@ -151,4 +151,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if(map==null)return new ArrayList<>();
         return (List<Object>) map.get("data");
     }
+
+    @Override
+    public List<String> getMemberNameListById(Long projectId) {
+        if(projectId == null)return new ArrayList<>();
+        return projectMapper.selectMemberNameByProjectId(projectId);
+    }
 }

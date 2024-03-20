@@ -100,5 +100,12 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	 */
 	Project selectTaskStatusCntByProjectId(@Param("projectId") Long projectId);
 
-
+	/**
+	 * 查询指定项目的项目成员名称列表
+	 * @author Yang Fan
+	 * @since 2024/3/20 15:01
+	 * @param projectId 项目id
+	 * @return List<String>
+	 */
+	List<String> selectMemberNameByProjectId(@Param("projectId") Long projectId);
 }

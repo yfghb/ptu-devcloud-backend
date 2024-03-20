@@ -161,4 +161,17 @@ public class ProjectController {
         return CommonResult.successNoMsg(GITEA_HOST);
     }
 
+    /**
+     * 查询项目成员名称列表
+     * @author Yang Fan
+     * @since 2024/3/20 15:02
+     * @param projectId 项目id
+     * @return List<String>
+     */
+    @GetMapping("/getMemberNameList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<String>> getMemberNameList(Long projectId){
+        return CommonResult.successNoMsg(projectService.getMemberNameListById(projectId));
+    }
+
 }
