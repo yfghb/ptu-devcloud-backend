@@ -7,7 +7,7 @@
         <result column="project_remark" property="projectRemark" />
         <result column="current_version" property="currentVersion" />
         <result column="gitea_account" property="giteaAccount" />
-        <result column="gitea_password" property="giteaPassword" />
+        <result column="gitea_id" property="giteaId" />
         <result column="gitea_username" property="giteaUsername" />
         <result column="create_by" property="createBy" />
         <result column="create_date" property="createDate" />
@@ -23,7 +23,7 @@
 		, t.project_remark
 		, t.current_version
 		, t.gitea_account
-		, t.gitea_password
+		, t.gitea_id
 		, t.gitea_username
 		, t.create_by
 		, t.create_date
@@ -107,7 +107,7 @@
     		project_remark,
     		current_version,
     		gitea_account,
-    		gitea_password,
+    		gitea_id,
     		gitea_username,
     		create_by,
     		create_date,
@@ -121,7 +121,7 @@
         	#{projectRemark},                   
         	#{currentVersion},                   
         	#{giteaAccount},                   
-        	#{giteaPassword},                   
+        	#{giteaId},
         	#{giteaUsername},                   
         	#{createBy},                   
         	#{createDate},                   
@@ -151,8 +151,8 @@
 			<if test="giteaAccount != null">
 				gitea_account,
 			</if>
-			<if test="giteaPassword != null">
-				gitea_password,
+			<if test="giteaId != null">
+				gitea_id,
 			</if>
 			<if test="giteaUsername != null">
 				gitea_username,
@@ -189,8 +189,8 @@
 			<if test="giteaAccount != null" >
 				#{giteaAccount},                    
 			</if>
-			<if test="giteaPassword != null" >
-				#{giteaPassword},                    
+			<if test="giteaId != null" >
+				#{giteaId},
 			</if>
 			<if test="giteaUsername != null" >
 				#{giteaUsername},                    
@@ -221,7 +221,7 @@
 			project_remark = #{projectRemark},        
 			current_version = #{currentVersion},        
 			gitea_account = #{giteaAccount},        
-			gitea_password = #{giteaPassword},        
+			gitea_id = #{giteaId},
 			gitea_username = #{giteaUsername},        
 			create_by = #{createBy},        
 			create_date = #{createDate},        
@@ -249,8 +249,8 @@
 		<if test="giteaAccount != null" >
 			gitea_account = #{giteaAccount},                 
 		</if>
-		<if test="giteaPassword != null" >
-			gitea_password = #{giteaPassword},                 
+		<if test="giteaId != null" >
+			gitea_id = #{giteaId},
 		</if>
 		<if test="giteaUsername != null" >
 			gitea_username = #{giteaUsername},                 

@@ -6,6 +6,7 @@ import com.ptu.devCloud.entity.TaskOperationLog;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -69,4 +70,30 @@ public interface ProjectService extends IService<Project> {
 	 * @return List<TaskOperationLog>
 	 */
 	List<TaskOperationLog> getTaskLog(Long projectId, String startDate, String endDate);
+
+	/**
+	 * 调gitea的请求查询账户是否存在
+	 * @author Yang Fan
+	 * @since 2024/3/18 14:40
+	 * @param giteaAccount gitea账户
+	 * @return true-存在 / false-不存在
+	 */
+	Map<String, Object> checkGiteaUserIsAvailable(String giteaAccount);
+
+	/**
+	 * 以id更新，忽略null字段
+	 * @author Yang Fan
+	 * @since 2024/3/18 15:03
+	 * @param project Project实体
+	 */
+	Project updateByIdIgnoreNull(Project project);
+
+	/**
+	 * 调用gitea API查询仓库列表
+	 * @author Yang Fan
+	 * @since 2024/3/18 15:42
+	 * @param giteaId gitea 用户id
+	 * @return List<Object>
+	 */
+	List<Object> getCodeRepoList(Long giteaId);
 }

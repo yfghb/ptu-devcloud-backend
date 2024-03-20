@@ -3,6 +3,7 @@ package com.ptu.devCloud.controller;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Project;
 import com.ptu.devCloud.entity.TaskOperationLog;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.ptu.devCloud.service.ProjectService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,8 @@ public class ProjectController {
 
     @Resource
     private ProjectService projectService;
+    @Value("${gitea.host}")
+    public String GITEA_HOST;
 
     /**
      * 新增项目
@@ -106,6 +109,56 @@ public class ProjectController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<List<TaskOperationLog>> getTaskLog(Long projectId, String startDate, String endDate){
         return CommonResult.successNoMsg(projectService.getTaskLog(projectId,startDate,endDate));
+    }
+
+    /**
+     * 调gitea的请求查询账户是否存在
+     * @author Yang Fan
+     * @since 2024/3/18 14:40
+     * @param giteaAccount gitea账户
+     * @return true-存在 / false-不存在
+     */
+    @GetMapping("/checkGitea")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<Boolean> checkGitea(String giteaAccount){
+        return CommonResult.successNoMsg(projectService.checkGiteaUserIsAvailable(giteaAccount) != null);
+    }
+
+    /**
+     * 以id更新，忽略null字段
+     * @author Yang Fan
+     * @since 2024/3/18 15:03
+     * @param project Project实体
+     */
+    @PostMapping("/update")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<Project> update(@RequestBody Project project){
+        return CommonResult.successNoMsg(projectService.updateByIdIgnoreNull(project));
+    }
+
+    /**
+     * 调用gitea API查询仓库列表
+     * @author Yang Fan
+     * @since 2024/3/18 15:42
+     * @param giteaId gitea 用户id
+     * @return List<Object>
+     */
+    @GetMapping("/getCodeRepoList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<Object>> getCodeRepoList(Long giteaId){
+        return CommonResult.successNoMsg(projectService.getCodeRepoList(giteaId));
+    }
+
+    /**
+     * 查询gitea的主机
+     * @author Yang Fan
+     * @since 2024/3/19 13:44
+     * @return CommonResult<String>
+     */
+    @GetMapping("/getGiteaHost")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<String> getGiteaHost(){
+        return CommonResult.successNoMsg(GITEA_HOST);
     }
 
 }

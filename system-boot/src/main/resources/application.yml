@@ -3,6 +3,7 @@ spring:
     active: dev
 
 gitea:
-  token: 3e91666e32d1fa417a9d890447d0e9904c321f3d
+  base-url: http://47.92.255.178:3000/api/v1
+  host: 47.92.255.178:3000
 
 

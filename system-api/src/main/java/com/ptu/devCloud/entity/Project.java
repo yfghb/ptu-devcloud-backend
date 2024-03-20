@@ -27,9 +27,9 @@ public class Project extends BaseEntity implements Serializable {
 	@TableField(value = "gitea_account")
 	private String giteaAccount;
     
-	/** gitea密码 */
-	@TableField(value = "gitea_password")
-	private String giteaPassword;
+	/** gitea id */
+	@TableField(value = "gitea_id")
+	private Integer giteaId;
     
 	/** gitea用户名 */
 	@TableField(value = "gitea_username")
