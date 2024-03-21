@@ -111,8 +111,8 @@
 		(select count(ut.team_id) from user_team ut where ut.user_id = #{userId}) as "teamCnt",
 		(select count(pt.project_id) from project_team pt
 		    left join user_team sub_ut on sub_ut.team_id = pt.team_id where sub_ut.user_id = #{userId}
-		    ) as "projectCnt"
-		
+		    ) as "projectCnt",
+		(select count(t.id) from task t where t.task_finish_user = #{userId}) as "taskFinishCnt"
 	</select>
 
     <!-- 插入全部字段 -->

@@ -5,7 +5,13 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ptu.devCloud.entity.*;
+import com.ptu.devCloud.entity.LoginUser;
+import com.ptu.devCloud.entity.ProjectTeam;
+import com.ptu.devCloud.entity.Task;
+import com.ptu.devCloud.entity.TaskOperationLog;
+import com.ptu.devCloud.entity.User;
+import com.ptu.devCloud.entity.UserTeam;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
@@ -13,18 +19,28 @@ import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.*;
+import com.ptu.devCloud.utils.DateUtils;
 import com.ptu.devCloud.utils.RedisUtils;
 import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
-
 import com.ptu.devCloud.annotation.SeqName;
 import com.ptu.devCloud.constants.TableSequenceConstants;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -454,6 +470,65 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             }
         }));
         return Arrays.asList(newCard, todoCard, doneCard, closeCard);
+    }
+
+    @Override
+    public WorkplaceDTO getTaskTypeCnt(Long userId) {
+        if(userId == null)return null;
+        return taskMapper.selectTaskTypeCnt(userId);
+    }
+
+    @Override
+    public WorkplaceDTO getTaskCntChart(Long projectId) {
+        if(projectId == null) {
+            throw new JobException("项目id不能为null");
+        }
+        Date now = new Date();
+        List<Task> tasks = taskMapper.selectTaskChartDataByProjectId(projectId,
+                DateUtils.getStartTimeOfCurrentMonth(now),
+                DateUtils.getEndTimeOfCurrentMonth(now),
+                false);
+        List<Task> tasksFinish = taskMapper.selectTaskChartDataByProjectId(projectId,
+                DateUtils.getStartTimeOfCurrentMonth(now),
+                DateUtils.getEndTimeOfCurrentMonth(now),
+                true);
+        List<List<String>> taskList = new ArrayList<>();
+        List<List<String>> taskFinishList = new ArrayList<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd");
+        Map<String, List<Task>> taskMap = tasks.stream()
+                .collect(Collectors.groupingBy(o -> {
+                            LocalDateTime localDateTime = o.getCreateDate().toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime();
+                            return dateFormatter.format(localDateTime);
+                        }
+                ));
+        Map<String, List<Task>> taskFinishMap = tasksFinish.stream()
+                .collect(Collectors.groupingBy(o -> {
+                            LocalDateTime localDateTime = o.getUpdateDate().toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime();
+                            return dateFormatter.format(localDateTime);
+                        }
+                ));
+        for(String key:taskMap.keySet()){
+            List<String> list = new ArrayList<>();
+            list.add(key);
+            list.add(String.valueOf(taskMap.get(key).size()));
+            taskList.add(list);
+        }
+        for(String key:taskFinishMap.keySet()){
+            List<String> list = new ArrayList<>();
+            list.add(key);
+            list.add(String.valueOf(taskFinishMap.get(key).size()));
+            taskFinishList.add(list);
+        }
+        taskList = taskList.stream().sorted(Comparator.comparing(o -> o.get(0))).collect(Collectors.toList());
+        taskFinishList = taskFinishList.stream().sorted(Comparator.comparing(o -> o.get(0))).collect(Collectors.toList());
+        WorkplaceDTO dto = new WorkplaceDTO();
+        dto.setTaskList(taskList);
+        dto.setTaskFinishList(taskFinishList);
+        return dto;
     }
 
     private String generateStatusOperationLog(String taskStatus, String taskName){

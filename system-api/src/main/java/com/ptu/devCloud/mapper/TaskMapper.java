@@ -1,6 +1,7 @@
 package com.ptu.devCloud.mapper;
 
 
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -9,6 +10,7 @@ import com.ptu.devCloud.constants.TableSequenceConstants;
 import com.ptu.devCloud.entity.Task;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -150,5 +152,29 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @return boolean
 	 */
 	boolean updateTaskStatusByIds(@Param("ids") List<String> ids, @Param("status") String status);
+
+	/**
+	 * 查询指定用户的待办任务
+	 * @author Yang Fan
+	 * @since 2024/3/21 18:43
+	 * @param userId 用户id
+	 * @return WorkplaceDTO
+	 */
+	WorkplaceDTO selectTaskTypeCnt(@Param("userId") Long userId);
+
+	/**
+	 * 查询任务统计图表的数据
+	 * @author Yang Fan
+	 * @since 2024/3/21 22:38
+	 * @param projectId 项目id
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @param filtered 是否只保留已完成和已关闭的任务
+	 * @return List<Task>
+	 */
+	List<Task> selectTaskChartDataByProjectId(@Param("projectId") Long projectId,
+											  @Param("startDate") Date startDate,
+											  @Param("endDate") Date endDate,
+											  @Param("filtered") Boolean filtered);
 
 }

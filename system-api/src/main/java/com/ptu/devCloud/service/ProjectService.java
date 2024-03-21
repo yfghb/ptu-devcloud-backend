@@ -106,5 +106,11 @@ public interface ProjectService extends IService<Project> {
 	 */
 	List<String> getMemberNameListById(Long projectId);
 
+	/**
+	 * 查询当前登录用户参与的项目数量，团队数量，以及完成过的任务数
+	 * @author Yang Fan
+	 * @since 2024/3/21 16:17
+	 * @return WorkplaceDTO
+	 */
 	WorkplaceDTO getProjectTeamTaskCnt();
 }

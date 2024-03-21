@@ -3,6 +3,7 @@ package com.ptu.devCloud.service;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
@@ -122,4 +123,22 @@ public interface TaskService extends IService<Task> {
      * @return List<TaskCardVO>
      */
     List<TaskCardVO> getTaskCardList(TaskPageVO params);
+
+    /**
+     * 查询指定用户的待办任务数量
+     * @author Yang Fan
+     * @since 2024/3/21 18:44
+     * @param userId 用户id
+     * @return WorkplaceDTO
+     */
+    WorkplaceDTO getTaskTypeCnt(Long userId);
+
+    /**
+     * 获取统计任务的图表的数据
+     * @author Yang Fan
+     * @since 2024/3/21 21:23
+     * @param projectId 项目id
+     * @return WorkplaceDTO
+     */
+    WorkplaceDTO getTaskCntChart(Long projectId);
 }

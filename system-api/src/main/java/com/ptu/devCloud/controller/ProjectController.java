@@ -3,6 +3,7 @@ package com.ptu.devCloud.controller;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Project;
 import com.ptu.devCloud.entity.TaskOperationLog;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.ptu.devCloud.service.ProjectService;
@@ -172,6 +173,18 @@ public class ProjectController {
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
     public CommonResult<List<String>> getMemberNameList(Long projectId){
         return CommonResult.successNoMsg(projectService.getMemberNameListById(projectId));
+    }
+
+    /**
+     * 查询当前登录用户参与的项目数量，团队数量，以及完成过的任务数
+     * @author Yang Fan
+     * @since 2024/3/21 16:17
+     * @return WorkplaceDTO
+     */
+    @GetMapping("/getProjectTeamTaskCnt")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<WorkplaceDTO> getProjectTeamTaskCnt(){
+        return CommonResult.successNoMsg(projectService.getProjectTeamTaskCnt());
     }
 
 }

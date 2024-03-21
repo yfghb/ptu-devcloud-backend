@@ -3,6 +3,7 @@ package com.ptu.devCloud.controller;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Task;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.LinkTaskVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
@@ -205,5 +206,29 @@ public class TaskController {
         return CommonResult.successNoMsg(taskService.getTaskCardList(params));
     }
 
+    /**
+     * 查询指定用户的待办任务数量
+     * @author Yang Fan
+     * @since 2024/3/21 18:44
+     * @param userId 用户id
+     * @return WorkplaceDTO
+     */
+    @GetMapping("/getTaskTypeCnt")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<WorkplaceDTO> getTaskTypeCnt(Long userId){
+        return CommonResult.successNoMsg(taskService.getTaskTypeCnt(userId));
+    }
 
+    /**
+     * 获取统计任务的图表的数据
+     * @author Yang Fan
+     * @since 2024/3/21 21:23
+     * @param projectId 项目id
+     * @return WorkplaceDTO
+     */
+    @GetMapping("/getTaskCntChart")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<WorkplaceDTO> getTaskCntChart(Long projectId){
+        return CommonResult.successNoMsg(taskService.getTaskCntChart(projectId));
+    }
 }

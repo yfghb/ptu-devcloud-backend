@@ -167,7 +167,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if(loginUser==null){
             throw new JobException("登录认证过期，清重新登录");
         }
-        Long id = loginUser.getUser().getId();
-        return null;
+        Long userId = loginUser.getUser().getId();
+        return projectMapper.selectProjectTeamTaskCnt(userId);
     }
 }
