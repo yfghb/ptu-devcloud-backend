@@ -228,8 +228,14 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         TaskOperationLog statusChangeLog = new TaskOperationLog();
         statusChangeLog.setTaskId(task.getId());
         statusChangeLog.setOperationLog(generateStatusOperationLog(taskStatus, task.getTaskName()));
+        if(taskStatus.equals("done")){
+            LoginUser loginUser = SecurityUtils.getLoginUser();
+            Long userId = loginUser == null ? null : loginUser.getUser().getId();
+            task.setTaskFinishUser(userId);
+        }
         transaction.execute(action -> {
             try{
+                taskMapper.updateIgnoreNull(task);
                 taskMapper.updateTaskStatusBySerialNumber(serialNumber, taskStatus);
                 taskOperationLogService.save(statusChangeLog);
                 return true;

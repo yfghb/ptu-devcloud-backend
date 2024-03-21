@@ -50,6 +50,10 @@ public class Task extends BaseEntity implements Serializable {
 	@TableField(value = "project_id")
 	private Long projectId;
 
+	/** 完成人 */
+	@TableField(value = "task_finish_user")
+	private Long taskFinishUser;
+
 	/** 当前操作人-名称 */
 	@TableField(exist = false)
 	private String currentOperatorName;

@@ -360,3 +360,6 @@ create table task_operation_log
 alter table task drop column operation_log;
 
 alter table project change gitea_password gitea_id bigint default null null comment 'gitea id';
+
+alter table task
+	add task_finish_user bigint default null null comment '完成人';

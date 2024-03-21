@@ -17,7 +17,8 @@
         <result column="update_date" property="updateDate" />
 		<result column="team_id" property="teamId" />
 		<result column="project_id" property="projectId" />
-	</resultMap>  
+		<result column="task_finish_user" property="taskFinishUser" />
+	</resultMap>
     
     <!-- 表字段 -->
     <sql id="baseColumns">
@@ -36,6 +37,7 @@
 		, t.update_date
 		, t.team_id
 		, t.project_id
+		, t.task_finish_user
     </sql> 
     
  
@@ -198,6 +200,7 @@
     		update_date,
 			team_id,
 			project_id,
+			task_finish_user,
     	</trim>
     	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
         	#{id},                   
@@ -215,6 +218,7 @@
         	#{updateDate},
 			#{teamId},
 			#{projectId},
+		    #{taskFinishUser}
     	</trim>
 	</insert>
     
@@ -268,6 +272,9 @@
 			<if test="projectId != null">
 				project_id,
 			</if>
+			<if test="taskFinishUser != null">
+				task_finish_user,
+			</if>
 		</trim>
 		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
 			<if test="id != null" >
@@ -315,6 +322,9 @@
 			<if test="projectId != null" >
 				#{projectId},
 			</if>
+			<if test="taskFinishUser != null">
+				#{taskFinishUser},
+			</if>
 		</trim>
     </insert>
 
@@ -336,6 +346,7 @@
 			update_date = #{updateDate},
 			team_id = #{teamId},
 			project_id = #{projectId},
+			task_finish_user = #{taskFinishUser}
 		</set>
     	WHERE id = #{id}
     </update>  
@@ -386,6 +397,9 @@
 		</if>
 		<if test="projectId != null" >
 			project_id = #{projectId},
+		</if>
+		<if test="taskFinishUser != null" >
+			task_finish_user = #{taskFinishUser},
 		</if>
     </set>
     WHERE id = #{id}
@@ -441,6 +455,9 @@
 			</if>
 			<if test="projectId != null" >
 				project_id = #{projectId},
+			</if>
+			<if test="taskFinishUser != null" >
+				task_finish_user = #{taskFinishUser},
 			</if>
 		</set>
 		WHERE serial_number = #{serialNumber}

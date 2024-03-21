@@ -3,6 +3,8 @@ package com.ptu.devCloud.service;
 import com.ptu.devCloud.entity.Project;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.TaskOperationLog;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+
 import java.util.List;
 import java.util.Map;
 
@@ -103,4 +105,6 @@ public interface ProjectService extends IService<Project> {
 	 * @return List<String>
 	 */
 	List<String> getMemberNameListById(Long projectId);
+
+	WorkplaceDTO getProjectTeamTaskCnt();
 }

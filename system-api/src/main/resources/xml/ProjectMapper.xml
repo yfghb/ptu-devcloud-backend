@@ -106,6 +106,14 @@
 		where p.id = #{projectId}
 		order by ut.create_date
 	</select>
+    <select id="selectProjectTeamTaskCnt" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+		select
+		(select count(ut.team_id) from user_team ut where ut.user_id = #{userId}) as "teamCnt",
+		(select count(pt.project_id) from project_team pt
+		    left join user_team sub_ut on sub_ut.team_id = pt.team_id where sub_ut.user_id = #{userId}
+		    ) as "projectCnt"
+		
+	</select>
 
     <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Project"

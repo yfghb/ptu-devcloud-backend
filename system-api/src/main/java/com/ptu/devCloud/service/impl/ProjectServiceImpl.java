@@ -1,15 +1,18 @@
 package com.ptu.devCloud.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Project;
 import com.ptu.devCloud.entity.ProjectTeam;
 import com.ptu.devCloud.entity.TaskOperationLog;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.ProjectMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.ProjectTeamService;
 import com.ptu.devCloud.service.TableSequenceService;
 import com.ptu.devCloud.service.TaskOperationLogService;
+import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
@@ -156,5 +159,15 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     public List<String> getMemberNameListById(Long projectId) {
         if(projectId == null)return new ArrayList<>();
         return projectMapper.selectMemberNameByProjectId(projectId);
+    }
+
+    @Override
+    public WorkplaceDTO getProjectTeamTaskCnt() {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(loginUser==null){
+            throw new JobException("登录认证过期，清重新登录");
+        }
+        Long id = loginUser.getUser().getId();
+        return null;
     }
 }
