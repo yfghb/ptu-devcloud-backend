@@ -113,4 +113,13 @@ public interface ProjectService extends IService<Project> {
 	 * @return WorkplaceDTO
 	 */
 	WorkplaceDTO getProjectTeamTaskCnt();
+
+	/**
+	 * 查询指定团队下的项目名称列表以及任务数和完成的任务数数
+	 * @author Yang Fan
+	 * @since 2024/3/22 13:17
+	 * @param teamId 团队id
+	 * @return List<Project>
+	 */
+	List<Project> getProjectListAndTaskCnt(Long teamId);
 }

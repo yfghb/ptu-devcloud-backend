@@ -219,8 +219,15 @@
 			</if>
 		</where>
 	</select>
-
-	<!-- 插入全部字段 -->
+    <select id="selectLastMonthAndThisMonthTaskCnt" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+		select
+			(select count(t1.id) from task t1 where
+			    DATE_FORMAT(t1.create_date,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m') and t1.project_id = #{projectId}) as "thisMonthTaskCnt",
+			(select count(t2.id) from task t2 where
+			    t2.create_date BETWEEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))
+			                                    and t2.project_id = #{projectId}) as "lastMonthTaskCnt"
+	</select>
+    <!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO task

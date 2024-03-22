@@ -66,4 +66,12 @@ public class Project extends BaseEntity implements Serializable {
 	/** 本周新增任务的数量 */
 	@TableField(exist = false)
 	private Integer addTaskCnt;
+
+	/** 指定项目下包含的所有任务的数量 */
+	@TableField(exist = false)
+	private Integer taskCnt;
+
+	/** 指定项目下包含的所有（已完成+已关闭）任务的数量 */
+	@TableField(exist = false)
+	private Integer taskFinishCnt;
 }

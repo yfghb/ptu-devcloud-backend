@@ -146,7 +146,8 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team> implements Te
         Team team = teamMapper.selectById(teamId);
         if(team == null) throw new JobException("团队不存在或已被删除");
         user.setCurrentTeamId(teamId);
-        String userRedisKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
+        String activeRedisKey = SecurityUtils.aesEncrypt(user.getLoginAccount(), CommonConstants.SECRET_KEY_16);
+        String userRedisKey = (String) redisUtils.get(activeRedisKey);
         String userRedisToken = JwtUtil.generate(loginUser);
         transaction.execute(action -> {
             try {

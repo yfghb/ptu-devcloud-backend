@@ -231,4 +231,17 @@ public class TaskController {
     public CommonResult<WorkplaceDTO> getTaskCntChart(Long projectId){
         return CommonResult.successNoMsg(taskService.getTaskCntChart(projectId));
     }
+
+    /**
+     * 获取指定项目上个月以及这个月的新建任务数量
+     * @author Yang Fan
+     * @since 2024/3/22 16:22
+     * @param projectId 项目id
+     * @return WorkplaceDTO
+     */
+    @GetMapping("/getLastMonthAndThisMonthTaskCnt")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<WorkplaceDTO> getLastMonthAndThisMonthTaskCnt(Long projectId){
+        return CommonResult.successNoMsg(taskService.getLastMonthAndThisMonthTaskCnt(projectId));
+    }
 }

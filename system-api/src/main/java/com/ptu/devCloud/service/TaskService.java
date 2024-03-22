@@ -141,4 +141,13 @@ public interface TaskService extends IService<Task> {
      * @return WorkplaceDTO
      */
     WorkplaceDTO getTaskCntChart(Long projectId);
+
+    /**
+     * 获取指定项目上个月以及这个月的新建任务数量
+     * @author Yang Fan
+     * @since 2024/3/22 16:22
+     * @param projectId 项目id
+     * @return WorkplaceDTO
+     */
+    WorkplaceDTO getLastMonthAndThisMonthTaskCnt(Long projectId);
 }

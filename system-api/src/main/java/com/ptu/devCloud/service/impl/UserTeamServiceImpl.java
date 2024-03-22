@@ -1,15 +1,22 @@
 package com.ptu.devCloud.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ptu.devCloud.entity.LoginUser;
+import com.ptu.devCloud.entity.Team;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.UserTeam;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 import com.ptu.devCloud.exception.JobException;
+import com.ptu.devCloud.mapper.TeamMapper;
 import com.ptu.devCloud.mapper.UserMapper;
 import com.ptu.devCloud.mapper.UserTeamMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ptu.devCloud.utils.SecurityUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import com.ptu.devCloud.service.UserTeamService;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +40,9 @@ public class UserTeamServiceImpl extends ServiceImpl<UserTeamMapper, UserTeam> i
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private TeamMapper teamMapper;
 
     @Override
     @SeqName(value = TableSequenceConstants.UserTeam)
@@ -76,5 +86,25 @@ public class UserTeamServiceImpl extends ServiceImpl<UserTeamMapper, UserTeam> i
             }
         });
 
+    }
+
+    @Override
+    public WorkplaceDTO getTeamList() {
+        WorkplaceDTO dto = new WorkplaceDTO();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(loginUser == null){
+            throw new JobException("登录认证异常，请重新登录");
+        }
+        User user = loginUser.getUser();
+        LambdaQueryWrapper<UserTeam> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(UserTeam::getUserId, user.getId());
+        List<UserTeam> userTeamList = userTeamMapper.selectList(lqw);
+        List<Long> teamIds = new ArrayList<>();
+        userTeamList.forEach(o -> teamIds.add(o.getTeamId()));
+        List<Team> teamList = teamMapper.selectBatchIds(teamIds);
+        Team team = teamMapper.selectById(user.getCurrentTeamId());
+        dto.setTeamList(teamList);
+        dto.setCurrentTeam(team);
+        return dto;
     }
 }

@@ -2,6 +2,7 @@ package com.ptu.devCloud.service;
 
 import com.ptu.devCloud.entity.UserTeam;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ptu.devCloud.entity.dto.WorkplaceDTO;
 
 
 /**
@@ -18,4 +19,12 @@ public interface UserTeamService extends IService<UserTeam> {
 	 * @param userTeam UserTeam
 	 */
 	void addUserTeam(UserTeam userTeam);
+
+	/**
+	 * 查询当前用户的团队列表和当前团队
+	 * @author Yang Fan
+	 * @since 2024/3/22 13:53
+	 * @return WorkplaceDTO
+	 */
+	WorkplaceDTO getTeamList();
 }

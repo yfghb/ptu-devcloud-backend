@@ -1,5 +1,6 @@
 package com.ptu.devCloud.entity.dto;
 
+import com.ptu.devCloud.entity.Team;
 import lombok.Data;
 
 import java.util.List;
@@ -32,4 +33,16 @@ public class WorkplaceDTO {
 
     /** 已完成任务列表，n行2列，taskFinishList[i][0]：日期（mm-dd），taskFinishList[i][0]：数量 */
     private List<List<String>> taskFinishList;
+
+    /** 当前请求的登录用户加入的团队列表 */
+    private List<Team> teamList;
+
+    /** 当前请求的登录用户加入的团队 */
+    private Team currentTeam;
+
+    /** 上个月创建任务的数量 */
+    private Integer lastMonthTaskCnt;
+
+    /** 这个月创建任务的数量 */
+    private Integer thisMonthTaskCnt;
 }

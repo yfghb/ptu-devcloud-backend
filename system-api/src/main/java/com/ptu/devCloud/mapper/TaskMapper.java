@@ -177,4 +177,13 @@ public interface TaskMapper extends BaseMapper<Task> {
 											  @Param("endDate") Date endDate,
 											  @Param("filtered") Boolean filtered);
 
+	/**
+	 * 查询指定项目的上个月和这个月的任务数量
+	 * @author Yang Fan
+	 * @since 2024/3/22 16:21
+	 * @param projectId 项目id
+	 * @return WorkplaceDTO
+	 */
+	WorkplaceDTO selectLastMonthAndThisMonthTaskCnt(@Param("projectId") Long projectId);
+
 }

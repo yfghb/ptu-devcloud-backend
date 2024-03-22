@@ -531,6 +531,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return dto;
     }
 
+    @Override
+    public WorkplaceDTO getLastMonthAndThisMonthTaskCnt(Long projectId) {
+        if(projectId == null)return new WorkplaceDTO();
+        return taskMapper.selectLastMonthAndThisMonthTaskCnt(projectId);
+    }
+
     private String generateStatusOperationLog(String taskStatus, String taskName){
         if(StrUtil.isEmpty(taskStatus))return "";
         LoginUser loginUser = SecurityUtils.getLoginUser();

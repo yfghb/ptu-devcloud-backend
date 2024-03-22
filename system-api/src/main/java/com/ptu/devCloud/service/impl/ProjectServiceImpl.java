@@ -170,4 +170,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         Long userId = loginUser.getUser().getId();
         return projectMapper.selectProjectTeamTaskCnt(userId);
     }
+
+    @Override
+    public List<Project> getProjectListAndTaskCnt(Long teamId) {
+        if(teamId == null)return new ArrayList<>();
+        return projectMapper.selectProjectNameListAndTaskCnt(teamId);
+    }
 }

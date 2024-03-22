@@ -187,4 +187,16 @@ public class ProjectController {
         return CommonResult.successNoMsg(projectService.getProjectTeamTaskCnt());
     }
 
+    /**
+     * 查询指定团队下的项目名称列表以及任务数和完成的任务数数
+     * @author Yang Fan
+     * @since 2024/3/22 13:17
+     * @param teamId 团队id
+     * @return List<Project>
+     */
+    @GetMapping("/getProjectListAndTaskCnt")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<Project>> getProjectListAndTaskCnt(Long teamId){
+        return CommonResult.successNoMsg(projectService.getProjectListAndTaskCnt(teamId));
+    }
 }

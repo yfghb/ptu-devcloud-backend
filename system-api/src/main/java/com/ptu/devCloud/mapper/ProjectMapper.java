@@ -115,8 +115,17 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	 * 查询指定用户的项目数，团队数，完成过的任务数
 	 * @author Yang Fan
 	 * @since 2024/3/21 15:45
-	 * @param userId
-	 * @return
+	 * @param userId 用户id
+	 * @return WorkplaceDTO
 	 */
 	WorkplaceDTO selectProjectTeamTaskCnt(@Param("userId") Long userId);
+
+	/**
+	 * 查询指定团队下的项目名称列表以及任务数和完成的任务数
+	 * @author Yang Fan
+	 * @since 2024/3/22 13:16
+	 * @param teamId 团队id
+	 * @return List<Project>
+	 */
+	List<Project> selectProjectNameListAndTaskCnt(@Param("teamId") Long teamId);
 }

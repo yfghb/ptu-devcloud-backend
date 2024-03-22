@@ -79,23 +79,6 @@
 			where YEARWEEK(DATE_FORMAT(t.create_date,'%Y-%m-%d')) = YEARWEEK(NOW())
 			  and t.project_id = #{projectId}) as "addTaskCnt"
 	</select>
-	<select id="selectTaskOperationLogByParams" resultType="java.lang.String">
-		select
-		t.operation_log
-		from task t
-		<where>
-			t.project_id = #{projectId}
-			<if test="startDate != null and startDate != '' and startDate != 'null'">
-			  and t.create_date >= #{startDate}
-			</if>
-			<if test="endDate != null and endDate != '' and endDate != 'null'">
-				<![CDATA[
-				and t.create_date <= #{endDate}
-				]]>
-			</if>
-		</where>
-		order by t.create_date desc
-	</select>
     <select id="selectMemberNameByProjectId" resultType="java.lang.String">
 		select
 			u.user_name
@@ -113,6 +96,20 @@
 		    left join user_team sub_ut on sub_ut.team_id = pt.team_id where sub_ut.user_id = #{userId}
 		    ) as "projectCnt",
 		(select count(t.id) from task t where t.task_finish_user = #{userId}) as "taskFinishCnt"
+	</select>
+    <select id="selectProjectNameListAndTaskCnt" resultMap="BaseResultMap">
+		SELECT
+		t.id,
+		t.project_name,
+		(select count(sub_t.id) from task sub_t where sub_t.team_id = #{teamId} and sub_t.project_id = t.id) as "taskCnt",
+		(
+			select count(sub_tt.id) from task sub_tt where sub_tt.team_id = #{teamId} and sub_tt.project_id = t.id
+			and (sub_tt.task_status = 'done' or sub_tt.task_status = 'close')
+		) as "taskFinishCnt"
+		FROM project t
+		left join project_team pt on t.id = pt.project_id
+		where pt.team_id = #{teamId}
+		order by t.create_date asc
 	</select>
 
     <!-- 插入全部字段 -->
