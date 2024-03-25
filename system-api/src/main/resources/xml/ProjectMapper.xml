@@ -111,8 +111,18 @@
 		where pt.team_id = #{teamId}
 		order by t.create_date asc
 	</select>
+	<select id="selectMemberIdsByProjectId" resultType="java.lang.Long">
+		select
+			u.id
+		from project p
+				 left join project_team pt on p.id = pt.project_id
+				 left join user_team ut on ut.team_id = pt.team_id
+				 left join user u on ut.user_id = u.id
+		where p.id = #{projectId}
+		order by ut.create_date
+	</select>
 
-    <!-- 插入全部字段 -->
+	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Project"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO project

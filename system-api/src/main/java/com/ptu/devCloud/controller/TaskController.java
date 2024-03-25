@@ -244,4 +244,17 @@ public class TaskController {
     public CommonResult<WorkplaceDTO> getLastMonthAndThisMonthTaskCnt(Long projectId){
         return CommonResult.successNoMsg(taskService.getLastMonthAndThisMonthTaskCnt(projectId));
     }
+
+    /**
+     * 获取用户列表中指定项目的不同任务类型未完成的数量
+     * @author Yang Fan
+     * @since 2024/3/25 10:15
+     * @param projectId 项目id
+     * @return List<WorkplaceDTO>
+     */
+    @GetMapping("/getTaskTypeCntList")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<List<WorkplaceDTO>> getTaskTypeCntList(Long projectId){
+        return CommonResult.successNoMsg(taskService.getTaskTypeCntList(projectId));
+    }
 }

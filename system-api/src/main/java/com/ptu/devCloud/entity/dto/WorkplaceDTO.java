@@ -13,6 +13,9 @@ public class WorkplaceDTO {
     /** 团队数量 */
     private Integer teamCnt;
 
+    /** 用户名 */
+    private String username;
+
     /** 完成过的任务数量 */
     private Integer taskFinishCnt;
 

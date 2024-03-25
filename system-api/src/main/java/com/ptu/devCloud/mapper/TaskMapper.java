@@ -163,6 +163,16 @@ public interface TaskMapper extends BaseMapper<Task> {
 	WorkplaceDTO selectTaskTypeCnt(@Param("userId") Long userId);
 
 	/**
+	 * 查询用户列表中指定项目的不同任务类型未完成的数量
+	 * @author Yang Fan
+	 * @since 2024/3/25 10:09
+	 * @param userIds 用户id列表
+	 * @param projectId 项目id
+	 * @return List<WorkplaceDTO>
+	 */
+	List<WorkplaceDTO> selectTaskTypeCntList(@Param("userIds") List<Long> userIds, @Param("projectId") Long projectId);
+
+	/**
 	 * 查询任务统计图表的数据
 	 * @author Yang Fan
 	 * @since 2024/3/21 22:38

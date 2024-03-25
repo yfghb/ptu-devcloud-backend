@@ -227,7 +227,24 @@
 			    t2.create_date BETWEEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))
 			                                    and t2.project_id = #{projectId}) as "lastMonthTaskCnt"
 	</select>
-    <!-- 插入全部字段 -->
+	<select id="selectTaskTypeCntList" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+		select
+			(select count(t.id) from task t
+				where t.task_type = 'req' and t.current_operator = u.id and (t.task_status = 'new' or t.task_status = 'todo') and t.project_id = #{projectId}) as "reqTaskCnt",
+			(select count(t.id) from task t
+				where t.task_type = 'dev' and t.current_operator = u.id and (t.task_status = 'new' or t.task_status = 'todo') and t.project_id = #{projectId}) as "devTaskCnt",
+			(select count(t.id) from task t
+				where t.task_type = 'test' and t.current_operator = u.id and (t.task_status = 'new' or t.task_status = 'todo') and t.project_id = #{projectId}) as "testTaskCnt",
+			(select count(t.id) from task t
+				where t.task_type = 'bug' and t.current_operator = u.id and (t.task_status = 'new' or t.task_status = 'todo') and t.project_id = #{projectId}) as "bugTaskCnt",
+			u.user_name as "username"
+		from user u
+		where u.id in
+		<foreach item="item" collection="userIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"
 		keyProperty="id" keyColumn="id" >
 		INSERT INTO task

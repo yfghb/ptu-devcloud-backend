@@ -16,6 +16,7 @@ import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import com.ptu.devCloud.exception.JobException;
+import com.ptu.devCloud.mapper.ProjectMapper;
 import com.ptu.devCloud.mapper.TaskMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ptu.devCloud.service.*;
@@ -76,6 +77,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Resource
     private TableSequenceService tableSequenceService;
+
+    @Resource
+    private ProjectMapper projectMapper;
 
 
     @Override
@@ -535,6 +539,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     public WorkplaceDTO getLastMonthAndThisMonthTaskCnt(Long projectId) {
         if(projectId == null)return new WorkplaceDTO();
         return taskMapper.selectLastMonthAndThisMonthTaskCnt(projectId);
+    }
+
+    @Override
+    public List<WorkplaceDTO> getTaskTypeCntList(Long projectId) {
+        List<Long> userIds = projectMapper.selectMemberIdsByProjectId(projectId);
+        if(CollUtil.isEmpty(userIds))return new ArrayList<>();
+        return taskMapper.selectTaskTypeCntList(userIds, projectId);
     }
 
     private String generateStatusOperationLog(String taskStatus, String taskName){
