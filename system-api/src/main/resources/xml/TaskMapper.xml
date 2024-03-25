@@ -179,7 +179,7 @@
 			#{item}
 		</foreach>
 	</select>
-    <select id="selectTaskTypeCnt" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+    <select id="selectTaskTypeCnt" resultType="com.ptu.devCloud.entity.dto.ChartDataDTO">
 		select
 		(select count(t.id) from task t where t.task_type = 'req' and t.current_operator = #{userId} and (t.task_status = 'new' or t.task_status = 'todo')) as "reqTaskCnt",
 		(select count(t.id) from task t where t.task_type = 'dev' and t.current_operator = #{userId} and (t.task_status = 'new' or t.task_status = 'todo')) as "devTaskCnt",
@@ -219,7 +219,7 @@
 			</if>
 		</where>
 	</select>
-    <select id="selectLastMonthAndThisMonthTaskCnt" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+    <select id="selectLastMonthAndThisMonthTaskCnt" resultType="com.ptu.devCloud.entity.dto.ChartDataDTO">
 		select
 			(select count(t1.id) from task t1 where
 			    DATE_FORMAT(t1.create_date,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m') and t1.project_id = #{projectId}) as "thisMonthTaskCnt",
@@ -227,7 +227,7 @@
 			    t2.create_date BETWEEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))
 			                                    and t2.project_id = #{projectId}) as "lastMonthTaskCnt"
 	</select>
-	<select id="selectTaskTypeCntList" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+	<select id="selectTaskTypeCntList" resultType="com.ptu.devCloud.entity.dto.ChartDataDTO">
 		select
 			(select count(t.id) from task t
 				where t.task_type = 'req' and t.current_operator = u.id and (t.task_status = 'new' or t.task_status = 'todo') and t.project_id = #{projectId}) as "reqTaskCnt",
@@ -243,6 +243,20 @@
 		<foreach item="item" collection="userIds" open="(" separator="," close=")">
 			#{item}
 		</foreach>
+	</select>
+	<select id="selectToDoTaskByProjectId" resultType="com.ptu.devCloud.entity.dto.ChartDataDTO">
+		select
+			(select count(t.id) from task t where t.task_type = 'req' and t.project_id = #{projectId} and (t.task_status = 'new' or t.task_status = 'todo')) as "reqTaskCnt",
+			(select count(t.id) from task t where t.task_type = 'dev' and t.project_id = #{projectId} and (t.task_status = 'new' or t.task_status = 'todo')) as "devTaskCnt",
+			(select count(t.id) from task t where t.task_type = 'test' and t.project_id = #{projectId} and (t.task_status = 'new' or t.task_status = 'todo')) as "testTaskCnt",
+			(select count(t.id) from task t where t.task_type = 'bug' and t.project_id = #{projectId} and (t.task_status = 'new' or t.task_status = 'todo')) as "bugTaskCnt"
+	</select>
+	<select id="selectFinishTaskByProjectId" resultType="com.ptu.devCloud.entity.dto.ChartDataDTO">
+		select
+			(select count(t.id) from task t where t.task_type = 'req' and t.project_id = #{projectId} and (t.task_status = 'done' or t.task_status = 'close')) as "reqFinishTaskCnt",
+			(select count(t.id) from task t where t.task_type = 'dev' and t.project_id = #{projectId} and (t.task_status = 'done' or t.task_status = 'close')) as "devFinishTaskCnt",
+			(select count(t.id) from task t where t.task_type = 'test' and t.project_id = #{projectId} and (t.task_status = 'done' or t.task_status = 'close')) as "testFinishTaskCnt",
+			(select count(t.id) from task t where t.task_type = 'bug' and t.project_id = #{projectId} and (t.task_status = 'done' or t.task_status = 'close')) as "bugFinishTaskCnt"
 	</select>
 	<!-- 插入全部字段 -->
     <insert id="insert" parameterType="com.ptu.devCloud.entity.Task"

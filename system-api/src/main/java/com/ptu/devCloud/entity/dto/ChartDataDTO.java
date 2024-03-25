@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class WorkplaceDTO {
+public class ChartDataDTO {
     /** 项目数量 */
     private Integer projectCnt;
 
@@ -22,14 +22,26 @@ public class WorkplaceDTO {
     /** 待办需求单数量 */
     private Integer reqTaskCnt;
 
+    /** 已完成需求单数量 */
+    private Integer reqFinishTaskCnt;
+
     /** 待办研发单数量 */
     private Integer devTaskCnt;
+
+    /** 已完成需求单数量 */
+    private Integer devFinishTaskCnt;
 
     /** 待办测试单数量 */
     private Integer testTaskCnt;
 
+    /** 已完成需求单数量 */
+    private Integer testFinishTaskCnt;
+
     /** 待办缺陷单数量 */
     private Integer bugTaskCnt;
+
+    /** 已完成需求单数量 */
+    private Integer bugFinishTaskCnt;
 
     /** 新增任务列表，n行2列，taskList[i][0]：日期（mm-dd），taskList[i][0]：数量 */
     private List<List<String>> taskList;

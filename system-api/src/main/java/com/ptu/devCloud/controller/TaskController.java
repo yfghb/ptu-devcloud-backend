@@ -3,7 +3,7 @@ package com.ptu.devCloud.controller;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.Task;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.LinkTaskVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
@@ -211,11 +211,11 @@ public class TaskController {
      * @author Yang Fan
      * @since 2024/3/21 18:44
      * @param userId 用户id
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
     @GetMapping("/getTaskTypeCnt")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<WorkplaceDTO> getTaskTypeCnt(Long userId){
+    public CommonResult<ChartDataDTO> getTaskTypeCnt(Long userId){
         return CommonResult.successNoMsg(taskService.getTaskTypeCnt(userId));
     }
 
@@ -224,11 +224,11 @@ public class TaskController {
      * @author Yang Fan
      * @since 2024/3/21 21:23
      * @param projectId 项目id
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
     @GetMapping("/getTaskCntChart")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<WorkplaceDTO> getTaskCntChart(Long projectId){
+    public CommonResult<ChartDataDTO> getTaskCntChart(Long projectId){
         return CommonResult.successNoMsg(taskService.getTaskCntChart(projectId));
     }
 
@@ -237,11 +237,11 @@ public class TaskController {
      * @author Yang Fan
      * @since 2024/3/22 16:22
      * @param projectId 项目id
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
     @GetMapping("/getLastMonthAndThisMonthTaskCnt")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<WorkplaceDTO> getLastMonthAndThisMonthTaskCnt(Long projectId){
+    public CommonResult<ChartDataDTO> getLastMonthAndThisMonthTaskCnt(Long projectId){
         return CommonResult.successNoMsg(taskService.getLastMonthAndThisMonthTaskCnt(projectId));
     }
 
@@ -250,11 +250,37 @@ public class TaskController {
      * @author Yang Fan
      * @since 2024/3/25 10:15
      * @param projectId 项目id
-     * @return List<WorkplaceDTO>
+     * @return List<ChartDataDTO>
      */
     @GetMapping("/getTaskTypeCntList")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<List<WorkplaceDTO>> getTaskTypeCntList(Long projectId){
+    public CommonResult<List<ChartDataDTO>> getTaskTypeCntList(Long projectId){
         return CommonResult.successNoMsg(taskService.getTaskTypeCntList(projectId));
+    }
+
+    /**
+     * 获取指定项目的待办需求/研发/测试/缺陷单的数量
+     * @author Yang Fan
+     * @since 2024/3/25 13:37
+     * @param projectId 项目id
+     * @return ChartDataDTO
+     */
+    @GetMapping("/getToDoTaskCnt")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<ChartDataDTO> getToDoTaskCnt(Long projectId){
+        return CommonResult.successNoMsg(taskService.getToDoTaskCnt(projectId));
+    }
+
+    /**
+     * 获取指定项目的待办和已完成需求/研发/测试/缺陷单的数量
+     * @author Yang Fan
+     * @since 2024/3/25 14:02
+     * @param projectId 项目id
+     * @return ChartDataDTO
+     */
+    @GetMapping("/getToDoAndFinishTaskCnt")
+    @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
+    public CommonResult<ChartDataDTO> getToDoAndFinishTaskCnt(Long projectId){
+        return CommonResult.successNoMsg(taskService.getToDoAndFinishTaskCnt(projectId));
     }
 }

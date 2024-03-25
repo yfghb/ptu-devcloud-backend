@@ -2,12 +2,11 @@ package com.ptu.devCloud.controller;
 
 import com.ptu.devCloud.entity.CommonResult;
 import com.ptu.devCloud.entity.UserTeam;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.ptu.devCloud.service.UserTeamService;
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * UserTeamController
@@ -39,11 +38,11 @@ public class UserTeamController {
      * 查询当前用户的团队列表和当前团队
      * @author Yang Fan
      * @since 2024/3/22 13:53
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
     @GetMapping("/getTeamList")
     @PreAuthorize("@permissionServiceImpl.hasPermission('ignorePermission')")
-    public CommonResult<WorkplaceDTO> getTeamList(){
+    public CommonResult<ChartDataDTO> getTeamList(){
         return CommonResult.successNoMsg(userTeamService.getTeamList());
     }
 }

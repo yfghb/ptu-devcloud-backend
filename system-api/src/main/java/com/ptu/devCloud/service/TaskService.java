@@ -3,7 +3,7 @@ package com.ptu.devCloud.service;
 import com.github.pagehelper.PageInfo;
 import com.ptu.devCloud.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
@@ -129,34 +129,52 @@ public interface TaskService extends IService<Task> {
      * @author Yang Fan
      * @since 2024/3/21 18:44
      * @param userId 用户id
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
-    WorkplaceDTO getTaskTypeCnt(Long userId);
+    ChartDataDTO getTaskTypeCnt(Long userId);
 
     /**
      * 获取统计任务的图表的数据
      * @author Yang Fan
      * @since 2024/3/21 21:23
      * @param projectId 项目id
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
-    WorkplaceDTO getTaskCntChart(Long projectId);
+    ChartDataDTO getTaskCntChart(Long projectId);
 
     /**
      * 获取指定项目上个月以及这个月的新建任务数量
      * @author Yang Fan
      * @since 2024/3/22 16:22
      * @param projectId 项目id
-     * @return WorkplaceDTO
+     * @return ChartDataDTO
      */
-    WorkplaceDTO getLastMonthAndThisMonthTaskCnt(Long projectId);
+    ChartDataDTO getLastMonthAndThisMonthTaskCnt(Long projectId);
 
     /**
      * 获取用户列表中指定项目的不同任务类型未完成的数量
      * @author Yang Fan
      * @since 2024/3/25 10:15
      * @param projectId 项目id
-     * @return List<WorkplaceDTO>
+     * @return List<ChartDataDTO>
      */
-    List<WorkplaceDTO> getTaskTypeCntList(Long projectId);
+    List<ChartDataDTO> getTaskTypeCntList(Long projectId);
+
+    /**
+     * 获取指定项目的待办需求/研发/测试/缺陷单的数量
+     * @author Yang Fan
+     * @since 2024/3/25 13:37
+     * @param projectId 项目id
+     * @return ChartDataDTO
+     */
+    ChartDataDTO getToDoTaskCnt(Long projectId);
+
+    /**
+     * 获取指定项目的待办和已完成需求/研发/测试/缺陷单的数量
+     * @author Yang Fan
+     * @since 2024/3/25 14:02
+     * @param projectId 项目id
+     * @return ChartDataDTO
+     */
+    ChartDataDTO getToDoAndFinishTaskCnt(Long projectId);
 }

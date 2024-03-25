@@ -5,7 +5,7 @@ import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Project;
 import com.ptu.devCloud.entity.ProjectTeam;
 import com.ptu.devCloud.entity.TaskOperationLog;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.ProjectMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -162,7 +162,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
-    public WorkplaceDTO getProjectTeamTaskCnt() {
+    public ChartDataDTO getProjectTeamTaskCnt() {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if(loginUser==null){
             throw new JobException("登录认证过期，清重新登录");

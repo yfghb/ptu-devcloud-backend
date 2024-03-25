@@ -3,7 +3,7 @@ package com.ptu.devCloud.service;
 import com.ptu.devCloud.entity.Project;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ptu.devCloud.entity.TaskOperationLog;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -110,9 +110,9 @@ public interface ProjectService extends IService<Project> {
 	 * 查询当前登录用户参与的项目数量，团队数量，以及完成过的任务数
 	 * @author Yang Fan
 	 * @since 2024/3/21 16:17
-	 * @return WorkplaceDTO
+	 * @return ChartDataDTO
 	 */
-	WorkplaceDTO getProjectTeamTaskCnt();
+	ChartDataDTO getProjectTeamTaskCnt();
 
 	/**
 	 * 查询指定团队下的项目名称列表以及任务数和完成的任务数数

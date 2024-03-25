@@ -1,7 +1,7 @@
 package com.ptu.devCloud.mapper;
 
 
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -158,9 +158,9 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @author Yang Fan
 	 * @since 2024/3/21 18:43
 	 * @param userId 用户id
-	 * @return WorkplaceDTO
+	 * @return ChartDataDTO
 	 */
-	WorkplaceDTO selectTaskTypeCnt(@Param("userId") Long userId);
+	ChartDataDTO selectTaskTypeCnt(@Param("userId") Long userId);
 
 	/**
 	 * 查询用户列表中指定项目的不同任务类型未完成的数量
@@ -168,9 +168,9 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @since 2024/3/25 10:09
 	 * @param userIds 用户id列表
 	 * @param projectId 项目id
-	 * @return List<WorkplaceDTO>
+	 * @return List<ChartDataDTO>
 	 */
-	List<WorkplaceDTO> selectTaskTypeCntList(@Param("userIds") List<Long> userIds, @Param("projectId") Long projectId);
+	List<ChartDataDTO> selectTaskTypeCntList(@Param("userIds") List<Long> userIds, @Param("projectId") Long projectId);
 
 	/**
 	 * 查询任务统计图表的数据
@@ -192,8 +192,25 @@ public interface TaskMapper extends BaseMapper<Task> {
 	 * @author Yang Fan
 	 * @since 2024/3/22 16:21
 	 * @param projectId 项目id
-	 * @return WorkplaceDTO
+	 * @return ChartDataDTO
 	 */
-	WorkplaceDTO selectLastMonthAndThisMonthTaskCnt(@Param("projectId") Long projectId);
+	ChartDataDTO selectLastMonthAndThisMonthTaskCnt(@Param("projectId") Long projectId);
 
+	/**
+	 * 查询指定项目的待办需求/研发/测试/缺陷单的数量
+	 * @author Yang Fan
+	 * @since 2024/3/25 13:34
+	 * @param projectId 项目id
+	 * @return ChartDataDTO
+	 */
+	ChartDataDTO selectToDoTaskByProjectId(@Param("projectId") Long projectId);
+
+	/**
+	 * 查询指定项目已完成的需求/研发/测试/缺陷单的数量
+	 * @author Yang Fan
+	 * @since 2024/3/25 13:34
+	 * @param projectId 项目id
+	 * @return ChartDataDTO
+	 */
+	ChartDataDTO selectFinishTaskByProjectId(@Param("projectId") Long projectId);
 }

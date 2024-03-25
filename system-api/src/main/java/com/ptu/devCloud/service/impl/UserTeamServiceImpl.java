@@ -5,7 +5,7 @@ import com.ptu.devCloud.entity.LoginUser;
 import com.ptu.devCloud.entity.Team;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.UserTeam;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import com.ptu.devCloud.exception.JobException;
 import com.ptu.devCloud.mapper.TeamMapper;
 import com.ptu.devCloud.mapper.UserMapper;
@@ -89,8 +89,8 @@ public class UserTeamServiceImpl extends ServiceImpl<UserTeamMapper, UserTeam> i
     }
 
     @Override
-    public WorkplaceDTO getTeamList() {
-        WorkplaceDTO dto = new WorkplaceDTO();
+    public ChartDataDTO getTeamList() {
+        ChartDataDTO dto = new ChartDataDTO();
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if(loginUser == null){
             throw new JobException("登录认证异常，请重新登录");

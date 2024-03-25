@@ -1,5 +1,6 @@
 package com.ptu.devCloud.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
@@ -11,7 +12,7 @@ import com.ptu.devCloud.entity.Task;
 import com.ptu.devCloud.entity.TaskOperationLog;
 import com.ptu.devCloud.entity.User;
 import com.ptu.devCloud.entity.UserTeam;
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import com.ptu.devCloud.entity.vo.IdsVO;
 import com.ptu.devCloud.entity.vo.TaskCardVO;
 import com.ptu.devCloud.entity.vo.TaskPageVO;
@@ -477,13 +478,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public WorkplaceDTO getTaskTypeCnt(Long userId) {
+    public ChartDataDTO getTaskTypeCnt(Long userId) {
         if(userId == null)return null;
         return taskMapper.selectTaskTypeCnt(userId);
     }
 
     @Override
-    public WorkplaceDTO getTaskCntChart(Long projectId) {
+    public ChartDataDTO getTaskCntChart(Long projectId) {
         if(projectId == null) {
             throw new JobException("项目id不能为null");
         }
@@ -529,23 +530,41 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         }
         taskList = taskList.stream().sorted(Comparator.comparing(o -> o.get(0))).collect(Collectors.toList());
         taskFinishList = taskFinishList.stream().sorted(Comparator.comparing(o -> o.get(0))).collect(Collectors.toList());
-        WorkplaceDTO dto = new WorkplaceDTO();
+        ChartDataDTO dto = new ChartDataDTO();
         dto.setTaskList(taskList);
         dto.setTaskFinishList(taskFinishList);
         return dto;
     }
 
     @Override
-    public WorkplaceDTO getLastMonthAndThisMonthTaskCnt(Long projectId) {
-        if(projectId == null)return new WorkplaceDTO();
+    public ChartDataDTO getLastMonthAndThisMonthTaskCnt(Long projectId) {
+        if(projectId == null)return new ChartDataDTO();
         return taskMapper.selectLastMonthAndThisMonthTaskCnt(projectId);
     }
 
     @Override
-    public List<WorkplaceDTO> getTaskTypeCntList(Long projectId) {
+    public List<ChartDataDTO> getTaskTypeCntList(Long projectId) {
         List<Long> userIds = projectMapper.selectMemberIdsByProjectId(projectId);
         if(CollUtil.isEmpty(userIds))return new ArrayList<>();
         return taskMapper.selectTaskTypeCntList(userIds, projectId);
+    }
+
+    @Override
+    public ChartDataDTO getToDoTaskCnt(Long projectId) {
+        if(projectId == null)return new ChartDataDTO();
+        return taskMapper.selectToDoTaskByProjectId(projectId);
+    }
+
+    @Override
+    public ChartDataDTO getToDoAndFinishTaskCnt(Long projectId) {
+        if(projectId == null)return new ChartDataDTO();
+        ChartDataDTO dto1 = taskMapper.selectToDoTaskByProjectId(projectId);
+        ChartDataDTO dto2 = taskMapper.selectFinishTaskByProjectId(projectId);
+        dto2.setReqTaskCnt(dto1.getReqTaskCnt());
+        dto2.setDevTaskCnt(dto1.getDevTaskCnt());
+        dto2.setTestTaskCnt(dto1.getTestTaskCnt());
+        dto2.setBugTaskCnt(dto1.getBugTaskCnt());
+        return dto2;
     }
 
     private String generateStatusOperationLog(String taskStatus, String taskName){

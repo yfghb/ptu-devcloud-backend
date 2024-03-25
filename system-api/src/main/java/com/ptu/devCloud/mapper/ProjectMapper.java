@@ -1,9 +1,8 @@
 package com.ptu.devCloud.mapper;
 
-import java.util.Date;
 import java.util.List;
 
-import com.ptu.devCloud.entity.dto.WorkplaceDTO;
+import com.ptu.devCloud.entity.dto.ChartDataDTO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ptu.devCloud.annotation.SeqName;
@@ -125,9 +124,9 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	 * @author Yang Fan
 	 * @since 2024/3/21 15:45
 	 * @param userId 用户id
-	 * @return WorkplaceDTO
+	 * @return ChartDataDTO
 	 */
-	WorkplaceDTO selectProjectTeamTaskCnt(@Param("userId") Long userId);
+	ChartDataDTO selectProjectTeamTaskCnt(@Param("userId") Long userId);
 
 	/**
 	 * 查询指定团队下的项目名称列表以及任务数和完成的任务数

@@ -89,7 +89,7 @@
 		where p.id = #{projectId}
 		order by ut.create_date
 	</select>
-    <select id="selectProjectTeamTaskCnt" resultType="com.ptu.devCloud.entity.dto.WorkplaceDTO">
+    <select id="selectProjectTeamTaskCnt" resultType="com.ptu.devCloud.entity.dto.ChartDataDTO">
 		select
 		(select count(ut.team_id) from user_team ut where ut.user_id = #{userId}) as "teamCnt",
 		(select count(pt.project_id) from project_team pt
